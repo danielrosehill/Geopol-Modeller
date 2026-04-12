@@ -1,0 +1,248 @@
+# Scenario Subgraph Configuration: Iran-Israel
+#
+# This file defines scenario-specific simulation behavior that augments
+# the core snowglobe graph (setup → respond → adjudicate → assess).
+# The core engine remains generic; this config injects domain-specific
+# hooks for information asymmetry, exogenous shocks, escalation tracking,
+# and adaptive pacing.
+#
+# Scenarios without a graph config use the default behavior unchanged.
+
+name: iran-israel
+description: >
+  Iran-Israel conflict subgraph with information asymmetry between blocs,
+  domain-specific exogenous shocks, escalation ladder tracking, and
+  adaptive timestep compression during kinetic escalation.
+
+# ============================================================
+#  INFORMATION ASYMMETRY
+# ============================================================
+# Defines which actors can see which other actors' internal deliberations.
+# Each bloc sees: (a) full adjudicated narrative (public), (b) their own
+# bloc members' responses (internal), (c) NOT other blocs' raw responses.
+#
+# This replaces the default behavior where every actor sees full history.
+
+visibility:
+  blocs:
+    iranian_state: [khamenei, irgc, basij]
+    axis_of_resistance: [hezbollah, houthis, iraqi_pmf]
+    iranian_opposition: [iran_dissidents_active, iran_dissidents_silent]
+    iranian_diaspora: [pahlavi_diaspora]
+    israeli_government: [netanyahu, netanyahu_coalition, idf, mossad]
+    israeli_opposition: [israeli_opposition]
+    lebanese_state: [laf, lebanon_gov]
+    us: [trump, centcom]
+    gulf: [mbs]
+    kurdish: [kurds]
+    russia_china: [russia, china]
+    independent: [pakistan, turkey]
+    international: [un_sg]
+
+  rules:
+    # All actors see the public adjudicated narrative
+    public: all
+
+    # Actors see their own bloc's internal responses
+    internal: own_bloc
+
+    # Cross-bloc intelligence sharing (explicit channels)
+    shared_channels:
+      - from: iranian_state
+        to: axis_of_resistance
+        type: directives  # Iran sends orders/guidance to proxies
+      - from: israeli_government
+        to: us
+        type: coordination  # Israel shares with US
+      - from: us
+        to: israeli_government
+        type: coordination
+      - from: gulf
+        to: us
+        type: back_channel
+      - from: independent
+        to: [iranian_state, us, gulf]
+        type: mediation  # Pakistan, Turkey mediate
+
+# ============================================================
+#  EXOGENOUS SHOCKS
+# ============================================================
+# Domain-specific unexpected events. When the `nature` parameter triggers,
+# the adjudicator selects from this taxonomy instead of generating
+# unconstrained "unexpected consequences."
+
+shocks:
+  - id: northern_front
+    type: proxy_escalation
+    weight: 0.20
+    trigger: >
+      Hezbollah opens full northern front barrage — hundreds of rockets
+      targeting Israeli military and civilian infrastructure in the Galilee.
+    consequences: >
+      Israel faces multi-front war. IDF must split forces. Civilian
+      evacuation of northern communities. International pressure intensifies.
+
+  - id: houthi_shipping
+    type: proxy_escalation
+    weight: 0.15
+    trigger: >
+      Houthi anti-ship ballistic missile hits a commercial tanker in the
+      Red Sea, causing an oil spill and shipping insurance crisis.
+    consequences: >
+      Global shipping reroutes around Cape of Good Hope. Oil prices spike.
+      US Navy forced to divert assets to Red Sea from Gulf.
+
+  - id: iraqi_pmf_strike
+    type: proxy_escalation
+    weight: 0.10
+    trigger: >
+      Kata'ib Hezbollah drone swarm targets US al-Asad air base in Iraq,
+      causing US military casualties.
+    consequences: >
+      US domestic pressure for retaliation. Pentagon strikes PMF positions.
+      Iraqi government protests sovereignty violation.
+
+  - id: cyber_attack
+    type: infrastructure
+    weight: 0.10
+    trigger: >
+      Major cyber operation disrupts Iranian power grid or Israeli water
+      systems, attributed but not claimed.
+    consequences: >
+      Escalation ambiguity — is this an act of war? Civilian impact
+      generates humanitarian pressure. Attribution uncertainty.
+
+  - id: civilian_mass_casualty
+    type: intelligence_failure
+    weight: 0.15
+    trigger: >
+      Misidentified target leads to mass civilian casualties — a hospital,
+      school, or residential area struck by one side.
+    consequences: >
+      International outrage. UNSC emergency session. Potential loss of
+      US political cover for Israel, or domestic backlash in Iran.
+
+  - id: nuclear_threshold
+    type: nuclear
+    weight: 0.05
+    trigger: >
+      IAEA detects Iranian uranium enrichment to weapons-grade (90%+)
+      or evidence of weaponisation activity.
+    consequences: >
+      Existential red line for Israel. US forced to respond. Global
+      non-proliferation framework in crisis.
+
+  - id: diplomatic_breakthrough
+    type: de_escalation
+    weight: 0.10
+    trigger: >
+      Back-channel ceasefire offer surfaces through Omani, Qatari, or
+      Pakistani intermediary with credible terms.
+    consequences: >
+      Tests whether parties prefer off-ramp or escalation. Domestic
+      hardliners on both sides oppose. Window is narrow.
+
+  - id: iranian_unrest
+    type: domestic
+    weight: 0.10
+    trigger: >
+      Major protests erupt in Iranian cities as economic pain from conflict
+      compounds existing grievances. Basij deployed.
+    consequences: >
+      Regime faces two-front problem — external conflict and internal
+      dissent. IRGC must allocate forces to domestic control.
+
+  - id: kurdish_activation
+    type: internal_front
+    weight: 0.05
+    trigger: >
+      PJAK launches armed operations in Iranian Kurdistan, exploiting
+      IRGC's deployment to external fronts.
+    consequences: >
+      Internal front opens in Iran. IRGC must split attention. Kurdish
+      regions become ungovernable. Turkey watches nervously.
+
+# ============================================================
+#  ESCALATION LADDER
+# ============================================================
+# Structured output: the adjudicator assigns an escalation level
+# alongside narrative text each round. Enables quantitative comparison
+# across runs and pools.
+
+escalation_scale:
+  levels:
+    0: diplomatic_tension
+    1: economic_pressure
+    2: cyber_and_covert
+    3: proxy_exchanges
+    4: limited_direct_strikes
+    5: sustained_air_campaign
+    6: multi_front_war
+    7: strategic_strikes_on_homeland
+    8: wmd_threshold
+    9: total_war
+
+  tracking:
+    output_per_round: true      # Adjudicator outputs level each round
+    include_trajectory: true    # Also outputs direction (escalating/stable/de-escalating)
+
+# ============================================================
+#  ADAPTIVE TEMPO
+# ============================================================
+# Compress timesteps during kinetic escalation, expand during diplomacy.
+
+adaptive_tempo:
+  enabled: true
+  rules:
+    - escalation_above: 5
+      timestep: "+6h"
+      reason: "Kinetic exchange — decisions compress to hours"
+    - escalation_between: [3, 5]
+      timestep: "+24h"
+      reason: "Active hostilities — daily decision cycle"
+    - escalation_below: 3
+      timestep: "+72h"
+      reason: "Diplomatic/covert phase — multi-day cycles"
+
+# ============================================================
+#  INTER-ROUND INTELLIGENCE
+# ============================================================
+# Optional mid-simulation SITREP refresh for fast-moving scenarios.
+
+inter_round_sitrep:
+  enabled: false                # Enable for real-time tracking runs
+  search_queries: 3             # Tavily searches between rounds
+  format: flash                 # Short "FLASH" update, not full SITREP
+  inject_as: intelligence_update
+
+# ============================================================
+#  POST-SIMULATION ANALYSIS HOOKS
+# ============================================================
+# Additional analysis steps run after the core simulation completes.
+# Inspired by AI-Agent-UN bilateral impact analysis and Panel-Of-Claude
+# tension mapping.
+
+post_analysis:
+  # Bilateral impact assessment (from AI-Agent-UN pattern)
+  bilateral_impact:
+    enabled: true
+    focus_pairs:
+      - [netanyahu, trump]       # US-Israel relationship
+      - [khamenei, hezbollah]    # Iran-proxy relationship
+      - [mbs, netanyahu]         # Normalisation trajectory
+      - [china, khamenei]        # China-Iran energy relationship
+
+  # Tension mapping (from Panel-Of-Claude pattern)
+  tension_map:
+    enabled: true
+    description: >
+      After simulation, identify productive tensions that emerged:
+      where actor interests genuinely conflict vs. where cooperation
+      space exists. Map escalation drivers vs. off-ramp opportunities.
+
+  # Ensemble aggregation (for multi-run scenarios)
+  ensemble:
+    enabled: false              # Enable when running N>1 simulations
+    aggregate_mc_questions: true
+    compute_probability_distribution: true
+    cluster_trajectories: true

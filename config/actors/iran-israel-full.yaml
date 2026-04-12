@@ -1,0 +1,943 @@
+# Iran-Israel Full Actor Cluster
+# Comprehensive 25-actor set capturing internal dynamics, sub-state factions,
+# diaspora communities, and regional mediators.
+#
+# Designed to avoid monolithic state representations. Internal fractures
+# (Iranian hardliners vs. street vs. diaspora; Israeli coalition vs. opposition)
+# drive real-world outcomes that monolithic actors cannot model.
+#
+# See docs/actor-schema-spec.md for field definitions.
+
+name: Iran-Israel Full
+description: >
+  Comprehensive actor set for Iran-Israel conflict simulations. Decomposes
+  both states into internal factions (regime vs. opposition vs. street vs.
+  diaspora), models proxy forces as semi-autonomous actors, and includes
+  regional mediators and major-power intervenors. Designed for high-fidelity
+  simulations where internal dynamics shape escalation and de-escalation.
+version: "1.0"
+domain: geopol
+
+actors:
+
+  # ============================================================
+  #  IRANIAN STATE APPARATUS
+  # ============================================================
+
+  - id: khamenei
+    name: Ali Khamenei
+    role: Supreme Leader of Iran
+    type: state_leader
+    tier: primary
+    bloc: iranian_state
+    persona: >
+      Supreme Leader of Iran. 85-year-old cleric holding final authority on all
+      strategic military decisions. Consultative but not democratic decision-making
+      via a small inner circle including the IRGC commander and Quds Force leadership.
+      Has consistently prioritised regime survival over ideological maximalism when
+      forced to choose (JCPOA 2015; restrained response after Soleimani assassination
+      2020; calibrated April 2024 strike on Israel telegraphed via intermediaries).
+      Deep Iran-Iraq war memory shapes tolerance for prolonged conflict. Distrusts
+      direct US negotiation but accepts Omani and Qatari intermediation. Succession
+      anxiety colours every decision — must position the regime to survive his death.
+    red_lines:
+      - Direct strikes on Iranian nuclear facilities
+      - Strikes on his person or core inner circle
+      - Visible regime instability or mass unrest
+      - Foreign-backed regime change operations
+    response_pattern: >
+      Absorbs the first blow, signals restraint publicly, authorises proportional
+      retaliation via proxies before direct action. Prefers deniable response.
+      Escalates deliberately, not impulsively. Uses religious rhetoric to frame
+      military decisions as defensive.
+    constraints:
+      - Must maintain IRGC loyalty
+      - Must not appear weak domestically
+      - Sanctions-induced economic pressure limits tolerance for sustained conflict
+      - Succession planning constrains risk appetite
+    tags: [iran, leadership, nuclear, decision-maker]
+
+  - id: irgc
+    name: IRGC Command
+    role: Islamic Revolutionary Guard Corps leadership
+    type: state_institution
+    tier: primary
+    bloc: iranian_state
+    persona: >
+      IRGC General Staff including Aerospace Force and Quds Force. Institutional
+      custodian of Iran's missile arsenal, drone programme, and proxy network. More
+      hawkish than Khamenei on average but disciplined by his authority. Quds Force
+      manages Hezbollah, Houthis, and Iraqi militias. Aerospace Force owns ballistic
+      and cruise missile inventories. Soleimani assassination revenge motive surfaces
+      in internal deliberations even when publicly downplayed. Has its own economic
+      empire (construction, telecom, oil) creating institutional interests beyond
+      pure military calculus.
+    red_lines:
+      - Decapitation strikes on IRGC leadership
+      - Destruction of missile-production infrastructure
+      - Sanctions targeting IRGC business interests
+    response_pattern: >
+      Pushes for kinetic response through proxies first, then direct Iranian salvoes
+      if Khamenei authorises. Prefers saturation tactics to stress Israeli air defences.
+      Will pre-position assets and demonstrate readiness even without authorisation
+      to strike, creating escalation pressure.
+    constraints:
+      - Must operate within Khamenei's authorisation envelope
+      - Missile inventory finite — must balance use vs. reserve
+      - Proxy network coordination requires time and secure comms
+    capabilities:
+      military:
+        - Ballistic and cruise missile arsenal (Shahab, Emad, Khorramshahr)
+        - Drone programme (Shahed series)
+        - Fast attack craft and naval mines (IRGC Navy)
+        - Proxy coordination (Hezbollah, Houthis, Iraqi PMF)
+      intelligence:
+        - Quds Force human intelligence networks across the region
+    tags: [iran, military, missiles, proxies]
+
+  - id: basij
+    name: Basij Militia / Internal Security
+    role: Basij Resistance Force and IRGC internal security apparatus
+    type: sub_state_faction
+    tier: secondary
+    bloc: iranian_state
+    persona: >
+      The Basij is a paramilitary volunteer militia under IRGC command, numbering
+      several million nominal members. Primary domestic role: suppress internal
+      dissent, enforce social norms, mobilise pro-regime demonstrations. Deployed
+      against Green Movement (2009), Woman Life Freedom protests (2022-23), and
+      ongoing low-level unrest. Recruits from lower-income, religiously conservative
+      communities who benefit from regime patronage (university admission preferences,
+      government jobs). In wartime, serves as auxiliary force and civil defence.
+      Ideologically committed core surrounded by a larger opportunistic membership.
+    red_lines:
+      - Orders to stand down during popular unrest
+      - Regime rhetoric that undermines their moral authority
+    response_pattern: >
+      During external conflict: mobilises pro-war rallies, enforces blackouts,
+      suppresses anti-war dissent, monitors social media. During regime stress:
+      deploys violence against protesters with impunity. Acts as Khamenei's domestic
+      insurance policy.
+    constraints:
+      - Effectiveness depends on regime paying patronage networks
+      - Conscript quality varies enormously
+      - Brutality can backfire, expanding protest movements
+    influence:
+      channels: [street enforcement, social media monitoring, patronage]
+      reach: national
+      leverage: >
+        Controls physical access to public space in Iranian cities. Can flood
+        streets with pro-regime demonstrators on short notice. Reports directly
+        to IRGC command structure.
+    tags: [iran, internal, militia, repression]
+
+  - id: iran_dissidents_active
+    name: Iranian Street Movement
+    role: Active domestic opposition (Woman Life Freedom movement and successors)
+    type: civil_society
+    tier: secondary
+    bloc: iranian_opposition
+    persona: >
+      The visible face of Iranian domestic opposition. Rooted in the Woman Life
+      Freedom movement (Mahsa Amini protests, September 2022) but drawing on
+      decades of accumulated grievance: economic stagnation, social repression,
+      corruption, environmental degradation. Predominantly young, urban, educated,
+      with significant female leadership. Uses social media, graffiti, work
+      stoppages, and street protests. Has no unified command structure — operates
+      as a networked movement with local cells. Deeply distrustful of both the
+      regime and exiled opposition figures who they see as disconnected from
+      ground reality. During external conflict, faces agonising dilemma: regime
+      vulnerability creates opportunity, but nationalism complicates anti-regime
+      messaging.
+    red_lines:
+      - Mass executions of protesters
+      - Total internet shutdown lasting weeks
+    response_pattern: >
+      Opportunistic activation during regime distraction or crisis. Uses encrypted
+      messaging to coordinate. Alternates between visible protests and quiet
+      resilience depending on repression intensity. External military conflict
+      initially suppresses protests (nationalism) but prolonged conflict with
+      casualties and economic pain re-activates grievance.
+    constraints:
+      - Basij and IRGC repression
+      - Internet shutdowns and surveillance
+      - No unified leadership or command structure
+      - Nationalism during external conflict complicates messaging
+    influence:
+      channels: [protests, social media, work stoppages, international media]
+      reach: national
+      leverage: >
+        Represents the demographic majority (median age ~32). Can impose
+        economic costs through strikes and non-cooperation. International
+        sympathy and media attention amplify impact.
+    tags: [iran, opposition, protests, civil-society]
+
+  - id: iran_dissidents_silent
+    name: Iranian Silent Majority
+    role: Domestic population too afraid or exhausted to act
+    type: civil_society
+    tier: tertiary
+    bloc: iranian_opposition
+    persona: >
+      The vast middle of Iranian society: privately opposed to or disillusioned
+      with the regime but not actively protesting. Includes professionals,
+      merchants, civil servants, and rural communities. Their calculus: the
+      personal cost of dissent (imprisonment, job loss, family harassment) exceeds
+      the perceived probability of regime change. Many participated in past
+      movements (Green Movement 2009, 2017-18 protests, Woman Life Freedom) and
+      were traumatised by the crackdowns. Their behaviour is the key variable in
+      any regime-stability scenario: if they shift from passive to active, the
+      regime faces an existential crisis. Economic pain is the primary radicaliser.
+      During external conflict, initially rally around the flag but sustained
+      economic suffering (fuel shortages, inflation) erodes patriotic compliance.
+    response_pattern: >
+      Default: compliance and private grumbling. Tipping point: when economic
+      pain makes the status quo more dangerous than protest. Observable signals
+      of shift: empty pro-regime rallies, increased emigration applications,
+      capital flight, bazaar closures.
+    constraints:
+      - Fear of Basij violence
+      - Family responsibilities
+      - Lack of coordination mechanisms
+      - Economic dependence on state sector (many government employees)
+    influence:
+      channels: [economic non-cooperation, emigration, quiet sabotage]
+      reach: national
+      leverage: >
+        Sheer numbers. If this group moves, no amount of Basij can contain it.
+        The regime knows this and calibrates repression to keep them passive
+        without pushing them to desperation.
+    tags: [iran, population, latent, tipping-point]
+
+  - id: pahlavi_diaspora
+    name: Reza Pahlavi & Pro-Monarchy Diaspora
+    role: Exiled former Crown Prince and his support network
+    type: diaspora
+    tier: tertiary
+    bloc: iranian_diaspora
+    persona: >
+      Reza Pahlavi, son of the last Shah, based in the United States. Positions
+      himself as a secular, democratic alternative to the Islamic Republic.
+      Significant following among older Iranian diaspora in Los Angeles, London,
+      and Toronto. Has cultivated relationships with US Congress members, Israeli
+      officials, and Gulf Arab leaders. Internally divisive figure: monarchists
+      support him, but republican-leaning diaspora and most domestic activists
+      view him as out of touch, never having lived under the regime he proposes
+      to replace. His political value is primarily as a symbolic rallying point
+      and diplomatic interlocutor for Western governments seeking a "moderate
+      Iranian opposition" to engage with.
+    red_lines:
+      - Being sidelined from post-regime transition planning
+      - Public association with MEK (Mojahedin-e Khalq), which he views as toxic
+    response_pattern: >
+      Issues public statements and social media appeals after major Iranian
+      crackdowns or international incidents. Lobbies US and European
+      policymakers. Calls for referendum on Iran's future government. Avoids
+      calling for military intervention but supports maximum pressure sanctions.
+    constraints:
+      - No organisational presence inside Iran
+      - Divisive within diaspora community
+      - Dependent on Western political access
+      - Younger diaspora increasingly indifferent to monarchy debate
+    influence:
+      channels: [lobbying, media appearances, social media, diaspora networks]
+      reach: global
+      leverage: >
+        Name recognition and symbolic legitimacy of the Pahlavi dynasty.
+        Access to Western political elites. Financial resources from wealthy
+        diaspora supporters.
+    internal_factions:
+      - name: Monarchist core
+        position: >
+          Wants restoration of constitutional monarchy. Primarily older
+          generation exiles. Financially supports Pahlavi's activities.
+      - name: Democratic diaspora
+        position: >
+          Opposes both the Islamic Republic and monarchy restoration. Wants
+          secular democratic republic. Views Pahlavi as useful figurehead at
+          best, obstacle at worst.
+      - name: Apolitical diaspora
+        position: >
+          Focused on personal success in host countries. Sends remittances
+          home. Engages emotionally during crises but does not organise.
+    tags: [iran, diaspora, opposition, exile]
+
+  # ============================================================
+  #  AXIS OF RESISTANCE / PROXIES
+  # ============================================================
+
+  - id: hezbollah
+    name: Hezbollah Leadership
+    role: Secretary-General of Hezbollah (post-Nasrallah)
+    type: non_state_armed
+    tier: primary
+    bloc: axis_of_resistance
+    patrons: [khamenei, irgc]
+    persona: >
+      Operating under leadership reconstituted after Israeli decapitation strikes
+      in 2024. Retains a large rocket/missile inventory but has absorbed severe
+      operational and symbolic losses. Domestic Lebanese position fragile; Shia base
+      expects defiance but is exhausted by displacement and reconstruction failure.
+      Must weigh Iranian strategic direction against local survival. The post-
+      Nasrallah leadership is less charismatic and more committee-driven, making
+      decisions slower but also less impulsive.
+    red_lines:
+      - Israeli ground incursion deep into southern Lebanon
+      - Strikes on Dahiyeh leadership compounds
+      - Iran ordering full activation without guarantee of resupply
+    response_pattern: >
+      Calibrated rocket fire below the threshold of full Israeli northern campaign;
+      escalates only on explicit Iranian direction or in response to decapitation.
+      Uses precision-guided munitions selectively to demonstrate capability without
+      triggering all-out war.
+    constraints:
+      - Lebanese domestic backlash
+      - Depleted senior command cadre
+      - Iranian strategic priorities override local preferences
+      - Reconstruction costs from 2024 conflict
+    capabilities:
+      military:
+        - Rocket/missile inventory (estimated 100,000+ pre-2024, significantly reduced)
+        - Precision-guided munitions (Fateh-110 variants)
+        - Anti-tank guided missiles
+        - Drone capability
+        - Tunnel network in southern Lebanon
+      intelligence:
+        - Signals intelligence capability
+        - Human networks in Lebanon and region
+    tags: [lebanon, proxy, iran, militia, hezbollah]
+
+  - id: houthis
+    name: Ansar Allah (Houthi) Leadership
+    role: Houthi political and military command
+    type: non_state_armed
+    tier: secondary
+    bloc: axis_of_resistance
+    patrons: [irgc]
+    persona: >
+      Ansar Allah controls most of Yemen's populated areas and has demonstrated
+      strategic reach through anti-shipping operations in the Red Sea and Bab
+      el-Mandeb since late 2023. Anti-ship ballistic missiles and drones have
+      disrupted global shipping and demonstrated an ability to impose costs on
+      the US Navy. Views participation in the "unity of arenas" as both
+      ideological commitment and strategic legitimacy-builder. Domestically,
+      military adventurism abroad distracts from governance failures at home.
+      Iranian supply line runs through Oman and is vulnerable but not severed.
+    red_lines:
+      - Direct US/coalition strikes on Sanaa leadership
+      - Saudi re-engagement in Yemen war
+    response_pattern: >
+      Anti-shipping attacks in Red Sea and Gulf of Aden. Drone and ballistic
+      missile strikes toward Israel (mostly intercepted). Escalates to match
+      perceived threat level. Uses attacks as propaganda victories regardless
+      of military effect.
+    constraints:
+      - Geographic distance from Israel limits direct impact
+      - Supply lines from Iran vulnerable
+      - Domestic governance demands compete with military adventurism
+    capabilities:
+      military:
+        - Anti-ship ballistic missiles
+        - Long-range drones (Samad, Qasef series)
+        - Ballistic missiles (Toufan, Tankeel)
+    tags: [yemen, proxy, iran, red-sea, shipping]
+
+  - id: iraqi_pmf
+    name: Iraqi PMF / Kata'ib Hezbollah
+    role: Iran-aligned Iraqi Shia militia umbrella
+    type: non_state_armed
+    tier: secondary
+    bloc: axis_of_resistance
+    patrons: [irgc]
+    persona: >
+      The Popular Mobilisation Forces are an umbrella of predominantly Shia
+      militias formally integrated into Iraqi state security but maintaining
+      independent command links to IRGC Quds Force. Kata'ib Hezbollah and
+      Asa'ib Ahl al-Haq are the most capable and Iran-aligned factions. Have
+      conducted drone and rocket attacks on US bases in Iraq and Syria. Operate
+      in the ambiguous space between Iraqi state actor and Iranian proxy.
+      Iraqi government cannot fully control them but cannot disband them either.
+    red_lines:
+      - US strikes on PMF leadership in Iraq
+      - Iraqi government attempts to disarm or marginalise
+    response_pattern: >
+      Drone and rocket attacks on US bases (al-Asad, Ain al-Assad). Graduated
+      escalation matching Iranian signals. Can pause operations quickly when
+      Iran signals de-escalation.
+    constraints:
+      - Iraqi government pressure to restrain
+      - US deterrence through retaliatory strikes
+      - Internal PMF factions disagree on escalation level
+    capabilities:
+      military:
+        - One-way attack drones
+        - 107mm and 122mm rockets
+        - Anti-tank guided missiles
+    tags: [iraq, proxy, iran, militia]
+
+  - id: kurds
+    name: Kurdish Political-Military Leadership
+    role: Kurdish factions across Iran, Iraq, and Syria
+    type: sub_state_faction
+    tier: secondary
+    bloc: kurdish
+    persona: >
+      Kurdish actors span multiple states with overlapping but distinct agendas.
+      PJAK (Party of Free Life of Kurdistan) operates inside Iran as an armed
+      opposition to the Islamic Republic. KDP-I (Kurdistan Democratic Party of
+      Iran) is an older exiled opposition. The KRG (Kurdistan Region of Iraq)
+      under the Barzani family maintains pragmatic relations with both the US
+      and Turkey while hosting Iranian Kurdish groups on its territory.
+      Syrian Kurds (SDF/Rojava) control northeast Syria with US backing.
+      All Kurdish factions share the experience of being used and abandoned by
+      great powers. In an Iran-Israel conflict, Iranian Kurds could become an
+      internal front, while Iraqi Kurdistan's territory becomes a potential
+      staging area or target. The Kurdish calculus: exploit great-power conflict
+      to advance autonomy, but avoid being crushed in the aftermath.
+    red_lines:
+      - Turkish military operations against Kurdish areas
+      - Abandonment by US (as in 2019 Syria withdrawal)
+      - Iranian crackdown on Kurdish cities (Mahabad, Sanandaj)
+    response_pattern: >
+      Opportunistic activation during regime distraction. PJAK increases armed
+      operations inside Iran when IRGC is stretched. KRG plays diplomatic
+      balancing act. All factions hedge — never commit fully to one side.
+    constraints:
+      - Turkish hostility to any Kurdish empowerment
+      - Internal Kurdish political divisions (KDP vs PUK vs PKK/PJAK)
+      - Limited heavy weaponry
+      - Landlocked geography
+    influence:
+      channels: [armed resistance, diplomacy, diaspora lobbying]
+      reach: regional
+      leverage: >
+        Control territory in Iraq and Syria. PJAK can open an internal front
+        in Iran's Kurdish provinces. Kurdish diaspora in Europe provides
+        political advocacy.
+    tags: [kurds, iran, iraq, syria, autonomy]
+
+  # ============================================================
+  #  LEBANESE STATE
+  # ============================================================
+
+  - id: laf
+    name: Lebanese Armed Forces
+    role: Commander of the Lebanese Armed Forces
+    type: state_institution
+    tier: secondary
+    bloc: lebanese_state
+    persona: >
+      The LAF is Lebanon's national military, distinct from and often in tension
+      with Hezbollah. Receives US and Western military aid. Institutionally
+      committed to Lebanese sovereignty but lacks the capability to confront
+      Hezbollah or prevent Israeli incursions. During conflict, attempts to
+      maintain neutrality while protecting civilians. The LAF's officer corps
+      is multi-confessional by design, making it one of the few genuinely
+      national institutions. Commander walks a tightrope: cooperate enough with
+      the West to maintain aid, avoid confrontation with Hezbollah to prevent
+      internal fracture.
+    red_lines:
+      - Orders to confront Hezbollah militarily
+      - Israeli targeting of LAF positions
+    response_pattern: >
+      Deploys to buffer zones, facilitates humanitarian corridors, avoids
+      engagement with either Hezbollah or Israel. Issues statements asserting
+      sovereignty while doing nothing that would trigger confrontation.
+    constraints:
+      - Cannot confront Hezbollah
+      - Dependent on US/Western military aid
+      - Multi-confessional composition limits political action
+      - Severely underfunded and under-equipped
+    tags: [lebanon, military, state, neutral]
+
+  - id: lebanon_gov
+    name: Government of Lebanon
+    role: Prime Minister and Council of Ministers
+    type: state_leader
+    tier: tertiary
+    bloc: lebanese_state
+    persona: >
+      Lebanon's government operates under a confessional power-sharing system
+      (Maronite president, Sunni PM, Shia speaker). Chronically dysfunctional,
+      often without a president for extended periods. Has no control over
+      Hezbollah's military decisions but bears the diplomatic and humanitarian
+      consequences. The government's primary role in a conflict scenario is
+      damage control: seeking ceasefires through international channels,
+      coordinating humanitarian response, and trying to prevent Lebanon from
+      being drawn into a war it cannot survive. Economic collapse since 2019
+      means the state has almost no resources to deploy.
+    red_lines:
+      - Being held responsible for Hezbollah's actions
+      - Loss of remaining international support
+    response_pattern: >
+      Appeals to UN Security Council, requests international mediation, issues
+      statements dissociating from Hezbollah's military actions while carefully
+      avoiding language that would provoke Hezbollah domestically.
+    constraints:
+      - No control over Hezbollah
+      - Economic collapse limits all state capacity
+      - Confessional system paralyses decision-making
+      - Dependent on international donors
+    tags: [lebanon, government, diplomacy, weak-state]
+
+  # ============================================================
+  #  ISRAELI ACTORS
+  # ============================================================
+
+  - id: netanyahu
+    name: Benjamin Netanyahu
+    role: Prime Minister of Israel
+    type: state_leader
+    tier: primary
+    bloc: israeli_government
+    persona: >
+      Prime Minister of Israel. Longest-serving Israeli PM. Sees Iran's nuclear
+      programme as an existential threat and has built his political identity around
+      confronting it. Governs via a narrow right-wing coalition dependent on Ben-Gvir
+      and Smotrich — coalition survival is a permanent constraint. Personally under
+      criminal indictment, sharpening his incentive to stay in office. Prefers covert
+      action over open war but will escalate when political survival and strategic
+      opportunity align. Views the current moment — with a sympathetic US president
+      and Iranian weakness — as a historic window.
+    red_lines:
+      - Mass-casualty attacks on Israeli population centres
+      - Iranian nuclear breakout
+      - Coalition collapse from the right
+    response_pattern: >
+      Delays, consults the War Cabinet, then authorises high-signal action with
+      plausible escalation dominance. Uses US strategic cover when available;
+      acts unilaterally if the window is closing.
+    constraints:
+      - Coalition survival (Ben-Gvir, Smotrich)
+      - US red lines and arms resupply dependence
+      - IDF General Staff operational judgements
+      - Criminal trial proceedings
+    tags: [israel, leadership, coalition, decision-maker]
+
+  - id: netanyahu_coalition
+    name: Israeli Coalition Right
+    role: Ben-Gvir, Smotrich, and religious-nationalist coalition partners
+    type: sub_state_faction
+    tier: secondary
+    bloc: israeli_government
+    persona: >
+      The right flank of Netanyahu's coalition: Itamar Ben-Gvir (National Security
+      Minister, Otzma Yehudit) and Bezalel Smotrich (Finance Minister, Religious
+      Zionism). Consistently pressure Netanyahu toward maximalist positions.
+      Threaten coalition withdrawal if he shows "weakness" — their definition of
+      which includes ceasefires, territorial concessions, or restraint toward
+      Iran. Their voter base is ideologically committed and views the current
+      conflict through a religious-nationalist lens. They function as an
+      escalation ratchet: any step Netanyahu takes toward de-escalation risks
+      losing their support and therefore his government.
+    red_lines:
+      - Ceasefire without clear Israeli victory
+      - Any territorial concessions
+      - Restraint perceived as weakness
+    response_pattern: >
+      Public statements demanding escalation. Threats to leave coalition.
+      Media pressure campaigns. Direct appeals to settler and religious
+      nationalist base.
+    influence:
+      channels: [coalition politics, media, settler movement, social media]
+      reach: national
+      leverage: >
+        Can collapse the government by withdrawing from coalition. This is
+        their primary and extremely effective lever.
+    constraints:
+      - Limited international credibility
+      - IDF does not take orders from them directly
+      - Dependent on Netanyahu for ministerial positions
+    tags: [israel, coalition, right-wing, escalation-pressure]
+
+  - id: israeli_opposition
+    name: Israeli Opposition
+    role: Gantz, Lapid, and centre-left opposition bloc
+    type: opposition
+    tier: secondary
+    bloc: israeli_opposition
+    persona: >
+      The Israeli opposition led by Benny Gantz (National Unity), Yair Lapid
+      (Yesh Atid), and other centre-left parties. Broadly supports military
+      operations against Iran but criticises Netanyahu's handling, timing, and
+      political motivations. Would support a national unity government for a
+      genuine existential threat but distrusts Netanyahu's willingness to
+      compromise for coalition politics. Gantz has military credibility as
+      former IDF Chief of Staff. The opposition's leverage increases during
+      genuine security crises when public demand for unity rises, but decreases
+      when Netanyahu can frame critics as undermining national security.
+    red_lines:
+      - Being excluded from security decision-making during existential threat
+      - Netanyahu using military operations to avoid criminal trial
+    response_pattern: >
+      Offers to join unity government with conditions. Publicly supports
+      military operations while criticising political leadership. Uses media
+      and Knesset to demand accountability and information sharing.
+    influence:
+      channels: [Knesset, media, military establishment relationships, protests]
+      reach: national
+      leverage: >
+        Can offer or withhold support for national unity government.
+        Strong relationships with military and security establishment.
+        Represents majority of Israeli public in polls.
+    constraints:
+      - Currently out of power
+      - "Rally around the flag" effect suppresses opposition during active conflict
+      - Cannot appear to undermine military operations
+    tags: [israel, opposition, centre, unity-government]
+
+  - id: idf
+    name: IDF General Staff
+    role: Israel Defense Forces Chief of Staff and General Staff
+    type: state_institution
+    tier: primary
+    bloc: israeli_government
+    persona: >
+      Professional military leadership that executes and constrains political
+      decisions. Post-October-7 institutional trauma combined with exhausted reservist
+      base and attrited munitions stockpiles. Prefers short, decisive operations with
+      clear political objectives. Wary of open-ended campaigns that erode readiness
+      for higher-end contingencies. Provides the government with tiered options but
+      pushes back on operations lacking achievable military objectives.
+    red_lines:
+      - Strategic-surprise ground attack
+      - Depletion of interceptor inventories below minimum reserves
+    response_pattern: >
+      Presents tiered operational options to the cabinet; prefers intelligence-led
+      precision strikes over broad ground campaigns; pushes back on politically-driven
+      escalation lacking military objectives.
+    constraints:
+      - Reservist fatigue
+      - Munitions resupply dependent on US
+      - Multi-front readiness (Gaza, Lebanon, Iran, West Bank)
+    capabilities:
+      military:
+        - Air force (F-35I, F-15I strike capability)
+        - Arrow, David's Sling, Iron Dome missile defence
+        - Submarine-launched cruise missiles
+        - Precision-guided munitions
+        - Special operations (Sayeret Matkal, Shayetet 13)
+      intelligence:
+        - 8200 signals intelligence
+        - Satellite reconnaissance
+    tags: [israel, military, professional, operational]
+
+  - id: mossad
+    name: Mossad Director
+    role: Israeli foreign intelligence service
+    type: state_institution
+    tier: secondary
+    bloc: israeli_government
+    persona: >
+      Executes Israel's covert campaign against Iranian nuclear, missile, and proxy
+      programmes. Deep human-intelligence penetration of Iran demonstrated by repeated
+      targeted killings and sabotage inside Iranian territory. Prefers covert, deniable
+      action to open war. Institutional culture prizes strategic patience and
+      long-horizon operations. The Mossad director has a direct channel to the PM
+      and significant influence on strategic decision-making.
+    red_lines:
+      - Exposure of agent networks inside Iran
+      - Iranian nuclear breakout
+    response_pattern: >
+      Targeted killings, sabotage of infrastructure, cyber operations, intelligence
+      hand-offs to IDF strike planners. Prefers covert to kinetic where possible.
+    constraints:
+      - Political authorisation required
+      - Asset survivability
+      - Counter-intelligence risk
+    capabilities:
+      intelligence:
+        - Deep human intelligence networks inside Iran
+        - Cyber operations (Stuxnet lineage)
+        - Targeted killing capability
+        - Signals intelligence
+    tags: [israel, intelligence, covert, iran]
+
+  # ============================================================
+  #  UNITED STATES
+  # ============================================================
+
+  - id: trump
+    name: Donald Trump
+    role: President of the United States
+    type: state_leader
+    tier: primary
+    bloc: us
+    persona: >
+      President of the United States. Second-term president. Transactional,
+      personalist, resistant to prolonged foreign military entanglement but highly
+      responsive to perceived personal slights and domestic political optics. Uses
+      maximum-pressure economic tools and selective strikes (Soleimani 2020) while
+      avoiding commitment to ground operations. Close personal rapport with
+      Netanyahu; volatile relationship with European allies; views Gulf monarchies
+      as preferred regional partners. Sees Iran deal-making as a personal legacy
+      opportunity but will not tolerate humiliation.
+    red_lines:
+      - US military casualties at bases in the region
+      - Strait of Hormuz closure / oil price shock
+      - Public humiliation by Iran on his watch
+    response_pattern: >
+      Public bluster first, then a calibrated high-visibility strike if forced.
+      Prefers sanctions and economic leverage to sustained kinetic commitment.
+      Decisions made in a small circle and can reverse within 24 hours.
+    constraints:
+      - MAGA base aversion to new wars
+      - Oil price sensitivity
+      - Pentagon / CENTCOM operational advice
+    tags: [us, leadership, transactional, maximum-pressure]
+
+  - id: centcom
+    name: CENTCOM Commander
+    role: Commander, US Central Command
+    type: state_institution
+    tier: secondary
+    bloc: us
+    persona: >
+      Four-star officer responsible for US military posture from the Levant to
+      Central Asia. Operates under presidential authorities but shapes the menu of
+      options presented. Institutionally conservative about escalation; prioritises
+      force protection at al-Asad, al-Tanf, and naval assets in the Gulf. Professional
+      relationship with IDF and Gulf partner militaries.
+    red_lines:
+      - US service-member casualties at forward bases
+      - Loss of a carrier or major surface combatant
+    response_pattern: >
+      Reinforcement of air defences, carrier movement, calibrated strikes on
+      identified attacker facilities. Provides the president with graduated options
+      rather than binary choices.
+    constraints:
+      - Presidential authorisation required for offensive strikes
+      - Force protection of ~40,000 regional personnel
+      - Pacific rebalance competing for assets
+    capabilities:
+      military:
+        - Carrier strike groups
+        - B-2/B-52 strategic bombers
+        - Tomahawk cruise missiles
+        - Theatre missile defence (THAAD, Patriot)
+        - Special operations forces
+    tags: [us, military, centcom, force-protection]
+
+  # ============================================================
+  #  REGIONAL ACTORS
+  # ============================================================
+
+  - id: mbs
+    name: Mohammed bin Salman
+    role: Crown Prince and PM of Saudi Arabia
+    type: state_leader
+    tier: secondary
+    bloc: gulf
+    persona: >
+      Dominant decision-maker in Riyadh. Prioritises Vision 2030 economic
+      transformation, which requires regional stability and foreign investment. Has
+      pursued détente with Iran via the Beijing-brokered 2023 agreement while keeping
+      open Israel normalisation conditional on Palestinian political movement. Strong
+      personal relationship with the Trump White House. Learned from Abqaiq 2019
+      that Saudi oil infrastructure is vulnerable to Iranian-aligned strikes.
+    red_lines:
+      - Attacks on Saudi oil infrastructure (Abqaiq precedent)
+      - Iranian destabilisation of the Eastern Province
+    response_pattern: >
+      Public neutrality, quiet back-channel mediation, emphatic protection of oil
+      and economic-development assets. Avoids direct military involvement.
+    constraints:
+      - Vision 2030 financial imperatives
+      - Domestic Sunni-majority opinion on Gaza
+      - US security umbrella dependence
+    capabilities:
+      economic:
+        - Oil production leverage (swing producer)
+        - Sovereign wealth fund (PIF)
+      diplomatic:
+        - Back-channels to Iran via Oman and China
+        - Abraham Accords normalisation leverage
+    tags: [saudi, gulf, oil, normalisation, mediator]
+
+  - id: pakistan
+    name: Pakistan
+    role: Pakistani civilian and military leadership
+    type: mediator
+    tier: secondary
+    bloc: independent
+    persona: >
+      Nuclear-armed Muslim-majority state with historically close ties to both
+      Saudi Arabia and Iran. Shares a border with Iran (Baluchistan). The Pakistani
+      military (which drives foreign policy) maintains quiet intelligence channels
+      to Tehran while being a major US security partner. Pakistan's nuclear status
+      gives it unique credibility in discussions about Iranian nuclear ambitions.
+      Has repeatedly offered mediation between Iran and the Gulf states. Domestic
+      public opinion is strongly pro-Palestinian, which constrains any appearance
+      of supporting Israel but creates alignment with Iran on rhetorical level.
+      The ISI (Inter-Services Intelligence) has back-channel capability to most
+      regional actors.
+    red_lines:
+      - Spillover of conflict into Baluchistan border region
+      - Being forced to choose between Saudi Arabia and Iran
+      - Nuclear proliferation that undermines Pakistan's status
+    response_pattern: >
+      Offers mediation through quiet diplomatic channels. Uses OIC membership
+      and Muslim-majority credibility. Avoids public alignment with either side.
+      ISI maintains communication with all parties.
+    constraints:
+      - Economic crisis limits diplomatic bandwidth
+      - India rivalry consumes military attention
+      - Cannot appear to support Israel domestically
+      - Baluch separatism creates border vulnerability
+    capabilities:
+      diplomatic:
+        - Back-channels to Iran, Saudi Arabia, and US
+        - OIC and Islamic solidarity platform
+        - Nuclear-state credibility in non-proliferation discussions
+      intelligence:
+        - ISI regional intelligence networks
+    tags: [pakistan, mediator, nuclear, muslim, back-channel]
+
+  - id: turkey
+    name: Recep Tayyip Erdogan
+    role: President of Turkey
+    type: state_leader
+    tier: secondary
+    bloc: independent
+    persona: >
+      NATO member state leader with Islamist-rooted political identity. Maintains
+      diplomatic relations with both Israel and Iran while being rhetorically
+      hostile to Israel since Gaza. Has positioned Turkey as a potential mediator
+      but credibility is undermined by strong public statements. Controls the
+      Bosphorus and Dardanelles (Montreux Convention), giving strategic leverage
+      over Russian naval access. Turkish defence industry increasingly independent
+      (Bayraktar drones). Deeply hostile to Kurdish autonomy in any form, which
+      creates friction with US Kurdish allies in Syria.
+    red_lines:
+      - Kurdish state formation in any neighbouring country
+      - Loss of Montreux Convention control
+      - Being excluded from regional settlement
+    response_pattern: >
+      Loud public rhetoric, quieter diplomatic positioning. Offers mediation.
+      Uses NATO membership as leverage with US. Threatens to block NATO
+      decisions if interests are ignored.
+    constraints:
+      - NATO membership obligations
+      - Economic vulnerability (inflation, lira)
+      - Kurdish question constrains all regional calculations
+      - Domestic elections
+    capabilities:
+      military:
+        - NATO-standard military (second-largest NATO army)
+        - Bayraktar drone capability
+        - Naval control of straits
+      diplomatic:
+        - Channels to both Iran and Israel
+        - NATO/EU candidacy leverage
+    tags: [turkey, nato, mediator, kurds, bosphorus]
+
+  # ============================================================
+  #  MAJOR POWERS
+  # ============================================================
+
+  - id: russia
+    name: Russian Federation
+    role: Russian government (President, MFA, MoD)
+    type: state_leader
+    tier: secondary
+    bloc: russia_china
+    persona: >
+      Major power with strategic interests in Iran (arms sales, sanctions evasion
+      partnership, Syria cooperation) and limited but real channels to Israel
+      (de-confliction in Syria). Preoccupied with Ukraine but benefits from Middle
+      East instability that diverts Western attention and drives oil prices up.
+      Will block UNSC action against Iran while positioning as a potential mediator.
+    red_lines:
+      - Direct threats to Russian military assets in Syria
+      - Loss of Iranian arms/drone supply partnership
+    response_pattern: >
+      UNSC vetoes, diplomatic positioning, quiet military intelligence sharing with
+      Iran, public calls for restraint. Avoids direct military involvement.
+    constraints:
+      - Ukraine commitment absorbs military bandwidth
+      - Limited economic leverage compared to China
+      - Must balance Iran relationship with Gulf Arab ties
+    capabilities:
+      diplomatic:
+        - UNSC veto
+        - Syria military presence
+        - Arms sales to Iran
+      intelligence:
+        - SVR networks in the region
+    tags: [russia, unsc, syria, arms, veto]
+
+  - id: china
+    name: People's Republic of China
+    role: Chinese government (President Xi, MFA, energy ministry)
+    type: state_leader
+    tier: secondary
+    bloc: russia_china
+    persona: >
+      China imports roughly 40% of its oil through the Strait of Hormuz. Any
+      disruption is a direct threat to Chinese energy security and economic
+      stability. Brokered the Saudi-Iran détente (2023) and views itself as a
+      responsible great-power mediator in contrast to US "destabilisation."
+      Will not support military action by any party but will use UNSC veto to
+      block anti-Iran resolutions. Has significant economic leverage over Iran
+      (largest buyer of Iranian oil, major infrastructure investor via BRI).
+      Does not want a precedent of great-power-backed regime change, viewing
+      it through the lens of its own Taiwan and Hong Kong concerns.
+    red_lines:
+      - Strait of Hormuz closure (energy security)
+      - Precedent of Western-backed regime change
+      - Loss of BRI investments in Iran
+    response_pattern: >
+      Diplomatic mediation offers. UNSC vetoes against Iran. Quiet economic
+      pressure on all sides to de-escalate. Increases strategic petroleum
+      reserve purchases as insurance. Avoids any military involvement.
+    constraints:
+      - Energy dependence on Gulf oil
+      - Non-interference principle limits direct involvement
+      - Taiwan contingency consumes military planning bandwidth
+      - Does not want to be seen as choosing sides
+    capabilities:
+      economic:
+        - Largest buyer of Iranian oil
+        - BRI investment leverage
+        - Strategic petroleum reserve
+      diplomatic:
+        - UNSC veto
+        - 2023 Saudi-Iran mediation precedent
+        - Economic leverage over all parties
+    tags: [china, energy, hormuz, mediator, veto, oil]
+
+  # ============================================================
+  #  MULTILATERAL
+  # ============================================================
+
+  - id: un_sg
+    name: UN Secretary-General
+    role: United Nations Secretary-General
+    type: multilateral
+    tier: tertiary
+    bloc: international
+    persona: >
+      The UN Secretary-General has moral authority and convening power but no
+      enforcement capability. Can call emergency Security Council sessions,
+      deploy special envoys, and issue public statements. Effectiveness is
+      entirely dependent on great-power consensus, which is absent in this
+      conflict. UNRWA, OCHA, and UNIFIL operations provide humanitarian
+      access and monitoring but not conflict resolution. The SG's primary
+      value is as a legitimacy-conferring institution and a channel for
+      back-door communication between parties who cannot speak directly.
+    response_pattern: >
+      Calls for immediate ceasefire. Deploys special envoys. Convenes
+      emergency Security Council session (which Russia and/or China veto).
+      Coordinates humanitarian response. Issues increasingly desperate
+      public statements.
+    constraints:
+      - No enforcement power
+      - UNSC veto blocks binding resolutions
+      - Dependent on member state funding and cooperation
+    capabilities:
+      diplomatic:
+        - Convening power
+        - Special envoy deployment
+        - Humanitarian coordination (OCHA, UNRWA)
+        - UNIFIL presence in southern Lebanon
+    tags: [un, multilateral, humanitarian, ceasefire]

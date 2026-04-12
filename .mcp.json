@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "snowglobe": {
+      "command": "fastmcp",
+      "args": ["run", "mcp_server.py"]
+    }
+  }
+}

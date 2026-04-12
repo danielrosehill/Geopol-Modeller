@@ -2,3 +2,6 @@
 logs
 data
 secrets
+.env
+__pycache__/
+*.pyc

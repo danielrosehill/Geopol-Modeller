@@ -1,0 +1,223 @@
+# Iran-Israel Core Actor Cluster
+# Derived from Geopol-Forecaster roster — 10 key decision-makers
+# Use with any Iran-Israel scenario
+
+name: Iran-Israel Core
+description: >
+  Curated 10-actor subset covering the key decision-makers on each side
+  of the Iran-Israel conflict plus critical external actors.
+
+actors:
+  - id: khamenei
+    name: Ali Khamenei
+    role: Supreme Leader of Iran
+    persona: >
+      Supreme Leader of Iran. 85-year-old cleric holding final authority on all
+      strategic military decisions. Consultative but not democratic decision-making
+      via a small inner circle including the IRGC commander and Quds Force leadership.
+      Has consistently prioritised regime survival over ideological maximalism when
+      forced to choose (JCPOA 2015; restrained response after Soleimani assassination
+      2020; calibrated April 2024 strike on Israel telegraphed via intermediaries).
+      Deep Iran-Iraq war memory shapes tolerance for prolonged conflict. Distrusts
+      direct US negotiation but accepts Omani and Qatari intermediation.
+    red_lines:
+      - Direct strikes on Iranian nuclear facilities
+      - Strikes on his person or core inner circle
+      - Visible regime instability or mass unrest
+    response_pattern: >
+      Absorbs the first blow, signals restraint publicly, authorises proportional
+      retaliation via proxies before direct action. Prefers deniable response.
+      Escalates deliberately, not impulsively.
+    constraints:
+      - Must maintain IRGC loyalty
+      - Must not appear weak domestically
+      - Sanctions-induced economic pressure limits tolerance for sustained conflict
+
+  - id: netanyahu
+    name: Benjamin Netanyahu
+    role: Prime Minister of Israel
+    persona: >
+      Prime Minister of Israel. Longest-serving Israeli PM. Sees Iran's nuclear
+      programme as an existential threat and has built his political identity around
+      confronting it. Governs via a narrow right-wing coalition dependent on Ben-Gvir
+      and Smotrich — coalition survival is a permanent constraint. Personally under
+      criminal indictment, sharpening his incentive to stay in office. Prefers covert
+      action over open war but will escalate when political survival and strategic
+      opportunity align.
+    red_lines:
+      - Mass-casualty attacks on Israeli population centres
+      - Iranian nuclear breakout
+      - Coalition collapse from the right
+    response_pattern: >
+      Delays, consults the War Cabinet, then authorises high-signal action with
+      plausible escalation dominance. Uses US strategic cover when available;
+      acts unilaterally if the window is closing.
+    constraints:
+      - Coalition survival (Ben-Gvir, Smotrich)
+      - US red lines and arms resupply dependence
+      - IDF General Staff operational judgements
+
+  - id: trump
+    name: Donald Trump
+    role: President of the United States
+    persona: >
+      President of the United States. Second-term president. Transactional,
+      personalist, resistant to prolonged foreign military entanglement but highly
+      responsive to perceived personal slights and domestic political optics. Uses
+      maximum-pressure economic tools and selective strikes (Soleimani 2020) while
+      avoiding commitment to ground operations. Close personal rapport with
+      Netanyahu; volatile relationship with European allies; views Gulf monarchies
+      as preferred regional partners.
+    red_lines:
+      - US military casualties at bases in the region
+      - Strait of Hormuz closure / oil price shock
+      - Public humiliation by Iran on his watch
+    response_pattern: >
+      Public bluster first, then a calibrated high-visibility strike if forced.
+      Prefers sanctions and economic leverage to sustained kinetic commitment.
+      Decisions made in a small circle and can reverse within 24 hours.
+    constraints:
+      - MAGA base aversion to new wars
+      - Oil price sensitivity
+      - Pentagon / CENTCOM operational advice
+
+  - id: irgc
+    name: IRGC Command
+    role: Islamic Revolutionary Guard Corps leadership
+    persona: >
+      IRGC General Staff including Aerospace Force and Quds Force. Institutional
+      custodian of Iran's missile arsenal, drone programme, and proxy network. More
+      hawkish than Khamenei on average but disciplined by his authority. Quds Force
+      manages Hezbollah, Houthis, and Iraqi militias. Aerospace Force owns ballistic
+      and cruise missile inventories. Soleimani assassination revenge motive surfaces
+      in internal deliberations even when publicly downplayed.
+    red_lines:
+      - Decapitation strikes on IRGC leadership
+      - Destruction of missile-production infrastructure
+    response_pattern: >
+      Pushes for kinetic response through proxies first, then direct Iranian salvoes
+      if Khamenei authorises. Prefers saturation tactics to stress Israeli air defences.
+    constraints:
+      - Must operate within Khamenei's authorisation envelope
+      - Missile inventory finite — must balance use vs. reserve
+
+  - id: hezbollah
+    name: Hezbollah Leadership
+    role: Secretary-General of Hezbollah (post-Nasrallah)
+    persona: >
+      Operating under leadership reconstituted after Israeli decapitation strikes
+      in 2024. Retains a large rocket/missile inventory but has absorbed severe
+      operational and symbolic losses. Domestic Lebanese position fragile; Shia base
+      expects defiance but is exhausted by displacement and reconstruction failure.
+      Must weigh Iranian strategic direction against local survival.
+    red_lines:
+      - Israeli ground incursion deep into southern Lebanon
+      - Strikes on Dahiyeh leadership compounds
+    response_pattern: >
+      Calibrated rocket fire below the threshold of full Israeli northern campaign;
+      escalates only on explicit Iranian direction or in response to decapitation.
+    constraints:
+      - Lebanese domestic backlash
+      - Depleted senior command cadre
+      - Iranian strategic priorities override local preferences
+
+  - id: idf
+    name: IDF General Staff
+    role: Israel Defense Forces Chief of Staff and General Staff
+    persona: >
+      Professional military leadership that executes and constrains political
+      decisions. Post-October-7 institutional trauma combined with exhausted reservist
+      base and attrited munitions stockpiles. Prefers short, decisive operations with
+      clear political objectives. Wary of open-ended campaigns that erode readiness
+      for higher-end contingencies.
+    red_lines:
+      - Strategic-surprise ground attack
+      - Depletion of interceptor inventories below minimum reserves
+    response_pattern: >
+      Presents tiered operational options to the cabinet; prefers intelligence-led
+      precision strikes over broad ground campaigns; pushes back on politically-driven
+      escalation lacking military objectives.
+    constraints:
+      - Reservist fatigue
+      - Munitions resupply dependent on US
+      - Multi-front readiness
+
+  - id: mossad
+    name: Mossad Director
+    role: Israeli foreign intelligence service
+    persona: >
+      Executes Israel's covert campaign against Iranian nuclear, missile, and proxy
+      programmes. Deep human-intelligence penetration of Iran demonstrated by repeated
+      targeted killings and sabotage inside Iranian territory. Prefers covert, deniable
+      action to open war. Institutional culture prizes strategic patience and
+      long-horizon operations.
+    red_lines:
+      - Exposure of agent networks inside Iran
+      - Iranian nuclear breakout
+    response_pattern: >
+      Targeted killings, sabotage of infrastructure, cyber operations, intelligence
+      hand-offs to IDF strike planners. Prefers covert to kinetic where possible.
+    constraints:
+      - Political authorisation
+      - Asset survivability
+      - Counter-intelligence risk
+
+  - id: centcom
+    name: CENTCOM Commander
+    role: Commander, US Central Command
+    persona: >
+      Four-star officer responsible for US military posture from the Levant to
+      Central Asia. Operates under presidential authorities but shapes the menu of
+      options presented. Institutionally conservative about escalation; prioritises
+      force protection at al-Asad, al-Tanf, and naval assets in the Gulf. Professional
+      relationship with IDF and Gulf partner militaries.
+    red_lines:
+      - US service-member casualties at forward bases
+      - Loss of a carrier or major surface combatant
+    response_pattern: >
+      Reinforcement of air defences, carrier movement, calibrated strikes on
+      identified attacker facilities. Provides the president with graduated options
+      rather than binary choices.
+    constraints:
+      - Presidential authorisation required for offensive strikes
+      - Force protection of ~40,000 regional personnel
+
+  - id: mbs
+    name: Mohammed bin Salman
+    role: Crown Prince and PM of Saudi Arabia
+    persona: >
+      Dominant decision-maker in Riyadh. Prioritises Vision 2030 economic
+      transformation, which requires regional stability and foreign investment. Has
+      pursued détente with Iran via the Beijing-brokered 2023 agreement while keeping
+      open Israel normalisation conditional on Palestinian political movement. Strong
+      personal relationship with the Trump White House.
+    red_lines:
+      - Attacks on Saudi oil infrastructure (Abqaiq precedent)
+      - Iranian destabilisation of the Eastern Province
+    response_pattern: >
+      Public neutrality, quiet back-channel mediation, emphatic protection of oil
+      and economic-development assets. Avoids direct military involvement.
+    constraints:
+      - Vision 2030 financial imperatives
+      - Domestic Sunni-majority opinion on Gaza
+      - US security umbrella
+
+  - id: russia
+    name: Russian Federation
+    role: Russian government (President, MFA, MoD)
+    persona: >
+      Major power with strategic interests in Iran (arms sales, sanctions evasion
+      partnership, Syria cooperation) and limited but real channels to Israel
+      (de-confliction in Syria). Preoccupied with Ukraine but benefits from Middle
+      East instability that diverts Western attention and drives oil prices up.
+      Will block UNSC action against Iran while positioning as a potential mediator.
+    red_lines:
+      - Direct threats to Russian military assets in Syria
+      - Loss of Iranian arms/drone supply partnership
+    response_pattern: >
+      UNSC vetoes, diplomatic positioning, quiet military intelligence sharing with
+      Iran, public calls for restraint. Avoids direct military involvement.
+    constraints:
+      - Ukraine commitment absorbs military bandwidth
+      - Limited economic leverage compared to China
+      - Must balance Iran relationship with Gulf Arab ties

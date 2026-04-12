@@ -22,6 +22,8 @@ watchfiles = "*"
 rich = "*"
 edge-tts = "*"
 trafilatura = "*"
+sse-starlette = "*"
+httpx = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.9.0"
@@ -31,6 +33,7 @@ pytest-asyncio = "*"
 
 [tool.poetry.scripts]
 snowglobe = "llm_snowglobe.cli:main"
+snowglobe-web = "llm_snowglobe.web.app:main"
 snowglobe_server = "llm_snowglobe.scripts:server"
 snowglobe_game = "llm_snowglobe.user_defined_game:main"
 snowglobe_simulation = "llm_snowglobe.user_defined_sim:main"

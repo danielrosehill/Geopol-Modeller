@@ -1,0 +1,96 @@
+# Scenario: Iran-Israel War
+# Configurable prediction timeframes
+
+title: "Iran-Israel War"
+
+actor_cluster: iran-israel-core
+
+scenario: |
+  DATE: 12 April 2026
+
+  TRIGGER EVENT: US President Donald Trump has declared that the US Navy will
+  begin blockading the Strait of Hormuz "effective immediately." The announcement
+  comes amid escalating tensions in the Iran-Israel conflict.
+
+  CONTEXT:
+  - The Iran-Israel conflict has been escalating through direct strikes and proxy warfare
+  - The Strait of Hormuz handles approximately 21% of global oil transit
+  - Iran has long declared that any blockade of Hormuz would be treated as an act of war
+  - The US Navy maintains carrier strike groups and surface combatants in the region via CENTCOM
+  - Iran possesses anti-ship cruise missiles, fast attack craft, naval mines, and shore-based missile batteries
+  - Oil markets are already volatile; Brent crude has been climbing on regional tension
+  - Iran's IRGC Navy has conducted exercises simulating strait-closure operations
+  - Hezbollah has been reconstituting after 2024 Israeli decapitation strikes
+  - Houthi anti-shipping operations continue in the Red Sea and Bab el-Mandeb
+  - Multiple US allies (Japan, South Korea, India, EU states) are heavily dependent on Gulf oil transit
+  - China imports roughly 40% of its oil through the Strait of Hormuz
+
+  IMMEDIATE SITUATION:
+  Each actor must decide their response. The blockade has been declared but physical
+  enforcement posture is still being established.
+
+  KEY QUESTIONS AT STAKE:
+  - Does Iran attempt to run the blockade, or does it retaliate asymmetrically?
+  - Does Israel use this moment to escalate against Iranian nuclear/military targets?
+  - Do US allies support or distance themselves from the blockade?
+  - Does the oil market shock create pressure for immediate de-escalation?
+  - Do Iranian proxies (Hezbollah, Houthis) activate in response?
+  - Does this escalate to direct Iran-Israel kinetic exchange?
+
+# --- Timeframe Configuration ---
+# Each move simulates one timeframe step. Use presets or define custom.
+#
+# Presets (set timeframe_preset instead of custom timeframes):
+#   short:    ["+24h"]
+#   medium:   ["+24h", "+72h", "+2 weeks"]
+#   long:     ["+24h", "+72h", "+2 weeks", "+1 month", "+3 months"]
+#   daily:    ["+24h", "+48h"]
+#
+# Custom: define timeframes list directly (overrides preset)
+
+timeframe_preset: short
+
+# Uncomment to use custom timeframes instead of a preset:
+# timeframes:
+#   - "+24h"
+#   - "+72h"
+#   - "+1 week"
+#   - "+1 month"
+
+nature: true
+mode:
+  - geopol
+
+questions:
+  - "In one sentence, what is the dominant trajectory?"
+  - "What is the most dangerous escalation path that emerged?"
+  - "Which actor's response was most consequential in shaping the outcome?"
+
+mc_questions:
+  - question: "Does Iran attempt to physically challenge the blockade?"
+    options:
+      - "Yes — direct naval confrontation"
+      - "Yes — mines or asymmetric naval action"
+      - "No — diplomatic/rhetorical response only"
+      - "No — but activates proxies instead"
+
+  - question: "Does Israel launch strikes on Iranian targets?"
+    options:
+      - "Yes"
+      - "No"
+      - "Prepares but holds"
+
+  - question: "What happens to oil prices?"
+    options:
+      - "Spike above $150/barrel"
+      - "Spike to $120-150 range"
+      - "Moderate increase ($100-120)"
+      - "Markets wait for clarity"
+
+  - question: "What is the escalation level at the end of the timeframe?"
+    options:
+      - "De-escalation / diplomacy"
+      - "Proxy exchanges only (baseline)"
+      - "Direct Iran-Israel strikes"
+      - "Sustained mutual strikes"
+      - "Full conventional war"
