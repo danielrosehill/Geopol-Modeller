@@ -1,2 +1,1 @@
-from .ask import AskTool as AskTool
-from .rag import RAGTool as RAGTool
+from .rag import load_documents as load_documents

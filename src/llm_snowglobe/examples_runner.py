@@ -1,40 +1,24 @@
 #!/usr/bin/env python3
 
-#   Copyright 2023-2025 IQT Labs LLC
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+"""Runnable simulation functions invoked by the CLI."""
 
-"""Azuristan vs Crimsonia — AI-vs-AI geopolitical simulation.
-
-Uses OpenRouter model pools and optional Tavily briefing.
-"""
-
-import asyncio
 import os
+from .core.llm import LLMClient, load_pools
+from .core import Database, History, Player, Control, build_simulation_graph
+from .planning import PlanningAgent
 
-import llm_snowglobe as snowglobe
 
+async def run_ac_sim(pool_name=None, pools_path=None, verbosity=1):
+    """Run the Azuristan/Crimsonia geopolitical simulation."""
 
-async def run_simulation(pool_name=None, verbosity=1):
-    # Load pools config
-    pools_path = os.path.join(os.path.dirname(__file__), "..", "config", "pools.yaml")
-    pools, active, base_url = snowglobe.core.load_pools(pools_path)
+    # Load pool
+    if pools_path is None:
+        pools_path = os.path.join("config", "pools.yaml")
+    pools, active, base_url = load_pools(pools_path)
     pool = pools.get(pool_name or active)
 
-    # Create LLM client
-    client = snowglobe.LLMClient(base_url=base_url)
+    client = LLMClient(base_url=base_url)
 
-    # Scenario
     title = "Azuristan and Crimsonia"
     scenario = """\
 Azuristan and Crimsonia are neighboring countries in Central Asia.  Azuristan is a \
@@ -61,59 +45,50 @@ indicate that they want Tyriana to become part of Crimsonia."""
         'crimsonia_dove': "Your goal is to avoid war at all costs, and to unify the Crimsonian people if possible.",
     }
 
-    # Planning agent — research current events
-    planner = snowglobe.PlanningAgent(
-        llm_client=client, model=pool.planner, verbosity=verbosity
-    )
+    # Planning agent
+    planner = PlanningAgent(llm_client=client, model=pool.planner, verbosity=verbosity)
     briefing = await planner.create_briefing(scenario=scenario, title=title)
 
-    # Set up dummy database (no human players in this sim)
-    db_path = os.path.join(os.path.dirname(__file__), "..")
-    db = snowglobe.Database(ioid="sim_ac", path=db_path, initialize=True)
+    # Database
+    db_dir = os.path.join(os.getcwd(), ".snowglobe_data")
+    os.makedirs(db_dir, exist_ok=True)
+    db = Database(ioid="sim_ac", path=db_dir, initialize=True)
 
-    # Create players
+    # Players
     players = [
-        snowglobe.Player(
-            database=db,
-            verbosity=verbosity,
-            llm_client=client,
-            model_id=pool.player,
+        Player(
+            database=db, verbosity=verbosity,
+            llm_client=client, model_id=pool.player,
             name="President of Azuristan",
             persona=f"the leader of Azuristan. {goals['azuristan_dove']}",
         ),
-        snowglobe.Player(
-            database=db,
-            verbosity=verbosity,
-            llm_client=client,
-            model_id=pool.player,
+        Player(
+            database=db, verbosity=verbosity,
+            llm_client=client, model_id=pool.player,
             name="Premier of Crimsonia",
             persona=f"the leader of Crimsonia. {goals['crimsonia_dove']}",
         ),
     ]
 
-    # Create narrator (Control)
-    narrator = snowglobe.Control(
-        database=db,
-        verbosity=verbosity,
-        llm_client=client,
-        model_id=pool.narrator,
+    # Narrator
+    narrator = Control(
+        database=db, verbosity=verbosity,
+        llm_client=client, model_id=pool.narrator,
     )
 
-    # Build the simulation graph callbacks
+    # Graph callback wiring
     async def player_respond_fn(player_config, history):
         player_obj = next(p for p in players if p.name == player_config["name"])
-        # Build a History object from the state's history list
-        h = snowglobe.History()
+        h = History()
         for entry in history:
             h.add(entry["name"], entry["text"])
-        # Inject briefing into the history if not already there
         return await player_obj.respond(history=h)
 
     async def adjudicate_fn(history, responses, nature, timestep, mode):
-        h = snowglobe.History()
+        h = History()
         for entry in history:
             h.add(entry["name"], entry["text"])
-        r = snowglobe.History()
+        r = History()
         for entry in responses:
             r.add(entry["name"], entry["text"])
         return await narrator.adjudicate(
@@ -121,14 +96,14 @@ indicate that they want Tyriana to become part of Crimsonia."""
         )
 
     async def assess_fn(history, query, mc=None):
-        h = snowglobe.History()
+        h = History()
         for entry in history:
             h.add(entry["name"], entry["text"])
         return await narrator.assess(history=h, query=query, mc=mc)
 
-    # Run via LangGraph
-    graph = snowglobe.build_simulation_graph()
-    initial_state = {
+    # Run
+    graph = build_simulation_graph()
+    result = await graph.ainvoke({
         "scenario": scenario,
         "briefing": briefing,
         "title": title,
@@ -146,7 +121,8 @@ indicate that they want Tyriana to become part of Crimsonia."""
         "current_responses": [],
         "questions": ["In one sentence, what was the outcome?"],
         "mc_questions": [
-            ["What was the final status of Tyriana?", ["part of Azuristan", "part of Crimsonia", "independent", "not yet determined"]],
+            ["What was the final status of Tyriana?",
+             ["part of Azuristan", "part of Crimsonia", "independent", "not yet determined"]],
             ["Did armed conflict occur?", ["yes", "no"]],
         ],
         "assessments": [],
@@ -154,9 +130,7 @@ indicate that they want Tyriana to become part of Crimsonia."""
         "_adjudicate": adjudicate_fn,
         "_assess": assess_fn,
         "_verbosity": verbosity,
-    }
-
-    result = await graph.ainvoke(initial_state)
+    })
 
     print("\n\n=== ASSESSMENTS ===\n")
     for a in result.get("assessments", []):
@@ -165,9 +139,3 @@ indicate that they want Tyriana to become part of Crimsonia."""
         print()
 
     return result
-
-
-if __name__ == "__main__":
-    import sys
-    pool = sys.argv[1] if len(sys.argv) > 1 else None
-    asyncio.run(run_simulation(pool_name=pool))

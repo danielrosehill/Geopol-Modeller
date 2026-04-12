@@ -15,45 +15,21 @@
 #   limitations under the License.
 
 import os
-import platformdirs
-import random
-import sys
-import transformers
-import urllib.parse
-import urllib.request
 import yaml
+from dataclasses import dataclass
 
-import langchain_openai
-import langchain_huggingface
-import langchain_community.llms
-import langchain_community.embeddings
+import openai
 
-import langchain_community.document_loaders
-import langchain_community.document_loaders.text
-import langchain_community.document_loaders.html
 
-def settings():
-    s = {}
-    # Standard paths
-    s["config_dir"] = platformdirs.user_config_dir("snowglobe")
-    s["cache_dir"] = platformdirs.user_cache_dir("snowglobe")
-    s["data_dir"] = platformdirs.user_data_dir("snowglobe", "snowglobe")
-    s["menu_file"] = "llms.yaml"
-    s["menu_path"] = os.path.join(s["config_dir"], s["menu_file"])
-
-    # Default model
-    s["default_source"] = "llamacpp"
-    s["default_model"] = "mistral-7b-openorca"
-    s["default_url"] = (
-        "https://huggingface.co/TheBloke/Mistral-7B-OpenOrca-GGUF/resolve/main/mistral-7b-openorca.Q5_K_M.gguf"
-    )
-    s["default_file"] = os.path.basename(urllib.parse.urlparse(s["default_url"]).path)
-    s["default_path"] = os.path.join(s["cache_dir"], s["default_file"])
-    return s
+@dataclass
+class ModelPool:
+    planner: str
+    narrator: str
+    player: str
+    advisor: str
 
 
 def read_yaml(path):
-    # Reads YAML file, expressing empty or nonexistent file as empty dictionary
     if os.path.exists(path):
         with open(path, "r") as obj:
             content = yaml.safe_load(obj)
@@ -64,168 +40,63 @@ def read_yaml(path):
     return content
 
 
-def write_yaml(data, path):
-    # Writes YAML file, creating empty directory if needed
-    if not os.path.exists(os.path.dirname(path)):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as obj:
-        yaml.dump(data, obj, default_flow_style=False, sort_keys=False)
+def load_pools(path):
+    data = read_yaml(path)
+    pools = {}
+    for name, models in data.get("pools", {}).items():
+        pools[name] = ModelPool(
+            planner=models["planner"],
+            narrator=models["narrator"],
+            player=models["player"],
+            advisor=models["advisor"],
+        )
+    active = data.get("active_pool", "deepseek")
+    base_url = data.get("api", {}).get("base_url", "https://openrouter.ai/api/v1")
+    return pools, active, base_url
 
 
-def config(
-    menu=None,
-    source=None,
-    model=None,
-    url=None,
-    path=None,
-    update_menu=True,
-    download_weights=True,
-):
-    s = settings()
-    menu = menu if menu is not None else s["menu_path"]
-    source = source if source is not None else s["default_source"]
-    model = model if model is not None else s["default_model"]
-    url = url if url is not None else s["default_url"]
-    path = path if path is not None else s["default_path"]
+class LLMClient:
+    """Thin async wrapper around OpenAI SDK pointed at OpenRouter."""
 
-    # Update menu of source+model options
-    if update_menu:
-        options = read_yaml(menu)
-        if source not in options:
-            options[source] = {}
-        options[source][model] = path
-        write_yaml(options, menu)
+    def __init__(self, api_key=None, base_url="https://openrouter.ai/api/v1"):
+        if api_key is None:
+            api_key = os.environ.get("OPENROUTER_API_KEY", "")
+        self.client = openai.AsyncOpenAI(api_key=api_key, base_url=base_url)
 
-    # Download model weights
-    if download_weights:
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        print("Downloading model weights... ", end="", flush=True)
-        urllib.request.urlretrieve(url, path)
-        print("Done", flush=True)
+    async def complete(
+        self,
+        model,
+        messages,
+        temperature=0.7,
+        max_tokens=2048,
+        stop=None,
+    ):
+        response = await self.client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stop=stop,
+        )
+        return response.choices[0].message.content or ""
 
-class LLM:
-    def __init__(self, source=None, model=None, menu=None, gen=None, embed=None, verbosity=2):
-
-        s = settings()
-        self.menu = menu if menu is not None else s["menu_path"]
-        self.source = source if source is not None else s["default_source"]
-        self.model = model if model is not None else s["default_model"]
-        self.gen = gen if gen is not None else True
-        self.embed = embed if embed is not None else False
-        self.verbosity = verbosity
-
-        if self.source not in ["openai", "azure"]:
-            options = read_yaml(self.menu)
-            # When using the default model and standard menu path,
-            # if the model is not found then auto-install it.
-            if (
-                (self.source not in options or self.model not in options[self.source])
-                and self.source == s["default_source"]
-                and self.model == s["default_model"]
-                and self.menu == s["menu_path"]
-            ):
-                config()
-                options = read_yaml(self.menu)
-            self.model_path = options[self.source][self.model]
-            self.model_path = os.path.expanduser(self.model_path)
-            if not os.path.isabs(self.model_path):
-                self.model_path = os.path.join(self.menu, self.model_path)
-        elif self.source in ["azure"]:
-            options = read_yaml(self.menu)
-            self.azure_deployment = options[self.source][self.model]["deployment"]
-            self.azure_endpoint = options[self.source][self.model]["endpoint"]
-            self.azure_version = options[self.source][self.model]["version"]
-
-        if self.source == "openai":
-
-            # Model Source: OpenAI (Cloud)
-            if self.gen:
-                self.llm = langchain_openai.ChatOpenAI(
-                    model_name=self.model,
-                    streaming=True,
-                )
-            if self.embed:
-                self.embeddings = langchain_openai.OpenAIEmbeddings()
-
-        elif self.source == "azure":
-
-            # Model Source: Azure OpenAI (Cloud)
-            if self.gen:
-                self.llm = langchain_openai.AzureChatOpenAI(
-                    azure_deployment=self.azure_deployment,
-                    azure_endpoint=self.azure_endpoint,
-                    api_version=self.azure_version,
-                    streaming=True,
-                )
-            if self.embed:
-                self.embeddings = langchain_openai.AzureOpenAIEmbeddings(
-                    azure_deployment=self.azure_deployment,
-                    azure_endpoint=self.azure_endpoint,
-                    api_version=self.azure_version,
-                )
-
-        elif self.source == "llamacpp":
-
-            # Model Source: llama.cpp (Local)
-            if self.gen:
-                self.llm = langchain_community.llms.LlamaCpp(
-                    model_path=self.model_path,
-                    n_gpu_layers=-1,
-                    seed=random.randint(0, sys.maxsize),
-                    n_ctx=32768,
-                    n_batch=512,
-                    f16_kv=True,
-                    max_tokens=1000,
-                    verbose=False,
-                )
-            if self.embed:
-                self.embeddings = langchain_community.embeddings.LlamaCppEmbeddings(
-                    model_path=self.model_path,
-                    n_gpu_layers=-1,
-                    n_batch=512,
-                    n_ctx=8192,
-                    f16_kv=True,
-                    verbose=False,
-                )
-            self.serial = True
-
-        elif self.source == "huggingface":
-
-            # Model Source: Hugging Face (Local)
-            if self.gen:
-                model = transformers.AutoModelForCausalLM.from_pretrained(
-                    self.model_path, device_map="auto"
-                )
-                tokenizer = transformers.AutoTokenizer.from_pretrained(
-                    self.model_path, device_map="auto"
-                )
-                tokenizer.pad_token = tokenizer.eos_token
-                streamer = (
-                    transformers.TextStreamer(
-                        tokenizer, skip_prompt=True, skip_special_tokens=True
-                    )
-                    if self.verbosity >= 1
-                    else None
-                )
-                pipeline = transformers.pipeline(
-                    "text-generation",
-                    model=model,
-                    tokenizer=tokenizer,
-                    device_map="auto",
-                    max_new_tokens=2048,
-                    repetition_penalty=1.05,
-                    return_full_text=False,
-                    streamer=streamer,
-                    do_sample=True,
-                )
-                self.llm = langchain_huggingface.llms.HuggingFacePipeline(
-                    pipeline=pipeline
-                )
-            if self.embed:
-                self.embeddings = (
-                    langchain_huggingface.embeddings.HuggingFaceEmbeddings(
-                        model_name=self.model_path, show_progress=True
-                    )
-                )
-
-        self.bound = {}
+    async def complete_stream(
+        self,
+        model,
+        messages,
+        temperature=0.7,
+        max_tokens=2048,
+        stop=None,
+    ):
+        stream = await self.client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stop=stop,
+            stream=True,
+        )
+        async for chunk in stream:
+            delta = chunk.choices[0].delta
+            if delta.content:
+                yield delta.content

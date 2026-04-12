@@ -14,12 +14,11 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import langchain.globals
-import langgraph.prebuilt
 import random
 import time
 
 from .history import History
+
 
 class Intelligent:
     def __init__(self, database, verbosity, kind, ioid=None, name='', iodict=None, logger=None, **kwargs):
@@ -28,13 +27,12 @@ class Intelligent:
         self.logger = logger
         self.active = True
         self.kind = kind
-        # Assign ID
         if ioid is not None:
             self.ioid = str(ioid)
         else:
             self.ioid = str(random.randint(100000, 999999))
         self.name = name
-        self.iodict=iodict
+        self.iodict = iodict
         self.setup(self.kind)
 
     def setup(self, kind):
@@ -46,26 +44,18 @@ class Intelligent:
             self.preset_setup()
 
     async def return_output(
-        self, kind=None, bind=None, level=None, template=None, variables=None, **kwargs
+        self, kind=None, bind=None, template=None, variables=None, **kwargs
     ):
-        # Set defaults
         if kind is None:
             kind = self.kind
 
-        # Use intelligent entity (AI or human) to generate output
         if template is None and variables is None:
             template, variables = await self.return_template(**kwargs)
-        prompt = langchain.prompts.PromptTemplate(
-            template=template,
-            input_variables=list(variables.keys()),
-        )
-        
-        if kind == "ai" and self.reasoning:
-            output = await self.return_from_ai_reasoning(prompt, variables, level=level)
-        elif kind == "ai":
-            output = await self.return_from_ai(prompt, variables, bind=bind)
+
+        if kind == "ai":
+            output = await self.return_from_ai(template, variables, bind=bind)
         elif kind == "human":
-            output = await self.return_from_human(prompt, variables)
+            output = await self.return_from_human(template, variables)
         elif kind == "preset":
             output = await self.return_from_preset()
         return output
@@ -84,12 +74,10 @@ class Intelligent:
         query_format=None,
         query_subtitle=None,
     ):
-        # Punctuation edit
         if persona is not None:
             if persona[-1:] == ".":
                 persona = persona[:-1]
 
-        # Create template and variables
         template = ""
         variables = {}
         if persona is not None:
@@ -130,80 +118,42 @@ class Intelligent:
             variables["subtitle"] = query_subtitle
         return template, variables
 
-    async def return_from_ai_reasoning(self, prompt, variables, level=None):
-        llm = self.llm.llm.bind(**self.llm.bound)
-        if self.tools is None:
-            tools = []
-        else:
-            if level is None:
-                level = 0
-            tools = [tool for tool in self.tools if tool.metadata["level"] >= level]
-        llm = llm.bind_tools(tools)
-        mind = langgraph.prebuilt.create_react_agent(llm, tools)
-        context = {"role": "user", "content": prompt.format(**variables)}
-        if self.verbosity >= 5:
-            langchain_debug = langchain.globals.get_debug()
-            langchain.globals.set_debug(True)
-        response = await mind.ainvoke({"messages": context})
-        output = response["messages"][-1].text()
-        if self.verbosity >= 5:
-            langchain.globals.set_debug(langchain_debug)
-        elif self.verbosity >= 3:
-            for message in response["messages"]:
-                message.pretty_print()
-        elif self.verbosity >= 1:
-            print(output)
-        return output
+    async def return_from_ai(self, template, variables, max_tries=64, bind=None):
+        content = template.format(**variables)
+        messages = [{"role": "user", "content": content}]
+        stop = bind.get("stop") if bind else None
 
-    async def return_from_ai(self, prompt, variables, max_tries=64, bind=None):
-        llm = self.llm.llm.bind(**self.llm.bound)
-        if bind is not None:
-            llm = llm.bind(**bind)
-        chain = prompt | llm
         if self.verbosity >= 4:
             print("v" * 80)
-            print(prompt.format(**variables))
+            print(content)
             print("^" * 80)
+
         for i in range(max_tries):
-            if not self.verbosity >= 1 or self.llm.source == "huggingface":
-                if hasattr(self.llm, "serial") and self.llm.serial:
-                    output = chain.invoke(variables)
-                else:
-                    output = await chain.ainvoke(variables)
-                if self.llm.source in ["openai", "azure"]:
-                    output = output.content
+            if self.verbosity >= 1:
+                output = ""
+                async for chunk in self.llm_client.complete_stream(
+                    model=self.model_id, messages=messages, stop=stop
+                ):
+                    print(chunk, end="", flush=True)
+                    output += chunk
                 output = output.strip()
             else:
-
-                def handle(chunk):
-                    if self.llm.source in ["openai", "azure"]:
-                        chunk = chunk.content
-                    print(chunk, end="", flush=True)
-                    return chunk
-
-                output = ""
-                if hasattr(self.llm, "serial") and self.llm.serial:
-                    for chunk in chain.stream(variables):
-                        output += handle(chunk)
-                else:
-                    async for chunk in chain.astream(variables):
-                        output += handle(chunk)
+                output = await self.llm_client.complete(
+                    model=self.model_id, messages=messages, stop=stop
+                )
                 output = output.strip()
+
             if len(output) > 0:
                 break
+
         if self.verbosity >= 1:
             print()
         return output
 
-    async def return_from_human(self, prompt, variables):
+    async def return_from_human(self, template, variables):
         chatroom = self.db.default_chatroom(self.ioid)
-
-        # Send prompt.  Create a temporary control just to send the message.
-        # sender = Control(llm=None)
-        content = prompt.format(**variables)
+        content = template.format(**variables)
         self.interface_send_message(chatroom, content)
-
-        # Get response
         answer = await self.interface_get_message(chatroom)
         return answer
 
@@ -217,8 +167,6 @@ class Intelligent:
     def interface_setup(self):
         if self.verbosity >= 2:
             print("ID %s : %s" % (self.ioid, self.name))
-
-        # Export info for UI interface
         self.db.add_player(self.ioid, self.name)
         if self.iodict is not None:
             for resource_type in [
@@ -290,7 +238,6 @@ class Intelligent:
     async def chat_response(
         self, chatlog, name="Assistant", persona=None, history=None, participants=None
     ):
-        # Get single response, given prexisting chatlog
         chat_intro = "This is a conversation about what happened"
         if participants is None:
             participants = set([entry["name"] for entry in chatlog.entries])
@@ -320,7 +267,6 @@ class Intelligent:
             print(instructions)
             print("-" * len(instructions))
         while True:
-            # Get user input, which may be multiline if no line is blank
             usertext = ""
             while True:
                 userline = input()
@@ -331,8 +277,6 @@ class Intelligent:
                 break
             usertext = usertext.strip()
             chatlog.add(username, usertext)
-
-            # Get response
             output = await self.chat_response(
                 chatlog,
                 name=name,
@@ -346,13 +290,10 @@ class Intelligent:
     async def chat_session(self, chatroom, history=None):
         while self.active:
             log = self.db.get_chatlog(chatroom)
-            # Respond unless most recent message was from self
             if len(log) > 0 and log[-1]["name"] != self.name:
-                # Construct message log
                 chatlog = History()
                 for logitem in log:
                     chatlog.add(logitem["name"], logitem["content"])
-                # Respond
                 output = await self.chat_response(
                     chatlog, name=self.name, persona=self.persona, history=history
                 )

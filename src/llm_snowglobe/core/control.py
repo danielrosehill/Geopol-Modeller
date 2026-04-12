@@ -19,7 +19,7 @@ import random
 import asyncio
 
 from .intelligent import Intelligent
-from .llm import LLM
+from .llm import LLMClient
 from .player import Player
 from .stateful import Stateful
 
@@ -29,27 +29,20 @@ class Control(Intelligent, Stateful):
         self,
         database,
         verbosity,
-        name,
+        name="Control",
         kind='ai',
         logger=None,
-        source=None,
-        model=None,
-        menu=None,
-        gen=None,
-        embed=None,
-        llm=None,
-        reasoning=None,
-        tools=None,
+        llm_client=None,
+        model_id=None,
         ioid=None,
         iodict=None,
         presets=None,
         **kwargs
     ):
-        # super().__init__(database=database, verbosity=verbosity, logger=logger, kind='ai', **kwargs)
         Intelligent.__init__(
             self,
             database=database,
-            verbosity=verbosity, 
+            verbosity=verbosity,
             kind=kind,
             name=name,
             iodict=iodict,
@@ -57,19 +50,12 @@ class Control(Intelligent, Stateful):
             ioid=ioid,
             **kwargs
         )
-        Stateful.__init__(
-            self,
-            **kwargs
-        )
-        self.llm = (
-            LLM(source=source, model=model, menu=menu, gen=gen, embed=embed)
-            if llm is None
-            else llm
-        )
-        self.name = "Control"
+        Stateful.__init__(self, **kwargs)
+
+        self.llm_client = llm_client if llm_client is not None else LLMClient()
+        self.model_id = model_id
+        self.name = name
         self.persona = None
-        self.reasoning = reasoning
-        self.tools = tools
         self.ioid = ioid
         self.iodict = iodict
         self.presets = presets
@@ -128,7 +114,7 @@ class Control(Intelligent, Stateful):
             print("\n### Summary\n")
             template = "Give a short summary of the News.\n\n### History:\n\n{history}\n\n### News:\n\n{news}\n\n### Summary of the News:\n\n"
             variables = {"history": await history.textonly(), "news": output}
-            output = self.return_output(template=template, variables=variables)
+            output = await self.return_output(template=template, variables=variables)
         return output
 
     async def assess(
@@ -194,7 +180,15 @@ class Control(Intelligent, Stateful):
             player_names = names[:max_players]
             other_names = names[max_players:]
         players = [
-            Player(llm=self.llm, name=name, persona=name) for name in player_names
+            Player(
+                database=self.db,
+                verbosity=self.verbosity,
+                llm_client=self.llm_client,
+                model_id=self.model_id,
+                name=name,
+                persona=name,
+            )
+            for name in player_names
         ]
         if not others:
             return players

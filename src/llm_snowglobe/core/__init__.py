@@ -3,7 +3,9 @@ from .control import Control as Control
 from .database import Database as Database
 from .history import History as History
 from .intelligent import Intelligent as Intelligent
-from .llm import LLM as LLM
+from .llm import LLMClient as LLMClient
+from .llm import ModelPool as ModelPool
+from .llm import load_pools as load_pools
 from .player import Player as Player
+from .simulation_graph import build_simulation_graph as build_simulation_graph
 from .stateful import Stateful as Stateful
-from .team import Team as Team

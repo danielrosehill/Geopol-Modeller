@@ -17,32 +17,31 @@
 from .intelligent import Intelligent
 from .stateful import Stateful
 
+
 class Player(Intelligent, Stateful):
     def __init__(
         self,
         database,
         verbosity,
         logger=None,
-        llm=None,
+        llm_client=None,
+        model_id=None,
         name="Anonymous",
         kind="ai",
         persona=None,
-        reasoning=None,
-        tools=None,
         ioid=None,
         iodict=None,
         presets=None,
         **kwargs
     ):
-        self.llm = llm
+        self.llm_client = llm_client
+        self.model_id = model_id
         self.persona = persona
-        self.reasoning = reasoning
-        self.tools = tools
         self.presets = presets
         Intelligent.__init__(
             self,
             database=database,
-            verbosity=verbosity, 
+            verbosity=verbosity,
             kind=kind,
             name=name,
             ioid=ioid,
@@ -50,11 +49,7 @@ class Player(Intelligent, Stateful):
             logger=logger,
             **kwargs
         )
-        Stateful.__init__(
-            self,
-            **kwargs
-        )
-
+        Stateful.__init__(self, **kwargs)
 
     async def respond(self, history=None, query=None, reminder=2, mc=None, short=False):
         if query is None:
@@ -102,4 +97,5 @@ class Player(Intelligent, Stateful):
     def info(self, offset=0):
         print(" " * offset + "Player:", self.name)
         print(" " * offset + "  Type:", self.kind)
+        print(" " * offset + "  Model:", self.model_id or "default")
         print(" " * offset + "  Persona:", self.persona)

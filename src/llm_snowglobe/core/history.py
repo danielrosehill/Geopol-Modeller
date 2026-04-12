@@ -17,17 +17,18 @@
 
 import asyncio
 import inspect
-import numpy as np
+
 
 async def gather_plus(*args):
-    items = np.array(args)
-    flags = np.array([inspect.isawaitable(x) for x in items])
-    if sum(flags) == 0:
+    items = list(args)
+    awaitables = [(i, x) for i, x in enumerate(items) if inspect.isawaitable(x)]
+    if not awaitables:
         return items
-    awaitables = items[flags]
-    outputs = await asyncio.gather(*awaitables)
-    items[flags] = outputs
+    results = await asyncio.gather(*[x for _, x in awaitables])
+    for (i, _), result in zip(awaitables, results):
+        items[i] = result
     return items
+
 
 class History:
     def __init__(self):
