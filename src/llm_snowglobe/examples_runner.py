@@ -3,12 +3,29 @@
 """Runnable simulation functions invoked by the CLI."""
 
 import os
+import sys
+
 from .core.llm import LLMClient, load_pools
 from .core import Database, History, Player, Control, build_simulation_graph
 from .planning import PlanningAgent
+from .output import SimulationProgress, NullProgress
+from .output.checkpoint import save_checkpoint, load_checkpoint
 
 
-async def run_ac_sim(pool_name=None, pool_override=None, base_url=None, pools_path=None, verbosity=1):
+async def run_ac_sim(
+    pool_name=None,
+    pool_override=None,
+    base_url=None,
+    pools_path=None,
+    verbosity=1,
+    use_rich=None,
+    checkpoint=True,
+    resume_path=None,
+    report=False,
+    podcast=False,
+    podcast_voice="en-US-GuyNeural",
+    reference_urls=None,
+):
     """Run the Azuristan/Crimsonia geopolitical simulation."""
 
     # Load pool — use override if provided (e.g. from custom builder)
@@ -52,9 +69,42 @@ indicate that they want Tyriana to become part of Crimsonia."""
         'crimsonia_dove': "Your goal is to avoid war at all costs, and to unify the Crimsonian people if possible.",
     }
 
-    # Planning agent
-    planner = PlanningAgent(llm_client=client, model=pool.planner, verbosity=verbosity)
-    briefing = await planner.create_briefing(scenario=scenario, title=title)
+    moves_total = 3
+    num_players = 2
+
+    # Progress reporter
+    if use_rich is None:
+        use_rich = sys.stdout.isatty()
+    if use_rich:
+        progress = SimulationProgress(total_moves=moves_total, total_players=num_players)
+    else:
+        progress = NullProgress(total_moves=moves_total, total_players=num_players)
+
+    # Resume from checkpoint
+    resuming = False
+    initial_state_override = {}
+    if resume_path:
+        if verbosity >= 1:
+            print(f"[resume] Loading checkpoint: {resume_path}")
+        initial_state_override = load_checkpoint(resume_path)
+        resuming = True
+        if verbosity >= 1:
+            move = initial_state_override.get("move_current", "?")
+            total = initial_state_override.get("moves_total", "?")
+            print(f"[resume] Resuming from move {move}/{total}")
+
+    # Planning agent (skip if resuming — briefing is in the checkpoint)
+    if not resuming:
+        planner = PlanningAgent(
+            llm_client=client, model=pool.planner,
+            verbosity=verbosity, progress=progress,
+        )
+        briefing = await planner.create_briefing(
+            scenario=scenario, title=title,
+            reference_urls=reference_urls,
+        )
+    else:
+        briefing = initial_state_override.get("briefing", "")
 
     # Database
     db_dir = os.path.join(os.getcwd(), ".snowglobe_data")
@@ -64,13 +114,13 @@ indicate that they want Tyriana to become part of Crimsonia."""
     # Players
     players = [
         Player(
-            database=db, verbosity=verbosity,
+            database=db, verbosity=verbosity, progress=progress,
             llm_client=client, model_id=pool.player,
             name="President of Azuristan",
             persona=f"the leader of Azuristan. {goals['azuristan_dove']}",
         ),
         Player(
-            database=db, verbosity=verbosity,
+            database=db, verbosity=verbosity, progress=progress,
             llm_client=client, model_id=pool.player,
             name="Premier of Crimsonia",
             persona=f"the leader of Crimsonia. {goals['crimsonia_dove']}",
@@ -79,7 +129,7 @@ indicate that they want Tyriana to become part of Crimsonia."""
 
     # Narrator
     narrator = Control(
-        database=db, verbosity=verbosity,
+        database=db, verbosity=verbosity, progress=progress,
         llm_client=client, model_id=pool.narrator,
     )
 
@@ -108,9 +158,8 @@ indicate that they want Tyriana to become part of Crimsonia."""
             h.add(entry["name"], entry["text"])
         return await narrator.assess(history=h, query=query, mc=mc)
 
-    # Run
-    graph = build_simulation_graph()
-    result = await graph.ainvoke({
+    # Build initial state
+    initial_state = {
         "scenario": scenario,
         "briefing": briefing,
         "title": title,
@@ -121,7 +170,7 @@ indicate that they want Tyriana to become part of Crimsonia."""
             {"name": p.name, "persona": p.persona, "model_id": p.model_id}
             for p in players
         ],
-        "moves_total": 3,
+        "moves_total": moves_total,
         "move_current": 0,
         "current_player_idx": 0,
         "history": [],
@@ -137,12 +186,52 @@ indicate that they want Tyriana to become part of Crimsonia."""
         "_adjudicate": adjudicate_fn,
         "_assess": assess_fn,
         "_verbosity": verbosity,
-    })
+        "_progress": progress,
+        "_checkpoint": checkpoint,
+        "_resuming": resuming,
+    }
 
+    # Merge checkpoint state (overrides history, move_current, etc.)
+    if resuming:
+        for key in ("history", "move_current", "current_player_idx",
+                     "current_responses", "assessments", "moves_total",
+                     "briefing", "scenario"):
+            if key in initial_state_override:
+                initial_state[key] = initial_state_override[key]
+
+    # Run
+    graph = build_simulation_graph()
+    result = await graph.ainvoke(initial_state)
+
+    # Assessments
     print("\n\n=== ASSESSMENTS ===\n")
     for a in result.get("assessments", []):
         print(f"Q: {a['question']}")
         print(f"A: {a['answer']}")
         print()
+
+    progress.finish()
+
+    # Post-simulation outputs
+    if report:
+        try:
+            from .output.report import generate_report
+            print("[report] Generating PDF report...")
+            pdf_path = generate_report(result)
+            print(f"[report] PDF saved: {pdf_path}")
+        except Exception as e:
+            print(f"[report] Failed to generate report: {e}")
+
+    if podcast:
+        try:
+            from .output.podcast import generate_podcast
+            print("[podcast] Generating podcast episode...")
+            mp3_path = await generate_podcast(
+                result, llm_client=client, model=pool.narrator,
+                voice=podcast_voice, verbosity=verbosity,
+            )
+            print(f"[podcast] MP3 saved: {mp3_path}")
+        except Exception as e:
+            print(f"[podcast] Failed to generate podcast: {e}")
 
     return result

@@ -2,6 +2,7 @@
 
 """Interactive CLI for running snowglobe simulations with model pool selection."""
 
+import argparse
 import asyncio
 import os
 import sys
@@ -144,8 +145,72 @@ def select_pool(pools_path):
             print(f"  Invalid input. Enter a number, pool name, or 'custom'.")
 
 
+def parse_args():
+    """Parse CLI arguments for simulation options."""
+    parser = argparse.ArgumentParser(
+        description="Snowglobe — Multi-agent wargaming simulation",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+examples:
+  snowglobe                              Run with interactive pool selection
+  snowglobe --report --podcast           Run and generate PDF + podcast
+  snowglobe --refs URL1 URL2             Include reference URLs in briefing
+  snowglobe --resume checkpoint.json     Resume from a saved checkpoint
+  snowglobe --no-rich -v 0               Minimal output, no Rich formatting
+        """,
+    )
+
+    # Output features
+    output = parser.add_argument_group("output features")
+    output.add_argument(
+        "--rich", action=argparse.BooleanOptionalAction, default=None,
+        help="Rich terminal progress display (default: auto-detect TTY)",
+    )
+    output.add_argument(
+        "--report", action=argparse.BooleanOptionalAction, default=False,
+        help="Generate a Typst PDF report after simulation",
+    )
+    output.add_argument(
+        "--podcast", action=argparse.BooleanOptionalAction, default=False,
+        help="Generate an edge-tts podcast episode after simulation",
+    )
+    output.add_argument(
+        "--podcast-voice", type=str, default="en-US-GuyNeural",
+        metavar="VOICE",
+        help="TTS voice for podcast (default: en-US-GuyNeural)",
+    )
+
+    # Checkpointing
+    ckpt = parser.add_argument_group("checkpointing")
+    ckpt.add_argument(
+        "--checkpoint", action=argparse.BooleanOptionalAction, default=True,
+        help="Save checkpoints after each move (default: on)",
+    )
+    ckpt.add_argument(
+        "--resume", type=str, default=None, metavar="FILE",
+        help="Resume simulation from a checkpoint JSON file",
+    )
+
+    # Reference inputs
+    refs = parser.add_argument_group("reference inputs")
+    refs.add_argument(
+        "--refs", nargs="+", metavar="URL",
+        help="Reference URLs to fetch and include in the briefing context",
+    )
+
+    # General
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=1,
+        help="Verbosity level 0-4 (default: 1)",
+    )
+
+    return parser.parse_args()
+
+
 def main():
     """CLI entry point: select pool, then run the Azuristan/Crimsonia simulation."""
+    args = parse_args()
+
     pools_path = os.path.join(os.path.dirname(__file__), "..", "..", "config", "pools.yaml")
     if not os.path.exists(pools_path):
         pools_path = os.path.join("config", "pools.yaml")
@@ -157,7 +222,20 @@ def main():
     pool_name, pool, base_url = select_pool(pools_path)
 
     from .examples_runner import run_ac_sim
-    asyncio.run(run_ac_sim(pool_name=pool_name, pool_override=pool, base_url=base_url, pools_path=pools_path))
+    asyncio.run(run_ac_sim(
+        pool_name=pool_name,
+        pool_override=pool,
+        base_url=base_url,
+        pools_path=pools_path,
+        verbosity=args.verbosity,
+        use_rich=args.rich,
+        checkpoint=args.checkpoint,
+        resume_path=args.resume,
+        report=args.report,
+        podcast=args.podcast,
+        podcast_voice=args.podcast_voice,
+        reference_urls=args.refs,
+    ))
 
 
 if __name__ == "__main__":

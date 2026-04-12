@@ -45,15 +45,27 @@ class SimState(TypedDict):
     _adjudicate: object
     _assess: object
     _verbosity: int
+    _progress: object      # SimulationProgress or NullProgress
+    _checkpoint: object    # bool — save checkpoints after each move
+    _resuming: object      # bool — skip setup when resuming from checkpoint
 
 
 async def setup_node(state: SimState) -> dict:
     """Initialize history with scenario + briefing."""
+    # When resuming from a checkpoint, skip initialization — state is already loaded
+    if state.get("_resuming"):
+        return {"_resuming": False}
+
     history = [{"name": "Narrator", "text": state["scenario"]}]
     if state.get("briefing"):
         history.append({"name": "Briefing", "text": state["briefing"]})
 
-    if state.get("_verbosity", 0) >= 1:
+    progress = state.get("_progress")
+    if progress:
+        progress.start_phase("SIMULATION")
+        title = state.get("title", "Simulation")
+        progress.start_move(1)
+    elif state.get("_verbosity", 0) >= 1:
         print()
         title = state.get("title", "Simulation")
         print("+-" + "-" * len(title) + "-+")
@@ -77,7 +89,10 @@ async def player_respond_node(state: SimState) -> dict:
     player_config = state["player_configs"][idx]
     respond_fn = state["_player_respond"]
 
-    if state.get("_verbosity", 0) >= 1:
+    progress = state.get("_progress")
+    if progress:
+        progress.start_player(player_config["name"])
+    elif state.get("_verbosity", 0) >= 1:
         print(f"\n### {player_config['name']}\n")
 
     response_text = await respond_fn(
@@ -99,7 +114,10 @@ async def adjudicate_node(state: SimState) -> dict:
     """Narrator weaves player responses into outcome."""
     adjudicate_fn = state["_adjudicate"]
 
-    if state.get("_verbosity", 0) >= 1:
+    progress = state.get("_progress")
+    if progress:
+        progress.start_adjudication()
+    elif state.get("_verbosity", 0) >= 1:
         print("\n### Result\n")
 
     outcome = await adjudicate_fn(
@@ -117,12 +135,29 @@ async def adjudicate_node(state: SimState) -> dict:
 
     new_history = state["history"] + [{"name": label, "text": outcome}]
 
-    return {
+    result = {
         "history": new_history,
         "move_current": state["move_current"] + 1,
         "current_player_idx": 0,
         "current_responses": [],
     }
+
+    # Checkpoint after each completed move
+    if state.get("_checkpoint"):
+        from ..output.checkpoint import save_checkpoint
+        merged = {**state, **result}
+        path = save_checkpoint(merged)
+        if progress:
+            progress.checkpoint_saved(path)
+        elif state.get("_verbosity", 0) >= 1:
+            print(f"  [checkpoint saved: {path}]")
+
+    # Announce next move if there is one
+    next_move = state["move_current"] + 2  # +1 for 0-index, +1 for next
+    if progress and next_move <= state["moves_total"]:
+        progress.start_move(next_move)
+
+    return result
 
 
 async def assess_node(state: SimState) -> dict:
@@ -130,14 +165,22 @@ async def assess_node(state: SimState) -> dict:
     assess_fn = state["_assess"]
     assessments = []
 
+    progress = state.get("_progress")
+    if progress:
+        progress.start_phase("ASSESSMENT")
+
     for question in state.get("questions", []):
-        if state.get("_verbosity", 0) >= 1:
+        if progress:
+            progress.start_assessment(question)
+        elif state.get("_verbosity", 0) >= 1:
             print(f"\n--- {question}\n")
         result = await assess_fn(history=state["history"], query=question)
         assessments.append({"question": question, "answer": result})
 
     for question, mc in state.get("mc_questions", []):
-        if state.get("_verbosity", 0) >= 1:
+        if progress:
+            progress.start_assessment(question)
+        elif state.get("_verbosity", 0) >= 1:
             print(f"\n--- {question}\n")
         result = await assess_fn(history=state["history"], query=question, mc=mc)
         assessments.append({"question": question, "answer": result, "options": mc})

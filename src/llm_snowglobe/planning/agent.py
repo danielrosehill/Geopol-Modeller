@@ -4,12 +4,14 @@
 
 """Planning agent that runs before simulation to produce a shared briefing.
 
-Uses Tavily for current-events research and optional document ingestion.
+Uses Tavily for current-events research, trafilatura for reference URL
+ingestion, and optional local document loading.
 All simulation agents receive the same briefing output.
 """
 
 import os
 from ..core.llm import LLMClient
+from ..tools.rag import fetch_urls
 
 
 PLANNING_SYSTEM_PROMPT = """\
@@ -33,23 +35,28 @@ Keep the briefing factual, concise, and actionable. Avoid speculation — label 
 class PlanningAgent:
     """Runs once before simulation to produce a shared briefing."""
 
-    def __init__(self, llm_client, model, tavily_api_key=None, verbosity=1):
+    def __init__(self, llm_client, model, tavily_api_key=None, verbosity=1, progress=None):
         self.llm_client = llm_client
         self.model = model
         self.verbosity = verbosity
+        self.progress = progress
         self.tavily_api_key = tavily_api_key or os.environ.get("TAVILY_API_KEY")
 
     async def research(self, scenario, title=None, num_queries=3):
         """Use Tavily to search for context relevant to the scenario."""
         if not self.tavily_api_key:
-            if self.verbosity >= 1:
+            if self.progress:
+                self.progress.update("No TAVILY_API_KEY set, skipping web research")
+            elif self.verbosity >= 1:
                 print("[Planning] No TAVILY_API_KEY set, skipping web research")
             return ""
 
         try:
             from tavily import AsyncTavilyClient
         except ImportError:
-            if self.verbosity >= 1:
+            if self.progress:
+                self.progress.update("tavily-python not installed, skipping web research")
+            elif self.verbosity >= 1:
                 print("[Planning] tavily-python not installed, skipping web research")
             return ""
 
@@ -105,17 +112,60 @@ class PlanningAgent:
 
         return "\n\n".join(texts) if texts else ""
 
-    async def create_briefing(self, scenario, title=None, doc_paths=None, infodocs=None):
-        """Produce the briefing document that all agents will receive."""
-        if self.verbosity >= 1:
+    def load_reference_urls(self, urls):
+        """Fetch reference URLs and extract clean markdown content.
+
+        Uses trafilatura for robust content extraction (similar to Mozilla
+        Readability). Each URL is fetched and its main content extracted
+        as markdown, then formatted for inclusion in the briefing context.
+        """
+        if not urls:
+            return ""
+
+        if self.progress:
+            self.progress.update(f"Fetching {len(urls)} reference URL(s)...")
+        elif self.verbosity >= 1:
+            print(f"[Planning] Fetching {len(urls)} reference URL(s)...")
+
+        docs = fetch_urls(urls, output_format="markdown", verbosity=self.verbosity)
+
+        if not docs:
+            return ""
+
+        texts = []
+        for doc in docs:
+            texts.append(f"**Source: {doc['source']}**\n\n{doc['content']}")
+
+        return "\n\n---\n\n".join(texts)
+
+    async def create_briefing(self, scenario, title=None, doc_paths=None,
+                              infodocs=None, reference_urls=None):
+        """Produce the briefing document that all agents will receive.
+
+        Args:
+            scenario: The simulation scenario text.
+            title: Scenario title.
+            doc_paths: Local file paths to ingest.
+            infodocs: Dict of inline documents.
+            reference_urls: List of URLs to fetch and include as context.
+        """
+        if self.progress:
+            self.progress.start_phase("PLANNING")
+            self.progress.update("Researching current events...")
+        elif self.verbosity >= 1:
             print("[Planning] Researching current events...")
 
         research = await self.research(scenario, title=title)
 
-        if self.verbosity >= 1:
+        if self.progress:
+            self.progress.update("Loading reference documents...")
+        elif self.verbosity >= 1:
             print("[Planning] Loading reference documents...")
 
         documents = self.load_documents(doc_paths=doc_paths, infodocs=infodocs)
+
+        # Fetch reference URLs
+        url_content = self.load_reference_urls(reference_urls)
 
         # Assemble context for the planner
         user_content = f"## Scenario: {title or 'Untitled'}\n\n{scenario}\n\n"
@@ -123,9 +173,13 @@ class PlanningAgent:
             user_content += f"## Web Research Results\n\n{research}\n\n"
         if documents:
             user_content += f"## Reference Documents\n\n{documents}\n\n"
+        if url_content:
+            user_content += f"## Reference URLs\n\n{url_content}\n\n"
         user_content += "## Task\n\nProduce the briefing document now."
 
-        if self.verbosity >= 1:
+        if self.progress:
+            self.progress.update("Generating briefing...")
+        elif self.verbosity >= 1:
             print("[Planning] Generating briefing...")
 
         messages = [
@@ -134,6 +188,9 @@ class PlanningAgent:
         ]
 
         if self.verbosity >= 1:
+            if self.progress:
+                self.progress.pause()
+
             briefing = ""
             async for chunk in self.llm_client.complete_stream(
                 model=self.model, messages=messages, max_tokens=4096, temperature=0.4
@@ -141,12 +198,18 @@ class PlanningAgent:
                 print(chunk, end="", flush=True)
                 briefing += chunk
             print()
+
+            if self.progress:
+                self.progress.resume()
         else:
             briefing = await self.llm_client.complete(
                 model=self.model, messages=messages, max_tokens=4096, temperature=0.4
             )
 
-        if self.verbosity >= 1:
+        if self.progress:
+            self.progress.end_phase()
+            self.progress.update(f"Briefing complete ({len(briefing)} chars)")
+        elif self.verbosity >= 1:
             print(f"[Planning] Briefing complete ({len(briefing)} chars)")
 
         return briefing.strip()

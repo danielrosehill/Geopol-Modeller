@@ -19,6 +19,9 @@ platformdirs = "*"
 fastapi = "*"
 uvicorn = "*"
 watchfiles = "*"
+rich = "*"
+edge-tts = "*"
+trafilatura = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.9.0"

@@ -21,12 +21,13 @@ from .history import History
 
 
 class Intelligent:
-    def __init__(self, database, verbosity, kind, ioid=None, name='', iodict=None, logger=None, **kwargs):
+    def __init__(self, database, verbosity, kind, ioid=None, name='', iodict=None, logger=None, progress=None, **kwargs):
         self.db = database
         self.verbosity = verbosity
         self.logger = logger
         self.active = True
         self.kind = kind
+        self.progress = progress
         if ioid is not None:
             self.ioid = str(ioid)
         else:
@@ -130,6 +131,10 @@ class Intelligent:
 
         for i in range(max_tries):
             if self.verbosity >= 1:
+                # Pause Rich progress display so streamed output isn't garbled
+                if self.progress:
+                    self.progress.pause()
+
                 output = ""
                 async for chunk in self.llm_client.complete_stream(
                     model=self.model_id, messages=messages, stop=stop
@@ -137,6 +142,9 @@ class Intelligent:
                     print(chunk, end="", flush=True)
                     output += chunk
                 output = output.strip()
+
+                if self.progress:
+                    self.progress.resume()
             else:
                 output = await self.llm_client.complete(
                     model=self.model_id, messages=messages, stop=stop
