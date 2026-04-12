@@ -153,6 +153,8 @@ def parse_args():
         epilog="""\
 examples:
   snowglobe                              Run with interactive pool selection
+  snowglobe --pool anthropic             Run with a specific pool (no menu)
+  snowglobe --pool deepseek --report     Run and generate PDF report
   snowglobe --report --podcast           Run and generate PDF + podcast
   snowglobe --refs URL1 URL2             Include reference URLs in briefing
   snowglobe --resume checkpoint.json     Resume from a saved checkpoint
@@ -198,6 +200,13 @@ examples:
         help="Reference URLs to fetch and include in the briefing context",
     )
 
+    # Pool selection
+    pool_group = parser.add_argument_group("pool selection")
+    pool_group.add_argument(
+        "--pool", type=str, default=None, metavar="NAME",
+        help="Use a named pool from pools.yaml (skips interactive menu)",
+    )
+
     # General
     parser.add_argument(
         "-v", "--verbosity", type=int, default=1,
@@ -218,8 +227,17 @@ def main():
         print("Cannot find config/pools.yaml. Run from the snowglobe repo root.")
         sys.exit(1)
 
-    _, __, base_url = load_pools(pools_path)
-    pool_name, pool, base_url = select_pool(pools_path)
+    pools_data, active, base_url = load_pools(pools_path)
+
+    if args.pool:
+        if args.pool not in pools_data:
+            print(f"Unknown pool '{args.pool}'. Available: {', '.join(pools_data.keys())}")
+            sys.exit(1)
+        pool_name = args.pool
+        pool = pools_data[pool_name]
+        print(f"  Using pool: {pool_name}")
+    else:
+        pool_name, pool, base_url = select_pool(pools_path)
 
     from .examples_runner import run_ac_sim
     asyncio.run(run_ac_sim(

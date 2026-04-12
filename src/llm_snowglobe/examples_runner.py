@@ -4,6 +4,7 @@
 
 import os
 import sys
+import time
 
 from .core.llm import LLMClient, load_pools
 from .core import Database, History, Player, Control, build_simulation_graph
@@ -201,7 +202,9 @@ indicate that they want Tyriana to become part of Crimsonia."""
 
     # Run
     graph = build_simulation_graph()
+    t_start = time.monotonic()
     result = await graph.ainvoke(initial_state)
+    runtime_seconds = time.monotonic() - t_start
 
     # Assessments
     print("\n\n=== ASSESSMENTS ===\n")
@@ -212,12 +215,22 @@ indicate that they want Tyriana to become part of Crimsonia."""
 
     progress.finish()
 
+    # Print runtime summary
+    if runtime_seconds < 60:
+        rt_str = f"{runtime_seconds:.1f}s"
+    else:
+        rt_min = int(runtime_seconds // 60)
+        rt_sec = int(runtime_seconds % 60)
+        rt_str = f"{rt_min}m {rt_sec}s"
+    print(f"\n[runtime] Simulation completed in {rt_str}")
+    print(f"[runtime] Pool: {pool_name or 'custom'}")
+
     # Post-simulation outputs
     if report:
         try:
             from .output.report import generate_report
             print("[report] Generating PDF report...")
-            pdf_path = generate_report(result)
+            pdf_path = generate_report(result, runtime_seconds=runtime_seconds)
             print(f"[report] PDF saved: {pdf_path}")
         except Exception as e:
             print(f"[report] Failed to generate report: {e}")
