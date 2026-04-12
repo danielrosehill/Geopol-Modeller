@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /home/daniel/repos/github/forks/snowglobe/planning)",
+      "Bash(mkdir -p /home/daniel/repos/github/forks/snowglobe/.claude/commands)"
+    ]
+  }
+}
