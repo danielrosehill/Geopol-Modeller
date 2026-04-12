@@ -14,7 +14,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import asyncio
 import os
+import time
 import yaml
 from dataclasses import dataclass
 
@@ -56,12 +58,25 @@ def load_pools(path):
 
 
 class LLMClient:
-    """Thin async wrapper around OpenAI SDK pointed at OpenRouter."""
+    """Async wrapper around OpenAI SDK pointed at OpenRouter with retry/rate-limiting."""
+
+    MAX_RETRIES = 4
+    BASE_DELAY = 1.0        # seconds
+    MIN_REQUEST_GAP = 0.15  # seconds between requests (rate-limit guard)
 
     def __init__(self, api_key=None, base_url="https://openrouter.ai/api/v1"):
         if api_key is None:
             api_key = os.environ.get("OPENROUTER_API_KEY", "")
         self.client = openai.AsyncOpenAI(api_key=api_key, base_url=base_url)
+        self._last_request_time = 0.0
+
+    async def _rate_limit_wait(self):
+        """Enforce minimum gap between API requests."""
+        now = time.monotonic()
+        elapsed = now - self._last_request_time
+        if elapsed < self.MIN_REQUEST_GAP:
+            await asyncio.sleep(self.MIN_REQUEST_GAP - elapsed)
+        self._last_request_time = time.monotonic()
 
     async def complete(
         self,
@@ -71,14 +86,24 @@ class LLMClient:
         max_tokens=2048,
         stop=None,
     ):
-        response = await self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            stop=stop,
-        )
-        return response.choices[0].message.content or ""
+        last_error = None
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                await self._rate_limit_wait()
+                response = await self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    stop=stop,
+                )
+                return response.choices[0].message.content or ""
+            except (openai.RateLimitError, openai.APITimeoutError,
+                    openai.APIConnectionError, openai.InternalServerError) as e:
+                last_error = e
+                delay = self.BASE_DELAY * (2 ** attempt)
+                await asyncio.sleep(delay)
+        raise last_error
 
     async def complete_stream(
         self,
@@ -88,15 +113,26 @@ class LLMClient:
         max_tokens=2048,
         stop=None,
     ):
-        stream = await self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            stop=stop,
-            stream=True,
-        )
-        async for chunk in stream:
-            delta = chunk.choices[0].delta
-            if delta.content:
-                yield delta.content
+        last_error = None
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                await self._rate_limit_wait()
+                stream = await self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    stop=stop,
+                    stream=True,
+                )
+                async for chunk in stream:
+                    delta = chunk.choices[0].delta
+                    if delta.content:
+                        yield delta.content
+                return  # success — exit retry loop
+            except (openai.RateLimitError, openai.APITimeoutError,
+                    openai.APIConnectionError, openai.InternalServerError) as e:
+                last_error = e
+                delay = self.BASE_DELAY * (2 ** attempt)
+                await asyncio.sleep(delay)
+        raise last_error

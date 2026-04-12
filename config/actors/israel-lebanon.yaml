@@ -1,0 +1,16 @@
+# Actor cluster: Israel-Lebanon Negotiations
+# Uses shared actor registry — covers April 2026 ceasefire/disarmament talks
+
+name: Israel-Lebanon Negotiations
+description: >
+  Actors for the Israel-Lebanon ceasefire negotiations amid the Iran war.
+  Covers Israeli, Lebanese, Hezbollah, US, French, and Iranian stakeholders.
+
+actors:
+  - id: netanyahu
+  - id: idf
+  - id: lebanon_pm
+  - id: hezbollah
+  - id: us_envoy
+  - id: france_envoy
+  - id: iran_fm

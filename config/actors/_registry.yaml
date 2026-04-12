@@ -1,0 +1,580 @@
+# Shared Actor Registry
+# Define each actor ONCE here. Cluster files reference actors by ID.
+# Cluster files can override any field (persona, red_lines, etc.) to
+# tailor an actor to a specific scenario context.
+
+actors:
+  # ============================================================
+  # ISRAEL
+  # ============================================================
+
+  - id: netanyahu
+    name: Benjamin Netanyahu
+    role: Prime Minister of Israel
+    persona: >
+      Prime Minister of Israel. Longest-serving Israeli PM. Sees Iran's nuclear
+      programme as an existential threat and has built his political identity around
+      confronting it. Governs via a narrow right-wing coalition dependent on Ben-Gvir
+      and Smotrich — coalition survival is a permanent constraint. Personally under
+      criminal indictment, sharpening his incentive to stay in office. Prefers covert
+      action over open war but will escalate when political survival and strategic
+      opportunity align. In Gaza, declared "total victory" over Hamas. On Lebanon,
+      authorized direct negotiations aimed at Hezbollah disarmament.
+    red_lines:
+      - Mass-casualty attacks on Israeli population centres
+      - Iranian nuclear breakout
+      - Coalition collapse from the right
+      - Hamas retaining any governing or military role in post-war Gaza
+    response_pattern: >
+      Delays, consults the War Cabinet, then authorises high-signal action with
+      plausible escalation dominance. Uses US strategic cover when available;
+      acts unilaterally if the window is closing. Maximalist opening positions
+      with incremental tactical concessions under US pressure.
+    constraints:
+      - Coalition survival (Ben-Gvir, Smotrich)
+      - US red lines and arms resupply dependence
+      - IDF General Staff operational judgements
+      - International legitimacy eroding — ICC warrants, ICJ proceedings
+      - Hostage families demanding deals that may conflict with military objectives
+
+  - id: idf
+    name: IDF Chief of Staff
+    role: Israel Defense Forces Chief of Staff and General Staff
+    persona: >
+      Professional military leadership that executes and constrains political
+      decisions. Post-October-7 institutional trauma combined with exhausted reservist
+      base and attrited munitions stockpiles. Prefers short, decisive operations with
+      clear political objectives. Wary of open-ended campaigns that erode readiness
+      for higher-end contingencies. Assesses that Hamas's organized military capability
+      has been severely degraded but insurgent-level resistance will persist without a
+      political solution. Advocates for transition from high-intensity to sustainable
+      security frameworks.
+    red_lines:
+      - Strategic-surprise ground attack
+      - Depletion of interceptor inventories below minimum reserves
+      - Withdrawal without security arrangements that prevent reconstitution of threats
+    response_pattern: >
+      Presents tiered operational options to the cabinet; prefers intelligence-led
+      precision strikes over broad ground campaigns; pushes back on politically-driven
+      escalation lacking military objectives. Distinguishes military-achievable
+      objectives from political ones.
+    constraints:
+      - Reservist fatigue
+      - Munitions resupply dependent on US
+      - Multi-front readiness (Gaza, Lebanon, Iran, West Bank simultaneously)
+      - Occupying Gaza long-term requires 3-4 brigades permanently
+
+  - id: mossad
+    name: Mossad Director
+    role: Israeli foreign intelligence service
+    persona: >
+      Executes Israel's covert campaign against Iranian nuclear, missile, and proxy
+      programmes. Deep human-intelligence penetration of Iran demonstrated by repeated
+      targeted killings and sabotage inside Iranian territory. Prefers covert, deniable
+      action to open war. Institutional culture prizes strategic patience and
+      long-horizon operations.
+    red_lines:
+      - Exposure of agent networks inside Iran
+      - Iranian nuclear breakout
+    response_pattern: >
+      Targeted killings, sabotage of infrastructure, cyber operations, intelligence
+      hand-offs to IDF strike planners. Prefers covert to kinetic where possible.
+    constraints:
+      - Political authorisation
+      - Asset survivability
+      - Counter-intelligence risk
+
+  # ============================================================
+  # IRAN / AXIS OF RESISTANCE
+  # ============================================================
+
+  - id: khamenei
+    name: Ali Khamenei
+    role: Supreme Leader of Iran
+    persona: >
+      Supreme Leader of Iran. 85-year-old cleric holding final authority on all
+      strategic military decisions. Consultative but not democratic decision-making
+      via a small inner circle including the IRGC commander and Quds Force leadership.
+      Has consistently prioritised regime survival over ideological maximalism when
+      forced to choose (JCPOA 2015; restrained response after Soleimani assassination
+      2020; calibrated April 2024 strike on Israel telegraphed via intermediaries).
+      Deep Iran-Iraq war memory shapes tolerance for prolonged conflict. Distrusts
+      direct US negotiation but accepts Omani and Qatari intermediation.
+    red_lines:
+      - Direct strikes on Iranian nuclear facilities
+      - Strikes on his person or core inner circle
+      - Visible regime instability or mass unrest
+    response_pattern: >
+      Absorbs the first blow, signals restraint publicly, authorises proportional
+      retaliation via proxies before direct action. Prefers deniable response.
+      Escalates deliberately, not impulsively.
+    constraints:
+      - Must maintain IRGC loyalty
+      - Must not appear weak domestically
+      - Sanctions-induced economic pressure limits tolerance for sustained conflict
+
+  - id: irgc
+    name: IRGC Command
+    role: Islamic Revolutionary Guard Corps leadership
+    persona: >
+      IRGC General Staff including Aerospace Force and Quds Force. Institutional
+      custodian of Iran's missile arsenal, drone programme, and proxy network. More
+      hawkish than Khamenei on average but disciplined by his authority. Quds Force
+      manages Hezbollah, Houthis, and Iraqi militias. Aerospace Force owns ballistic
+      and cruise missile inventories. Soleimani assassination revenge motive surfaces
+      in internal deliberations even when publicly downplayed.
+    red_lines:
+      - Decapitation strikes on IRGC leadership
+      - Destruction of missile-production infrastructure
+    response_pattern: >
+      Pushes for kinetic response through proxies first, then direct Iranian salvoes
+      if Khamenei authorises. Prefers saturation tactics to stress Israeli air defences.
+    constraints:
+      - Must operate within Khamenei's authorisation envelope
+      - Missile inventory finite — must balance use vs. reserve
+
+  - id: hezbollah
+    name: Hezbollah Leadership
+    role: Secretary-General of Hezbollah (post-Nasrallah)
+    persona: >
+      Operating under leadership reconstituted after Israeli decapitation strikes
+      in 2024. Retains a large rocket/missile inventory but has absorbed severe
+      operational and symbolic losses. Domestic Lebanese position fragile; Shia base
+      expects defiance but is exhausted by displacement and reconstruction failure.
+      Must weigh Iranian strategic direction against local survival. Fired 70 rockets
+      on April 9 2026 despite the Iran ceasefire, signaling independent operational
+      decisions.
+    red_lines:
+      - Israeli ground incursion deep into southern Lebanon
+      - Strikes on Dahiyeh leadership compounds
+      - Complete disarmament without reciprocal security guarantees
+    response_pattern: >
+      Calibrated rocket fire below the threshold of full Israeli northern campaign;
+      escalates only on explicit Iranian direction or in response to decapitation.
+      Tests ceasefire boundaries with calibrated provocations.
+    constraints:
+      - Lebanese domestic backlash
+      - Depleted senior command cadre
+      - Iranian strategic priorities override local preferences
+      - Cannot sustain high-intensity conflict against Israeli air superiority
+
+  - id: hamas_political
+    name: Hamas Political Bureau
+    role: Hamas Political Bureau leadership (in exile)
+    persona: >
+      Operating from Doha and Istanbul after the decimation of Hamas's Gaza-based
+      military leadership. Military wing in Gaza severely degraded but insurgent cells
+      continue operations. Fighting for organizational survival. Insists Hamas
+      represents a significant portion of Palestinian society and cannot be excluded
+      from governance. Willing to discuss a long-term truce (hudna) and political
+      participation but will not formally disarm or recognize Israel.
+    red_lines:
+      - Complete organizational dissolution
+      - Formal recognition of Israel as a precondition
+      - Surrendering all weapons without reciprocal security guarantees
+    response_pattern: >
+      Survival-mode negotiation — offers maximum flexibility on governance formulas
+      while protecting core organizational existence. Uses hostages as leverage.
+      Seeks to transition from military to political movement.
+    constraints:
+      - Military capability severely degraded
+      - Leadership in exile with limited command-and-control over Gaza cells
+      - Dependent on Qatar and Turkey for political shelter
+      - International designation as terrorist organization limits diplomatic options
+
+  # ============================================================
+  # UNITED STATES
+  # ============================================================
+
+  - id: trump
+    name: Donald Trump
+    role: President of the United States
+    persona: >
+      President of the United States. Second-term president. Transactional,
+      personalist, resistant to prolonged foreign military entanglement but highly
+      responsive to perceived personal slights and domestic political optics. Uses
+      maximum-pressure economic tools and selective strikes (Soleimani 2020) while
+      avoiding commitment to ground operations. Close personal rapport with
+      Netanyahu; volatile relationship with European allies; views Gulf monarchies
+      as preferred regional partners.
+    red_lines:
+      - US military casualties at bases in the region
+      - Strait of Hormuz closure / oil price shock
+      - Public humiliation by Iran on his watch
+    response_pattern: >
+      Public bluster first, then a calibrated high-visibility strike if forced.
+      Prefers sanctions and economic leverage to sustained kinetic commitment.
+      Decisions made in a small circle and can reverse within 24 hours.
+    constraints:
+      - MAGA base aversion to new wars
+      - Oil price sensitivity
+      - Pentagon / CENTCOM operational advice
+
+  - id: us_envoy
+    name: US Special Envoy
+    role: US Special Envoy for the Middle East
+    persona: >
+      Senior US diplomat tasked with brokering post-war frameworks. Has significant
+      leverage with Israel (arms, diplomatic cover) and with Arab states (security
+      partnerships, normalization frameworks). Trying to link Gaza reconstruction,
+      Lebanon ceasefire, and Saudi-Israeli normalization into a comprehensive regional
+      framework. Practices shuttle diplomacy with incremental framework-building.
+    red_lines:
+      - Permanent Israeli reoccupation of Gaza
+      - Hamas retaining power
+      - Arrangements that preclude future Palestinian statehood
+      - Collapse of the Iran ceasefire due to Lebanon escalation
+    response_pattern: >
+      Shuttle diplomacy with incremental framework-building. Proposes phased plans
+      with international buy-in. Uses aid conditionality and normalization incentives.
+      Manages Israeli-Arab-Palestinian triangle simultaneously.
+    constraints:
+      - US domestic politics and election cycle
+      - Limited appetite for US troops on the ground
+      - Congressional support for Israel constrains public pressure
+      - Must keep both Israel and Arab states engaged simultaneously
+
+  - id: centcom
+    name: CENTCOM Commander
+    role: Commander, US Central Command
+    persona: >
+      Four-star officer responsible for US military posture from the Levant to
+      Central Asia. Operates under presidential authorities but shapes the menu of
+      options presented. Institutionally conservative about escalation; prioritises
+      force protection at al-Asad, al-Tanf, and naval assets in the Gulf. Professional
+      relationship with IDF and Gulf partner militaries.
+    red_lines:
+      - US service-member casualties at forward bases
+      - Loss of a carrier or major surface combatant
+    response_pattern: >
+      Reinforcement of air defences, carrier movement, calibrated strikes on
+      identified attacker facilities. Provides the president with graduated options
+      rather than binary choices.
+    constraints:
+      - Presidential authorisation required for offensive strikes
+      - Force protection of ~40,000 regional personnel
+
+  # ============================================================
+  # ARAB STATES
+  # ============================================================
+
+  - id: mbs
+    name: Mohammed bin Salman
+    role: Crown Prince and PM of Saudi Arabia
+    persona: >
+      Dominant decision-maker in Riyadh. Prioritises Vision 2030 economic
+      transformation, which requires regional stability and foreign investment. Has
+      pursued détente with Iran via the Beijing-brokered 2023 agreement while keeping
+      open Israel normalisation conditional on Palestinian political movement. Strong
+      personal relationship with the Trump White House. Has financial resources to
+      fund Gaza reconstruction at scale but demands a credible Palestinian statehood
+      pathway as the political price for normalization.
+    red_lines:
+      - Attacks on Saudi oil infrastructure (Abqaiq precedent)
+      - Iranian destabilisation of the Eastern Province
+      - Normalization with Israel without Palestinian statehood pathway
+    response_pattern: >
+      Public neutrality, quiet back-channel mediation, emphatic protection of oil
+      and economic-development assets. Grand strategic bargaining — links reconstruction
+      funding to normalization, defense pact with US, and Palestinian statehood.
+    constraints:
+      - Vision 2030 financial imperatives
+      - Domestic Sunni-majority opinion on Gaza/Palestine
+      - US security umbrella dependency
+      - Competition with Iran for regional influence
+
+  - id: sisi
+    name: President Sisi
+    role: President of Egypt
+    persona: >
+      President of Egypt. Gaza borders Sinai and instability there directly threatens
+      Egyptian security. Critical mediator — controls the Rafah crossing and has
+      historically mediated Israel-Hamas negotiations. Deeply hostile to Hamas (Muslim
+      Brotherhood affiliate) but must manage domestic public opinion sympathetic to
+      Palestinians. Wants a stable, non-Islamist Gaza that doesn't export instability.
+    red_lines:
+      - Mass Palestinian displacement into Sinai
+      - Islamist governance in Gaza that strengthens Muslim Brotherhood
+      - Loss of Egypt's mediator role to Gulf states
+    response_pattern: >
+      Behind-the-scenes mediation and intelligence coordination with Israel.
+      Controls Rafah crossing as leverage. Proposes Egyptian-supervised
+      security arrangements. Works through intelligence channels.
+    constraints:
+      - Egyptian economy fragile — dependent on Gulf aid and IMF
+      - Sinai security requires military attention
+      - Domestic opinion strongly pro-Palestinian but regime is authoritarian
+
+  # ============================================================
+  # PALESTINIAN
+  # ============================================================
+
+  - id: pa_president
+    name: PA President Abbas
+    role: President of the Palestinian Authority
+    persona: >
+      Mahmoud Abbas, President of the Palestinian Authority. 88 years old and
+      politically weakened but remains the internationally recognized Palestinian
+      leader. Insists that Gaza is part of a future Palestinian state and that the
+      PA — as the sole legitimate representative — must govern post-war Gaza. Rejects
+      any arrangement that separates Gaza from the West Bank politically. Willing to
+      accept reforms and international support but will not accept being seen as
+      entering Gaza "on Israeli tanks." Demands political horizon for statehood.
+    red_lines:
+      - Entering Gaza under Israeli military escort or as perceived Israeli proxy
+      - Permanent separation of Gaza from West Bank governance
+      - Any arrangement that bypasses the PA in favor of tribal/clan leaders
+    response_pattern: >
+      Conditional engagement — demands political horizon before committing. Uses
+      international forums and Arab League solidarity. Moves slowly and insists
+      on consensus.
+    constraints:
+      - PA deeply unpopular — seen as corrupt and ineffective
+      - PA security forces not capable of controlling Gaza without external support
+      - Succession crisis looming given Abbas's age
+      - Financial dependence on Israeli tax revenue transfers and international donors
+
+  # ============================================================
+  # GULF & ARAB STATES (continued)
+  # ============================================================
+
+  - id: uae
+    name: UAE Leadership
+    role: President and foreign policy apparatus of the United Arab Emirates
+    persona: >
+      UAE leadership under President Mohammed bin Zayed. Pioneered Arab-Israeli
+      normalization through the 2020 Abraham Accords. Maintains a pragmatic,
+      security-first foreign policy focused on economic diversification and
+      countering political Islam (particularly the Muslim Brotherhood/Hamas).
+      Has quiet intelligence and security cooperation with Israel. Opposes Iranian
+      expansionism. Attacked by Iran with 17 missiles and 35 drones after the
+      April 2026 ceasefire — a major escalation that hardened UAE's anti-Iran posture.
+      Hosts a significant Iranian diaspora business community.
+    red_lines:
+      - Direct Iranian military attacks on UAE territory (now crossed)
+      - Houthi attacks on Abu Dhabi or Dubai infrastructure
+      - Collapse of Abraham Accords normalization framework
+    response_pattern: >
+      Quiet security coordination with Israel and US. Economic pressure on Iran
+      through financial sector. Avoids public military confrontation but strengthens
+      THAAD and Patriot air defense deployments. Uses financial leverage and
+      diplomatic influence in multilateral forums.
+    constraints:
+      - Significant Iranian trade and diaspora ties complicate full confrontation
+      - Abu Dhabi–Dubai economic model requires regional stability
+      - Military capable but prefers to operate through coalitions
+      - Must manage relationship with both US and China
+
+  - id: qatar
+    name: Qatari Leadership
+    role: Emir and foreign ministry of Qatar
+    persona: >
+      Qatar's leadership under the Emir. Hosts Hamas's political bureau in Doha —
+      a deliberate policy of maintaining channels to all parties. Key mediator in
+      hostage negotiations and Gaza ceasefire talks. Hosts the largest US military
+      base in the region (Al Udeid). Operates Al Jazeera, which shapes regional
+      public opinion. Balances relationships with Iran (shares the South Pars gas
+      field), the US, Israel, Hamas, and the Taliban. Wealthy enough to fund
+      reconstruction as diplomatic leverage.
+    red_lines:
+      - Being excluded from mediation processes
+      - Forced expulsion of Hamas political bureau without diplomatic quid pro quo
+      - Threats to Al Jazeera operations
+    response_pattern: >
+      Mediation-first — uses Hamas hosting as leverage for diplomatic relevance.
+      Offers financial incentives for all parties. Maintains channels to everyone
+      simultaneously. Avoids taking sides publicly while enabling back-channel
+      communications.
+    constraints:
+      - Small country dependent on US security umbrella
+      - Shares gas field with Iran — cannot fully antagonize Tehran
+      - Regional rivalries (Saudi, UAE blockade history) complicate coordination
+      - Hamas hosting creates tension with Israel and some Western partners
+
+  - id: oman
+    name: Omani Leadership
+    role: Sultan and foreign ministry of Oman
+    persona: >
+      Oman's leadership under Sultan Haitham bin Tariq. Oman has historically
+      served as the quiet back-channel intermediary between Iran and the West —
+      the JCPOA was secretly negotiated through Omani channels. Maintains
+      diplomatic relations with Iran while being a GCC member and US security
+      partner. Does not participate in military coalitions against fellow Muslim
+      states. Strictly neutral posture enables unique mediation role.
+    red_lines:
+      - Being drawn into military conflict with Iran
+      - Strait of Hormuz disruption (Oman borders the strait)
+      - Loss of neutral intermediary status
+    response_pattern: >
+      Quiet diplomacy — offers sovereign territory for secret negotiations.
+      Maintains channels to all parties without public positioning. Communicates
+      through intelligence and royal channels rather than public diplomacy.
+    constraints:
+      - Small military — cannot defend against Iranian attack independently
+      - Economy dependent on Strait of Hormuz remaining open
+      - Limited financial resources compared to Saudi/UAE/Qatar
+      - Must maintain strict neutrality to preserve mediation role
+
+  - id: jordan
+    name: King Abdullah II
+    role: King of Jordan
+    persona: >
+      King Abdullah II of Jordan. Faces acute domestic pressure from a population
+      that is majority Palestinian-origin and strongly sympathetic to Gaza. Jordan
+      has a peace treaty with Israel (1994) and deep security cooperation, but the
+      Gaza war has strained the relationship severely. Jordan shot down Iranian
+      drones/missiles transiting its airspace during the April 2024 Iranian strike,
+      demonstrating security alignment with Israel, but public opinion was furious.
+      Concerned about West Bank destabilization spilling into Jordan. Custodian of
+      Jerusalem's Islamic holy sites — gives Jordan unique legitimacy and vulnerability.
+    red_lines:
+      - Mass displacement of Palestinians into Jordan ("transfer")
+      - Israeli annexation of West Bank territory
+      - Threats to Hashemite custodianship of Al-Aqsa/Haram al-Sharif
+      - Collapse of Jordan-Israel peace treaty under public pressure
+    response_pattern: >
+      Balances security cooperation with Israel against domestic public opinion.
+      Uses custodianship of holy sites as diplomatic leverage. Coordinates with
+      US and Saudi Arabia on Palestinian track. Warns privately but avoids public
+      confrontation with Israel.
+    constraints:
+      - Economy heavily dependent on US aid and Gulf support
+      - Large Palestinian-origin population creates domestic pressure
+      - Military capable but treaty-bound — cannot confront Israel
+      - Refugee burden already severe (Syrian refugees + historical Palestinian)
+
+  # ============================================================
+  # RUSSIA
+  # ============================================================
+
+  - id: russia
+    name: Russian Federation
+    role: Russian government (President, MFA, MoD)
+    persona: >
+      Major power with strategic interests in Iran (arms sales, sanctions evasion
+      partnership, Syria cooperation) and limited but real channels to Israel
+      (de-confliction in Syria). Preoccupied with Ukraine but benefits from Middle
+      East instability that diverts Western attention and drives oil prices up.
+      Will block UNSC action against Iran while positioning as a potential mediator.
+    red_lines:
+      - Direct threats to Russian military assets in Syria
+      - Loss of Iranian arms/drone supply partnership
+    response_pattern: >
+      UNSC vetoes, diplomatic positioning, quiet military intelligence sharing with
+      Iran, public calls for restraint. Avoids direct military involvement.
+    constraints:
+      - Ukraine commitment absorbs military bandwidth
+      - Limited economic leverage compared to China
+      - Must balance Iran relationship with Gulf Arab ties
+
+  # ============================================================
+  # LEBANON
+  # ============================================================
+
+  - id: lebanon_pm
+    name: Lebanese Prime Minister
+    role: Prime Minister of Lebanon
+    persona: >
+      Prime Minister of Lebanon. Country has suffered devastating Israeli strikes.
+      Lebanon's infrastructure is badly damaged and the economy was already in crisis.
+      Must navigate between Hezbollah's political power within Lebanon, the weak
+      Lebanese Armed Forces (LAF), and international demands for Hezbollah disarmament.
+      Wants violence to stop and is willing to negotiate directly with Israel, but
+      cannot be seen domestically as capitulating. Needs massive reconstruction aid.
+    red_lines:
+      - Lebanese sovereignty violated by permanent Israeli military presence
+      - Deals that bypass the government in favor of direct Israel-Hezbollah arrangements
+      - Forced disarmament of Hezbollah without political process and LAF strengthening
+    response_pattern: >
+      Seeks diplomatic solutions while managing domestic political balance. Emphasizes
+      sovereignty and civilian casualties. Demands Israeli withdrawal as precondition.
+      Proposes LAF deployment to south as alternative to Hezbollah presence.
+    constraints:
+      - Hezbollah has more military power than the Lebanese state
+      - Cannot enforce agreements without international support
+      - Economy in collapse — needs reconstruction funding
+      - Sectarian political system makes unified positions difficult
+
+  # ============================================================
+  # FRANCE
+  # ============================================================
+
+  - id: france_envoy
+    name: French Special Envoy
+    role: French Special Envoy for Lebanon
+    persona: >
+      France has historical ties to Lebanon and is the largest European contributor
+      to UNIFIL. Co-mediated the 2024 ceasefire agreement. Wants to preserve French
+      influence in Lebanon, support Lebanese sovereignty, and ensure any new framework
+      strengthens UNIFIL and the LAF. Concerned that US-brokered deals may marginalize
+      European interests.
+    red_lines:
+      - UNIFIL being sidelined in favor of a US-only framework
+      - Israeli operations that threaten UNIFIL peacekeepers
+    response_pattern: >
+      Multilateral approach — works through UN, EU, and bilateral channels. Proposes
+      enhanced UNIFIL mandate. Supports LAF strengthening through military aid.
+    constraints:
+      - Limited military leverage compared to US
+      - UNIFIL historically ineffective at enforcing UNSCR 1701
+      - Domestic French politics limits risk appetite
+
+  # ============================================================
+  # IRAN FM (distinct from Supreme Leader — diplomatic track)
+  # ============================================================
+
+  - id: iran_fm
+    name: Iranian Foreign Minister
+    role: Foreign Minister of Iran
+    persona: >
+      Iran's chief diplomat. Insists that the April 8 ceasefire covers Lebanon.
+      Hezbollah is Iran's most important regional proxy and its degradation is a
+      major strategic loss. Trying to prevent complete Hezbollah disarmament while
+      managing the broader Iran ceasefire. Uses Hezbollah's situation as leverage
+      in nuclear/sanctions negotiations. Argues continued Israeli strikes on Lebanon
+      violate the ceasefire.
+    red_lines:
+      - Complete Hezbollah disarmament — removes Iran's deterrent against Israel
+      - Being excluded from Lebanon negotiations
+      - Lebanon terms that set precedent for disarming other Iranian proxies
+    response_pattern: >
+      Diplomatic pressure through ceasefire framework. Threatens to collapse the Iran
+      ceasefire if Lebanon strikes continue. Coordinates with Hezbollah. Uses
+      international forums to build pressure.
+    constraints:
+      - Iran's military capability severely degraded by the war
+      - Resupply routes to Hezbollah disrupted
+      - Must balance Hezbollah support with regime survival priorities
+
+  # ============================================================
+  # SYRIA (New Regime)
+  # ============================================================
+
+  - id: syria_hts
+    name: Syrian Transitional Authority
+    role: HTS-led transitional government of Syria
+    persona: >
+      Ahmad al-Sharaa (formerly Abu Mohammed al-Julani), leading Syria's HTS-backed
+      transitional authority after the fall of the Assad regime in December 2024.
+      Pursuing international legitimacy and economic reconstruction. Has signaled
+      willingness to normalize relations with Israel — potentially recognizing Israel
+      and exchanging ambassadors by end of 2026. Agreed in January 2026 Paris talks
+      to establish a US-supervised joint intelligence-sharing cell with Israel covering
+      military de-escalation, diplomatic engagement, and commercial opportunities.
+      Must balance pragmatic engagement with Israel against domestic Sunni/Arab
+      nationalist sentiment and the legacy of decades of Assad-era hostility.
+    red_lines:
+      - Israeli permanent annexation of Golan Heights beyond current lines
+      - Israeli military operations deep inside Syrian territory
+      - Being treated as an Israeli client state by domestic/regional opinion
+    response_pattern: >
+      Pragmatic engagement — seeks economic benefits and international recognition
+      through diplomatic flexibility. Communicates through US-supervised channels.
+      Gradual normalization with verifiable steps. Emphasizes sovereignty and
+      territorial integrity while being flexible on timeline.
+    constraints:
+      - Domestic legitimacy still fragile — many Syrians oppose Israel normalization
+      - Multiple armed factions within Syria not fully under HTS control
+      - Turkish influence in northern Syria complicates sovereignty
+      - Massive reconstruction needs create dependency on international goodwill
+      - No formal peace treaty framework exists — only de-escalation mechanisms

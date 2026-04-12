@@ -1,0 +1,26 @@
+# Actor cluster: Iran War — Expanded with Gulf States
+# Uses shared actor registry — adds UAE, Qatar, Oman, Jordan to the core Iran-Israel set
+
+name: Iran War Expanded
+description: >
+  The iran-israel-core set plus Gulf and regional mediators.
+  Captures the full diplomatic landscape of the April 2026 Iran war
+  including Arab states that are directly affected and mediating.
+
+actors:
+  - id: khamenei
+  - id: netanyahu
+  - id: trump
+  - id: irgc
+  - id: hezbollah
+  - id: idf
+  - id: mossad
+  - id: centcom
+  - id: mbs
+  - id: russia
+  - id: uae
+  - id: qatar
+  - id: oman
+  - id: jordan
+  - id: iran_fm
+  - id: sisi

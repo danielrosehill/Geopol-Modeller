@@ -1,0 +1,99 @@
+# Scenario: Israel-Lebanon Negotiations — April 2026
+# Live crisis: direct talks authorized amid ongoing strikes and Iran ceasefire dispute
+
+title: "Israel-Lebanon Ceasefire Negotiations"
+
+actor_cluster: israel-lebanon
+
+scenario: |
+  DATE: 12 April 2026
+
+  TRIGGER EVENT: Israeli Prime Minister Netanyahu has authorized direct
+  negotiations with Lebanon "as soon as possible," aimed at disarming Hezbollah
+  and establishing formal relations between the two countries. Talks are expected
+  to begin next week at the US State Department in Washington.
+
+  CONTEXT:
+  - On April 8, the US and Iran agreed to a two-week ceasefire in the 2026 Iran
+    war, mediated by Pakistan. The ceasefire formally expires April 22.
+  - Lebanon's inclusion in the ceasefire is disputed: Iran, Hezbollah, and Pakistan
+    say Lebanon is covered. Israel and the US say it is not.
+  - Israel conducted its largest single-day strike against Hezbollah on April 8-9,
+    killing at least 254 people. Lebanon declared a national day of mourning.
+  - Hezbollah resumed attacks on April 9, firing 70 rockets into northern Israel,
+    despite the Iran ceasefire framework.
+  - The IDF killed 200+ Hezbollah fighters on April 8. Defense Minister Katz stated
+    that operations in Lebanon will continue regardless of negotiations.
+  - Netanyahu's stated objectives: Hezbollah's complete disarmament and establishing
+    formal Israel-Lebanon relations.
+  - The 2024 Israel-Hezbollah ceasefire agreement (November 2024) effectively
+    collapsed when the broader Iran-Israel war escalated in early 2026.
+  - UNSCR 1701 (2006) mandated Hezbollah's disarmament and LAF deployment south of
+    the Litani — never fully implemented in 20 years.
+  - France is the largest European UNIFIL contributor and co-mediated the 2024 deal.
+  - The Lebanese Armed Forces (LAF) are too weak to enforce sovereignty against
+    Hezbollah without massive international support and equipment.
+  - Hezbollah's military capability has been significantly degraded since 2024
+    (leadership decapitated, supply lines disrupted) but retains rocket arsenals
+    and fighters.
+  - Iran's ability to resupply Hezbollah is severely limited by the war and Israeli
+    interdiction of the Iraqi-Syrian corridor.
+
+  IMMEDIATE SITUATION:
+  Negotiations are about to begin in Washington. Israel continues strikes during the
+  diplomatic process. Hezbollah is testing the boundaries of the Iran ceasefire with
+  calibrated provocations. The US is pressuring both sides for restraint. France wants
+  a seat at the table. Iran argues its ceasefire covers Lebanon and threatens to
+  collapse the entire framework if strikes continue.
+
+  KEY QUESTIONS AT STAKE:
+  - Can negotiations succeed while Israel continues military operations?
+  - Will Hezbollah agree to any form of disarmament, or will it insist on
+    retaining deterrent capability?
+  - Does the Iran ceasefire hold, or does Lebanon become the trigger for its collapse?
+  - What enforcement mechanism can succeed where UNSCR 1701 failed for 20 years?
+  - Can the LAF realistically replace Hezbollah in southern Lebanon?
+  - Does this crisis create an opportunity for a historic Israel-Lebanon peace deal,
+    or does it spiral into renewed full-scale war?
+
+timeframe_preset: medium
+
+nature: 0.7
+mode:
+  - geopol
+
+questions:
+  - "What is the most likely outcome of the Washington negotiations within 2 weeks?"
+  - "What is the probability of a formal Israel-Lebanon ceasefire agreement within 1 month?"
+  - "What is the probability that Hezbollah accepts meaningful disarmament within 1 year?"
+  - "Does the Iran ceasefire survive, or does Lebanon escalation collapse it?"
+  - "What is the most likely long-term security arrangement for southern Lebanon?"
+
+mc_questions:
+  - question: "What happens at the Washington negotiations?"
+    options:
+      - "Framework agreement reached — phased ceasefire and disarmament"
+      - "Partial progress — ceasefire extended but no disarmament framework"
+      - "Talks collapse — positions too far apart"
+      - "Talks never begin — violence escalates before they start"
+
+  - question: "What is Hezbollah's posture during negotiations?"
+    options:
+      - "Restraint — holds fire to give diplomacy a chance"
+      - "Calibrated provocations — periodic rocket fire to signal resolve"
+      - "Major escalation — large barrage to disrupt talks"
+      - "Political engagement — participates indirectly through Lebanese government"
+
+  - question: "Does the Iran ceasefire (expiring April 22) get renewed?"
+    options:
+      - "Yes — extended and expanded to include Lebanon"
+      - "Yes — extended but Lebanon remains excluded"
+      - "No — collapses due to Lebanon violence"
+      - "No — collapses due to other factors (nuclear, Hormuz)"
+
+  - question: "What is the escalation level at the end of the scenario?"
+    options:
+      - "De-escalation — ceasefire on all fronts"
+      - "Mixed — ceasefire with Iran, continued operations in Lebanon"
+      - "Escalation — renewed full-scale war across Lebanon"
+      - "Regional escalation — conflict expands beyond bilateral"

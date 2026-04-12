@@ -1,0 +1,19 @@
+# Actor cluster: Gaza Governance Crisis
+# Uses shared actor registry (_registry.yaml) — only overrides where needed.
+
+name: Gaza Governance Crisis
+description: >
+  Actors for the contested future of Gaza — military end-state, governance,
+  reconstruction, and Hamas's survival or transformation. Outcome is NOT
+  predetermined; Hamas may persist, reconstitute, transform, or be replaced.
+
+actors:
+  - id: netanyahu
+  - id: idf
+  - id: pa_president
+  - id: us_envoy
+  - id: sisi
+  - id: mbs
+  - id: hamas_political
+  - id: qatar
+  - id: jordan

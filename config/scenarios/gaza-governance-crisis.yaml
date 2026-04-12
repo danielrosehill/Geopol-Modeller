@@ -1,0 +1,129 @@
+# Scenario: Gaza Governance Crisis
+# Live crisis: the contested future of Gaza — who controls it, who rebuilds it,
+# and whether Hamas survives, transforms, or is replaced.
+
+title: "Gaza Governance Crisis"
+
+actor_cluster: gaza-governance
+
+scenario: |
+  DATE: April 2026
+
+  SITUATION: After 18 months of intensive Israeli military operations in Gaza
+  following the October 7, 2023 attacks, the question of Gaza's future remains
+  fundamentally unresolved. Israel claims Hamas's organized military capability
+  has been "decisively degraded," but the situation on the ground is far more
+  ambiguous.
+
+  MILITARY REALITY:
+  - The IDF has destroyed much of Hamas's pre-war military infrastructure —
+    tunnel networks, command centers, weapons depots — but Hamas has not
+    been eliminated
+  - Hamas's senior military leadership has been largely killed, but the
+    political bureau operates from exile in Doha and Istanbul and retains
+    influence
+  - Insurgent cells remain active throughout Gaza — IED attacks, sniper
+    operations, and periodic rocket launches continue
+  - The IDF maintains operational control of the Netzarim and Philadelphi
+    corridors, effectively bisecting the Strip
+  - Every time the IDF withdraws from a cleared area, armed groups re-emerge
+    within weeks — demonstrating that military control ≠ political control
+  - Hamas retains significant social support as a resistance movement,
+    particularly among a population that has endured 18 months of bombardment
+
+  HUMANITARIAN CATASTROPHE:
+  - Approximately 1.9 million Gazans are displaced with catastrophic conditions
+  - Infrastructure destroyed on a scale requiring $50-80 billion and 10-20 years
+    to rebuild
+  - Famine conditions in northern Gaza; disease outbreaks spreading
+  - International community increasingly critical of Israeli operations and
+    the humanitarian toll
+
+  POLITICAL DEADLOCK:
+  - A fragile ceasefire-for-hostages framework is in place but under constant strain
+  - Remaining hostages create competing imperatives — families demand a deal,
+    military establishment says continued pressure is working
+  - Israel's far-right coalition members demand permanent Israeli security control
+    and renewed settlement activity in Gaza
+  - The Palestinian Authority has signaled willingness to assume governance but
+    only with international support, security force strengthening, and a
+    political horizon toward statehood
+  - Hamas insists it represents a significant portion of Palestinian society and
+    cannot be excluded from any governance arrangement — willing to discuss a
+    long-term truce (hudna) but refuses formal disarmament or recognition of Israel
+  - The US is attempting to link Gaza reconstruction with Saudi-Israeli
+    normalization — a grand bargain that faces opposition from multiple directions
+  - Egypt controls the Rafah crossing and fears both instability and mass
+    displacement into Sinai
+  - Qatar hosts Hamas's political leadership and mediates hostage negotiations
+  - Jordan faces domestic pressure from its majority Palestinian-origin population
+
+  THE US FRAMEWORK:
+  The US has tabled a phased proposal:
+    Phase 1: Extended ceasefire, hostage release, humanitarian surge
+    Phase 2: International stabilization force, reformed PA-led interim governance
+    Phase 3: Reconstruction, elections, permanent status negotiations
+
+  This framework faces opposition from nearly every direction:
+  - Israel rejects Phases 2-3 as currently formulated — opposes PA governance
+    and any pathway that could lead to Palestinian statehood
+  - Hamas rejects disarmament without statehood guarantees — views any framework
+    that excludes it as illegitimate
+  - The PA demands reform support before taking responsibility — and won't enter
+    Gaza "on Israeli tanks"
+  - Arab states demand a political horizon before funding reconstruction
+  - Israel's coalition hardliners want permanent Israeli control, not any of this
+
+  CORE UNCERTAINTY:
+  The fundamental question is NOT "what happens after Hamas" — it is whether
+  Hamas can be removed at all, and if so, what fills the vacuum. Historical
+  precedent (Iraq, Libya, Afghanistan) suggests that destroying a governing
+  entity without a viable replacement creates chaos, not stability. Hamas may
+  be degraded militarily but it remains a political and social movement with
+  deep roots. The scenario outcome is genuinely open.
+
+timeframe_preset: long
+
+nature: 0.6
+mode:
+  - geopol
+
+questions:
+  - "What governance arrangement is most likely to emerge in Gaza within 1 year?"
+  - "What is the probability that Hamas retains de facto control or influence in Gaza despite military degradation?"
+  - "What is the probability that Saudi-Israeli normalization advances and is linked to the Gaza solution?"
+  - "What is the most likely security arrangement for Gaza — who provides it, under what mandate, and can it hold?"
+  - "What is the probability of renewed large-scale Israeli military operations within 1 year?"
+  - "Does the humanitarian crisis force a political solution, or does political deadlock perpetuate the crisis?"
+
+mc_questions:
+  - question: "What is Hamas's status 1 year from now?"
+    options:
+      - "Eliminated as a coherent organization"
+      - "Military wing destroyed but political movement persists"
+      - "Degraded but reconstituting — still the dominant armed group"
+      - "Transformed into a political party (disarmed or largely disarmed)"
+      - "Largely unchanged — still governing and fighting from the rubble"
+
+  - question: "Who exercises actual authority in Gaza?"
+    options:
+      - "Reformed Palestinian Authority with international support"
+      - "International transitional administration (UN-led or Arab-led)"
+      - "Local technocratic council under Israeli security umbrella"
+      - "Israeli military administration (de facto reoccupation)"
+      - "Hamas or Hamas-successor organization"
+      - "No coherent authority — fragmented warlord/clan control"
+
+  - question: "What is the reconstruction trajectory?"
+    options:
+      - "Major international reconstruction effort begins within 1 year"
+      - "Partial reconstruction, limited by political deadlock"
+      - "Minimal reconstruction — humanitarian maintenance only"
+      - "No significant reconstruction due to continued conflict"
+
+  - question: "What happens to the hostages?"
+    options:
+      - "All released through negotiated deal"
+      - "Partial release — some remain in captivity"
+      - "Military rescue operations recover some"
+      - "Hostage situation remains unresolved"

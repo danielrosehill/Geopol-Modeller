@@ -51,9 +51,26 @@ class Player(Intelligent, Stateful):
         )
         Stateful.__init__(self, **kwargs)
 
-    async def respond(self, history=None, query=None, reminder=2, mc=None, short=False):
+    async def respond(self, history=None, query=None, reminder=2, mc=None,
+                      short=False, timestep=None, move_current=None,
+                      moves_total=None):
         if query is None:
-            query = "What action or actions do you take in response?"
+            # Build a temporally-grounded, decision-focused query
+            parts = []
+            if timestep and move_current is not None:
+                parts.append(
+                    f"This is decision period {move_current + 1}"
+                    f"{f' of {moves_total}' if moves_total else ''}"
+                    f", covering the next {timestep}."
+                )
+            parts.append(
+                "Given the current situation and your strategic objectives, "
+                "what specific decisions, orders, or actions do you take? "
+                "Be concrete — name the policy, military order, diplomatic "
+                "move, or economic measure. Explain your reasoning and what "
+                "outcome you expect."
+            )
+            query = " ".join(parts)
         bind = {"stop": ["\n\n"]} if short else {"stop": ["Narrator:"]}
         output = await self.return_output(
             bind=bind,

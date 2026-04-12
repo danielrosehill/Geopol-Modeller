@@ -1,0 +1,101 @@
+# Scenario: Israel-Syria Relations Under the New Regime
+# Live crisis: HTS-led transitional authority signals normalization while
+# Israel occupies Syrian territory beyond the Golan disengagement lines.
+
+title: "Israel-Syria: New Regime Dynamics"
+
+actor_cluster: israel-syria
+
+scenario: |
+  DATE: April 2026
+
+  SITUATION: The Assad regime fell on December 8, 2024, replaced by an HTS-led
+  transitional authority under Ahmad al-Sharaa (formerly Abu Mohammed al-Julani).
+  Israel and the new Syria are in an unprecedented diplomatic dance — exploring
+  normalization while managing deep mutual distrust and contested territorial
+  realities.
+
+  WHAT HAS HAPPENED SO FAR:
+  - January 2026: High-level security negotiations in Paris, coordinated by US
+    envoy Tom Barrack with French mediation. Israeli Ambassador Yechiel Leiter
+    led the Israeli delegation; Syrian FM Asaad al-Shaibani and intelligence chief
+    Hussein Salamah represented Damascus.
+  - The Paris talks produced a US-supervised joint intelligence-sharing cell for
+    "military de-escalation, diplomatic engagement, and commercial opportunities."
+  - HTS has signaled willingness to recognize Israel and exchange ambassadors by
+    end of 2026 — an extraordinary shift from decades of Assad-era hostility.
+  - However, Israel responded to the Assad collapse by attacking Syrian military
+    infrastructure and pushing IDF troops beyond the Golan disengagement zone
+    into Syrian territory.
+  - Israel now maintains three operational zones extending into Syria, well beyond
+    the pre-existing Golan Heights occupation.
+  - Damascus demands complete IDF withdrawal to the pre-December 2024 disengagement
+    lines before any normalization agreement.
+  - Israel demands a demilitarized zone in southern Syria as a precondition for
+    any withdrawal.
+
+  KEY TENSIONS:
+  - The territorial dispute: Israel occupies additional Syrian territory that it
+    seized during the regime change chaos. Syria wants it back. Israel wants
+    security guarantees first.
+  - The normalization question: HTS is offering something no Syrian government
+    has ever offered — recognition of Israel. But Israel's territorial moves
+    make this politically toxic for any Syrian leader.
+  - The security vacuum: Multiple armed factions operate within Syria — not all
+    under HTS control. Turkish-backed forces hold parts of northern Syria.
+    Kurdish SDF controls the northeast. Russian forces remain at Hmeimim and
+    Tartus bases.
+  - The Iran angle: Assad's fall eliminated Iran's land bridge to Hezbollah via
+    Syria. Israel wants to ensure this is permanent. The new regime is anti-Iran
+    but doesn't have full territorial control.
+  - Russian interests: Russia maintains military bases in Syria and had a
+    de-confliction arrangement with Israel. The new regime's orientation toward
+    the West threatens Russia's position.
+  - Jordan's concerns: Shares a long border with Syria. Deeply concerned about
+    instability, refugee flows, and the precedent of Israeli territorial expansion.
+
+  IMMEDIATE SITUATION:
+  The US-supervised intelligence-sharing cell is operational but limited. Diplomatic
+  contacts continue but no formal negotiations on territorial withdrawal or
+  normalization are underway. Israel continues security operations inside Syrian
+  territory. The Syrian transitional authority is consolidating power domestically
+  while seeking international recognition and reconstruction aid. The clock is
+  ticking — HTS's legitimacy depends on delivering governance and sovereignty,
+  not just promises.
+
+timeframe_preset: long
+
+nature: 0.5
+mode:
+  - geopol
+
+questions:
+  - "What is the probability of formal Israel-Syria diplomatic recognition by end of 2026?"
+  - "Will Israel withdraw from the Syrian territory it occupied after Assad's fall?"
+  - "Does the intelligence-sharing cell evolve into broader normalization, or does it stall?"
+  - "What role does Russia play — does it accept the new reality or attempt to spoil it?"
+  - "Can HTS deliver normalization with Israel without losing domestic legitimacy?"
+
+mc_questions:
+  - question: "What is the status of Israel-Syria relations at the end of the scenario?"
+    options:
+      - "Full normalization — ambassadors exchanged"
+      - "Partial normalization — diplomatic relations without full ambassadorial exchange"
+      - "Active de-escalation framework but no normalization"
+      - "Stalled — intelligence cell continues but no political progress"
+      - "Deteriorated — confrontation over territorial issues"
+
+  - question: "Does Israel withdraw from post-2024 occupied Syrian territory?"
+    options:
+      - "Full withdrawal to pre-December 2024 lines"
+      - "Partial withdrawal with negotiated security zone"
+      - "No withdrawal — maintains current positions"
+      - "Expands further into Syrian territory"
+
+  - question: "What is the biggest obstacle to normalization?"
+    options:
+      - "Israeli territorial occupation beyond Golan"
+      - "Syrian domestic opposition to recognizing Israel"
+      - "HTS inability to control all Syrian territory"
+      - "External spoiler (Russia, Iran, or Turkey)"
+      - "Israeli coalition politics — right-wing opposition to any withdrawal"

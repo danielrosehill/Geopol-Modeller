@@ -61,14 +61,57 @@ def resolve_timeframes(scenario_data):
     return None, timestep, moves
 
 
+def load_actor_registry(config_dir):
+    """Load the shared actor registry from config/actors/_registry.yaml."""
+    registry_path = os.path.join(config_dir, "actors", "_registry.yaml")
+    if not os.path.exists(registry_path):
+        return {}
+    yaml = YAML(typ="safe")
+    with open(registry_path, "r") as f:
+        data = yaml.load(f)
+    if not data or "actors" not in data:
+        return {}
+    return {a["id"]: a for a in data["actors"]}
+
+
 def load_actor_cluster(cluster_name, config_dir):
-    """Load an actor cluster YAML by name from config/actors/."""
+    """Load an actor cluster YAML by name from config/actors/.
+
+    Supports two formats:
+    1. Full inline definitions (legacy): actors list with full persona etc.
+    2. Registry references: actors list with just {id: "xxx"} or {id: "xxx", overrides...}
+       These are resolved against _registry.yaml, with any extra fields used as overrides.
+    """
     cluster_path = os.path.join(config_dir, "actors", f"{cluster_name}.yaml")
     if not os.path.exists(cluster_path):
         raise FileNotFoundError(f"Actor cluster not found: {cluster_path}")
     yaml = YAML(typ="safe")
     with open(cluster_path, "r") as f:
-        return yaml.load(f)
+        data = yaml.load(f)
+
+    # Resolve registry references if actors lack a 'persona' field
+    registry = None
+    actors = data.get("actors", [])
+    resolved = []
+    for actor in actors:
+        if "persona" not in actor:
+            # This is a registry reference — resolve it
+            if registry is None:
+                registry = load_actor_registry(config_dir)
+            base = registry.get(actor["id"])
+            if base is None:
+                raise ValueError(
+                    f"Actor '{actor['id']}' not found in _registry.yaml "
+                    f"and has no inline persona."
+                )
+            # Merge: registry base + cluster overrides
+            merged = {**base, **actor}
+            resolved.append(merged)
+        else:
+            resolved.append(actor)
+
+    data["actors"] = resolved
+    return data
 
 
 def build_persona(actor):
@@ -267,7 +310,8 @@ async def run_scenario(
     )
 
     # Graph callback wiring
-    async def player_respond_fn(player_config, history):
+    async def player_respond_fn(player_config, history, timestep=None,
+                                move_current=None, moves_total=None):
         player_obj = next(p for p in players if p.name == player_config["name"])
 
         # Information asymmetry: filter history based on bloc visibility
@@ -279,10 +323,18 @@ async def run_scenario(
         else:
             visible_history = history
 
+        # Use timeframe label for current move if available
+        effective_timestep = timestep
+        if timeframes and move_current is not None and move_current < len(timeframes):
+            effective_timestep = timeframes[move_current]
+
         h = History()
         for entry in visible_history:
             h.add(entry["name"], entry["text"])
-        return await player_obj.respond(history=h)
+        return await player_obj.respond(
+            history=h, timestep=effective_timestep,
+            move_current=move_current, moves_total=moves_total,
+        )
 
     # Track which move we're on for timeframe labelling
     _move_counter = [0]
@@ -504,6 +556,29 @@ async def run_scenario(
                 scenario_path=scenario_path,
                 config_snapshot=models_dict,
             )
+
+            # Auto-assess predictions with closed windows from prior runs
+            try:
+                from .predictions.accuracy import AccuracyAgent
+                unassessed = store.get_unassessed()
+                if unassessed:
+                    if verbosity >= 1:
+                        print(f"[assess] Found {len(unassessed)} prior predictions with closed windows — grading...")
+                    accuracy_agent = AccuracyAgent(
+                        llm_client=client, model=pool.narrator,
+                        store=store, verbosity=verbosity,
+                    )
+                    grades = await accuracy_agent.assess_all()
+                    if grades:
+                        scored = [g for g in grades if g.score is not None]
+                        if scored:
+                            avg = sum(g.score for g in scored) / len(scored)
+                            print(f"[assess] Graded {len(grades)} predictions. Average score: {avg:.2f}")
+                        else:
+                            print(f"[assess] Graded {len(grades)} predictions (none yet scorable).")
+            except Exception as assess_err:
+                if verbosity >= 1:
+                    print(f"[assess] Auto-assessment failed: {assess_err}")
 
         except Exception as e:
             if verbosity >= 1:

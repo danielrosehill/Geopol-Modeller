@@ -102,6 +102,9 @@ async def player_respond_node(state: SimState) -> dict:
     response_text = await respond_fn(
         player_config=player_config,
         history=state["history"],
+        timestep=state.get("timestep"),
+        move_current=state.get("move_current"),
+        moves_total=state.get("moves_total"),
     )
 
     new_responses = state["current_responses"] + [

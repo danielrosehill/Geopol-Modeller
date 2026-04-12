@@ -1,0 +1,16 @@
+# Actor cluster: Israel-Syria New Regime
+# Uses shared actor registry — covers normalization dynamics with HTS-led Syria
+
+name: Israel-Syria Normalization
+description: >
+  Actors for the Israel-Syria rapprochement following the fall of the Assad regime.
+  Covers Israeli, Syrian transitional authority, US, Turkish, and Jordanian stakeholders.
+
+actors:
+  - id: netanyahu
+  - id: idf
+  - id: mossad
+  - id: syria_hts
+  - id: us_envoy
+  - id: jordan
+  - id: russia

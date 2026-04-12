@@ -92,17 +92,35 @@ class Control(Intelligent, Stateful):
     ):
         responses_intro = "These are the plans for each person or group"
         if "geopol" in mode:
-            responses_intro = "These are the plans ordered by each leader"
-        if query is None:
-            query = (
-                "Weave these plans into a cohesive narrative of what happens in the next "
-                + timestep
-                + "."
+            responses_intro = (
+                "These are the orders and decisions issued by each leader or actor"
             )
+        if query is None:
             if "geopol" in mode:
-                query = "Describe these plans being carried out, assuming the leaders above issue no further orders."
+                query = (
+                    f"Narrate what happens over the next {timestep} as these "
+                    f"orders are carried out. For each actor's actions, describe: "
+                    f"(1) what they attempt, (2) how other actors and real-world "
+                    f"constraints shape the outcome, (3) second-order consequences "
+                    f"and reactions from affected parties. "
+                    f"Be specific about mechanisms — name the diplomatic channel, "
+                    f"military unit, economic lever, or intelligence operation. "
+                    f"End with a brief STATUS section listing each actor's position "
+                    f"at the close of this period."
+                )
+            else:
+                query = (
+                    f"Weave these plans into a cohesive narrative of what happens "
+                    f"in the next {timestep}. Describe concrete outcomes, not just "
+                    f"intentions. Include how plans interact, conflict, or reinforce "
+                    f"each other."
+                )
             if random.random() < nature:
-                query += " Include unexpected consequences."
+                query += (
+                    " Include at least one unexpected consequence — an unintended "
+                    "side-effect, intelligence failure, accident, or miscalculation "
+                    "that none of the actors planned for."
+                )
         output = await self.return_output(
             history=history,
             responses=responses,
@@ -125,6 +143,20 @@ class Control(Intelligent, Stateful):
             query_format = "twoline"
         else:
             query_format = "twoline_simple"
+
+        # Enhance assessment queries with structured prediction guidance
+        enhanced_query = query
+        if mc is None and query and not query.startswith("STRUCTURED:"):
+            enhanced_query = (
+                f"{query}\n\n"
+                f"In your answer, be specific and falsifiable. Include:\n"
+                f"- Your assessment of the most likely outcome\n"
+                f"- A probability estimate (e.g. '65% likely')\n"
+                f"- The time horizon over which this applies\n"
+                f"- Key indicators that would confirm or refute this assessment\n"
+                f"- The main alternative scenario and its probability"
+            )
+
         bind = {"stop": ["\n\n"]} if short else None
         output = await self.return_output(
             bind=bind,
@@ -132,7 +164,7 @@ class Control(Intelligent, Stateful):
             history_over=True,
             responses=responses,
             responses_intro=responses_intro,
-            query=query,
+            query=enhanced_query,
             query_format=query_format,
         )
         if mc is not None:
