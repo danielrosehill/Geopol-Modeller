@@ -3,6 +3,7 @@
 """Generic scenario runner — loads any scenario YAML + optional actor cluster."""
 
 import os
+import random
 import sys
 import time
 
@@ -13,6 +14,7 @@ from .core import Database, History, Player, Control, build_simulation_graph
 from .planning.sitrep import SitrepAgent
 from .output import SimulationProgress, NullProgress
 from .output.checkpoint import save_checkpoint, load_checkpoint
+from .graph_config import load_graph_config, parse_escalation_from_output
 
 
 TIMEFRAME_PRESETS = {
@@ -162,6 +164,13 @@ async def run_scenario(
 
     num_players = len(actors)
 
+    # Load graph config (scenario subgraph)
+    graph_config = load_graph_config(scenario_data, config_dir)
+
+    # Build actor name→id map for visibility filtering
+    actor_id_map = {a["name"]: a["id"] for a in actors}
+    actor_name_map = {a["id"]: a["name"] for a in actors}
+
     if verbosity >= 1:
         print(f"\n  Scenario: {title}")
         print(f"  Actors:   {num_players}")
@@ -170,6 +179,17 @@ async def run_scenario(
         else:
             print(f"  Moves:    {moves_total} × {timestep}")
         print(f"  Actors:   {', '.join(a['name'] for a in actors)}")
+        if graph_config.name != "default":
+            features = []
+            if graph_config.has_visibility_rules:
+                features.append("info-asymmetry")
+            if graph_config.has_shocks:
+                features.append("shocks")
+            if graph_config.has_escalation_tracking:
+                features.append("escalation-tracking")
+            if graph_config.has_adaptive_tempo:
+                features.append("adaptive-tempo")
+            print(f"  Subgraph: {graph_config.name} ({', '.join(features)})")
         print()
 
     # Load pool
@@ -249,18 +269,38 @@ async def run_scenario(
     # Graph callback wiring
     async def player_respond_fn(player_config, history):
         player_obj = next(p for p in players if p.name == player_config["name"])
+
+        # Information asymmetry: filter history based on bloc visibility
+        actor_id = actor_id_map.get(player_config["name"])
+        if graph_config.has_visibility_rules and actor_id:
+            visible_history = graph_config.filter_history_for_actor(
+                history, actor_id, actor_id_map,
+            )
+        else:
+            visible_history = history
+
         h = History()
-        for entry in history:
+        for entry in visible_history:
             h.add(entry["name"], entry["text"])
         return await player_obj.respond(history=h)
 
     # Track which move we're on for timeframe labelling
     _move_counter = [0]
+    _current_escalation = [None]  # track for adaptive tempo
 
     async def adjudicate_fn(history, responses, nature_val, timestep_val, mode_val):
         # Use timeframe label for current move if available
         if timeframes and _move_counter[0] < len(timeframes):
             timestep_val = timeframes[_move_counter[0]]
+
+        # Adaptive tempo: override timestep based on escalation level
+        if graph_config.has_adaptive_tempo and _current_escalation[0] is not None:
+            adaptive_ts = graph_config.get_adaptive_timestep(_current_escalation[0])
+            if adaptive_ts:
+                if verbosity >= 2:
+                    print(f"  [adaptive-tempo] escalation={_current_escalation[0]} → timestep={adaptive_ts}")
+                timestep_val = adaptive_ts
+
         _move_counter[0] += 1
 
         h = History()
@@ -269,10 +309,70 @@ async def run_scenario(
         r = History()
         for entry in responses:
             r.add(entry["name"], entry["text"])
-        return await narrator.adjudicate(
-            history=h, responses=r, nature=nature_val,
-            timestep=timestep_val, mode=mode_val,
-        )
+
+        # Shock injection: replace generic "unexpected consequences" with
+        # domain-specific shocks from the graph config taxonomy
+        shock_inject = None
+        if graph_config.has_shocks and random.random() < nature_val:
+            shock = graph_config.select_shock()
+            if shock:
+                shock_inject = shock
+                if verbosity >= 1:
+                    print(f"  [shock] {shock['id']}: {shock['trigger'][:80]}...")
+
+        # Build custom query with shock and escalation instructions
+        custom_query = None
+        if shock_inject or graph_config.has_escalation_tracking:
+            parts = []
+            if "geopol" in mode_val:
+                parts.append(
+                    "Describe these plans being carried out, assuming the "
+                    "leaders above issue no further orders."
+                )
+            else:
+                parts.append(
+                    f"Weave these plans into a cohesive narrative of what "
+                    f"happens in the next {timestep_val}."
+                )
+
+            if shock_inject:
+                parts.append(
+                    f"\n\nIMPORTANT — an exogenous event occurs during this "
+                    f"period that all actors must react to:\n"
+                    f"{shock_inject['trigger']}\n"
+                    f"Consequences: {shock_inject.get('consequences', '')}"
+                )
+            elif random.random() < nature_val:
+                parts.append(" Include unexpected consequences.")
+
+            parts.append(graph_config.get_escalation_prompt_suffix())
+            custom_query = "".join(parts)
+
+        if custom_query is not None:
+            # We handled nature/shocks ourselves — pass nature=0 to avoid double-roll
+            output = await narrator.adjudicate(
+                history=h, responses=r, nature=0,
+                timestep=timestep_val, mode=mode_val,
+                query=custom_query,
+            )
+        else:
+            # No graph config features active — use default adjudication
+            output = await narrator.adjudicate(
+                history=h, responses=r, nature=nature_val,
+                timestep=timestep_val, mode=mode_val,
+            )
+
+        # Parse escalation data from output if tracking is enabled
+        if graph_config.has_escalation_tracking:
+            level, direction, clean_output = parse_escalation_from_output(output)
+            if level is not None:
+                _current_escalation[0] = level
+                if verbosity >= 1:
+                    level_name = graph_config.escalation_levels.get(level, "unknown")
+                    print(f"  [escalation] level={level} ({level_name}) direction={direction}")
+            return clean_output
+
+        return output
 
     async def assess_fn(history, query, mc=None):
         h = History()
@@ -308,6 +408,7 @@ async def run_scenario(
         "questions": questions,
         "mc_questions": mc_questions,
         "assessments": [],
+        "escalation_history": [],
         "_player_respond": player_respond_fn,
         "_adjudicate": adjudicate_fn,
         "_assess": assess_fn,

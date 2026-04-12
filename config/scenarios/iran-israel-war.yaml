@@ -3,7 +3,8 @@
 
 title: "Iran-Israel War"
 
-actor_cluster: iran-israel-core
+actor_cluster: iran-israel-full
+graph_config: iran-israel
 
 scenario: |
   DATE: 12 April 2026

@@ -39,6 +39,9 @@ class SimState(TypedDict):
     mc_questions: list
     assessments: list
 
+    # Escalation tracking (from graph config)
+    escalation_history: list  # [{move, level, direction}]
+
     # Runtime references (callables injected at build time)
     # These are set during graph construction, not serialized
     _player_respond: object
@@ -80,6 +83,7 @@ async def setup_node(state: SimState) -> dict:
         "current_player_idx": 0,
         "current_responses": [],
         "assessments": [],
+        "escalation_history": [],
     }
 
 
