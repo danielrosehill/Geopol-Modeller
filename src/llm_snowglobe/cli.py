@@ -6,7 +6,7 @@ import asyncio
 import os
 import sys
 
-from .core.llm import load_pools
+from .core.llm import load_pools, ModelPool
 
 
 def print_pool_table(pools, active):
@@ -24,8 +24,73 @@ def print_pool_table(pools, active):
     print()
 
 
+def print_pool_detail(name, pool):
+    """Print all 4 roles for a pool."""
+    print(f"\n  Selected: {name}")
+    print(f"    Planner:  {pool.planner}")
+    print(f"    Narrator: {pool.narrator}")
+    print(f"    Player:   {pool.player}")
+    print(f"    Advisor:  {pool.advisor}")
+    print()
+
+
+def prompt_model(role, default=None):
+    """Prompt user for a model ID for a given role."""
+    hint = f" [{default}]" if default else ""
+    while True:
+        try:
+            val = input(f"    {role}{hint}: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            sys.exit(0)
+        if val == "" and default:
+            return default
+        if val:
+            return val
+        print(f"      Please enter a model ID (e.g. 'deepseek/deepseek-v3.2')")
+
+
+def build_custom_pool():
+    """Interactive builder for a custom model pool."""
+    print()
+    print("  ----------------------------------------")
+    print("  CUSTOM POOL BUILDER")
+    print("  ----------------------------------------")
+    print()
+    print("  Enter an OpenRouter model ID for each role.")
+    print("  Browse models: https://openrouter.ai/models")
+    print()
+    print("  Tip: press Enter to reuse the previous value,")
+    print("       or type a single model ID for all 4 roles.")
+    print()
+
+    # Ask if they want one model for everything
+    try:
+        shortcut = input("  Use one model for all roles? [y/N]: ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        sys.exit(0)
+
+    if shortcut in ("y", "yes"):
+        model = prompt_model("Model ID")
+        pool = ModelPool(planner=model, narrator=model, player=model, advisor=model)
+        print_pool_detail("custom", pool)
+        return pool
+
+    # Per-role selection
+    print()
+    planner = prompt_model("Planner  (research + briefing)")
+    narrator = prompt_model("Narrator (adjudication)      ", default=planner)
+    player = prompt_model("Player   (in-character moves) ", default=planner)
+    advisor = prompt_model("Advisor  (human player help)  ", default=player)
+
+    pool = ModelPool(planner=planner, narrator=narrator, player=player, advisor=advisor)
+    print_pool_detail("custom", pool)
+    return pool
+
+
 def select_pool(pools_path):
-    """Interactive pool selection menu. Returns (pool_name, pools_dict, base_url)."""
+    """Interactive pool selection menu. Returns (pool_name, pool, base_url)."""
     pools, active, base_url = load_pools(pools_path)
 
     if not pools:
@@ -33,6 +98,7 @@ def select_pool(pools_path):
         sys.exit(1)
 
     pool_names = list(pools.keys())
+    n = len(pools)
 
     print()
     print("=" * 40)
@@ -41,52 +107,57 @@ def select_pool(pools_path):
 
     print_pool_table(pools, active)
 
+    print(f"  {n + 1}. [Custom] — build your own stack")
+    print()
+
     while True:
         try:
-            choice = input(f"Select pool [1-{len(pools)}, or Enter for '{active}']: ").strip()
+            choice = input(f"  Select pool [1-{n + 1}, or Enter for '{active}']: ").strip()
         except (EOFError, KeyboardInterrupt):
             print()
             sys.exit(0)
 
         if choice == "":
-            return active, pools, base_url
+            return active, pools[active], base_url
+
+        # Check for "custom" by name
+        if choice.lower() == "custom":
+            pool = build_custom_pool()
+            return "custom", pool, base_url
 
         try:
             idx = int(choice) - 1
-            if 0 <= idx < len(pool_names):
+            if idx == n:
+                # Custom option
+                pool = build_custom_pool()
+                return "custom", pool, base_url
+            if 0 <= idx < n:
                 selected = pool_names[idx]
                 pool = pools[selected]
-                print(f"\n  Selected: {selected}")
-                print(f"    Planner:  {pool.planner}")
-                print(f"    Narrator: {pool.narrator}")
-                print(f"    Player:   {pool.player}")
-                print(f"    Advisor:  {pool.advisor}")
-                print()
-                return selected, pools, base_url
+                print_pool_detail(selected, pool)
+                return selected, pool, base_url
             else:
-                print(f"  Please enter a number between 1 and {len(pools)}.")
+                print(f"  Please enter a number between 1 and {n + 1}.")
         except ValueError:
-            # Try matching by name
             if choice in pools:
-                return choice, pools, base_url
-            print(f"  Invalid input. Enter a number or pool name.")
+                return choice, pools[choice], base_url
+            print(f"  Invalid input. Enter a number, pool name, or 'custom'.")
 
 
 def main():
     """CLI entry point: select pool, then run the Azuristan/Crimsonia simulation."""
     pools_path = os.path.join(os.path.dirname(__file__), "..", "..", "config", "pools.yaml")
-    # Also check relative to CWD
     if not os.path.exists(pools_path):
         pools_path = os.path.join("config", "pools.yaml")
     if not os.path.exists(pools_path):
         print("Cannot find config/pools.yaml. Run from the snowglobe repo root.")
         sys.exit(1)
 
-    pool_name, pools, base_url = select_pool(pools_path)
+    _, __, base_url = load_pools(pools_path)
+    pool_name, pool, base_url = select_pool(pools_path)
 
-    # Import here to avoid circular imports at module level
     from .examples_runner import run_ac_sim
-    asyncio.run(run_ac_sim(pool_name=pool_name, pools_path=pools_path))
+    asyncio.run(run_ac_sim(pool_name=pool_name, pool_override=pool, base_url=base_url, pools_path=pools_path))
 
 
 if __name__ == "__main__":

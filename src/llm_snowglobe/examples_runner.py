@@ -8,14 +8,21 @@ from .core import Database, History, Player, Control, build_simulation_graph
 from .planning import PlanningAgent
 
 
-async def run_ac_sim(pool_name=None, pools_path=None, verbosity=1):
+async def run_ac_sim(pool_name=None, pool_override=None, base_url=None, pools_path=None, verbosity=1):
     """Run the Azuristan/Crimsonia geopolitical simulation."""
 
-    # Load pool
-    if pools_path is None:
-        pools_path = os.path.join("config", "pools.yaml")
-    pools, active, base_url = load_pools(pools_path)
-    pool = pools.get(pool_name or active)
+    # Load pool — use override if provided (e.g. from custom builder)
+    if pool_override is not None:
+        pool = pool_override
+        if base_url is None:
+            base_url = "https://openrouter.ai/api/v1"
+    else:
+        if pools_path is None:
+            pools_path = os.path.join("config", "pools.yaml")
+        pools, active, base_url_loaded = load_pools(pools_path)
+        pool = pools.get(pool_name or active)
+        if base_url is None:
+            base_url = base_url_loaded
 
     client = LLMClient(base_url=base_url)
 
