@@ -5,7 +5,7 @@ description = "Snow Globe multi-agent wargaming platform — OpenRouter + LangGr
 license = "Apache-2.0"
 authors = ["Daniel Hogan <6313241+dphogan@users.noreply.github.com>"]
 readme = "README.md"
-homepage = "https://github.com/IQTLabs/snowglobe"
+homepage = "https://github.com/danielrosehill/Geopol-Modeller"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"

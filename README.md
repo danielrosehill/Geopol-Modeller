@@ -1,16 +1,22 @@
-# Snow Globe
-***Open-Ended Wargames with Large Language Models***
+# Geopol Modeller
 
-Snow Globe uses large language models (LLMs) for automated play of "open-ended" text-based wargames, such as seminar games and political wargames. LLMs enable a light, flexible architecture in which player actions are not restricted to predefined options. The system allows humans to play against or alongside AI agents with specific personas.
+**Open-ended geopolitical wargames with large language models**
 
-This fork adds:
-- **OpenRouter integration** — access any model from any provider through a single API
-- **Model pools** — predefined configurations for 14+ providers (DeepSeek, Anthropic, OpenAI, Google, Qwen, xAI, MiniMax, Meta, Zhipu, Moonshot)
-- **Tavily-powered planning agent** — researches current events before simulation begins, producing a shared briefing for all agents
-- **LangGraph simulation loop** — inspectable, pausable state graph replacing the imperative loop
-- **Stripped dependencies** — removed LangChain, torch, transformers, llama-cpp in favor of direct OpenAI SDK calls
+Geopol Modeller is a fork of [Snow Globe](https://github.com/IQTLabs/snowglobe) by [IQTLabs](https://github.com/IQTLabs) (In-Q-Tel). The original project demonstrated that every stage of a text-based wargame — from scenario preparation through post-game analysis — can be carried out by LLMs, humans, or a combination of both. Read the original paper [here](https://arxiv.org/abs/2404.11446).
 
-Read the original paper [here](https://arxiv.org/abs/2404.11446).
+## What This Fork Changes
+
+The original Snow Globe used LangChain, local model support (llama-cpp, transformers/torch), and a bespoke imperative game loop. This fork strips that stack and replaces it with:
+
+- **OpenRouter as the single LLM gateway** — access any model from any provider (DeepSeek, Anthropic, OpenAI, Google, Qwen, xAI, MiniMax, Meta, Zhipu, Moonshot) through a unified OpenAI-compatible SDK
+- **Model pools** — predefined configurations mapping roles (planner, player) to specific models, selectable at runtime via an interactive CLI menu or by name
+- **Tavily-powered planning agent** — an optional pre-simulation stage that searches current events and ingests reference URLs to produce a shared briefing for all agents
+- **LangGraph simulation loop** — an inspectable, pausable state graph replacing the imperative loop
+- **Rich progress reporting** — live terminal UI with progress bars and status updates
+- **Checkpointing** — simulation state is saved at each turn, allowing recovery from interruptions
+- **Typst PDF reports** — automatic generation of formatted PDF reports from simulation output
+- **Edge-TTS podcast generation** — text-to-speech audio summaries of simulation results
+- **Stripped dependencies** — removed LangChain, torch, transformers, llama-cpp in favor of direct OpenAI SDK calls through OpenRouter
 
 ## Quick Start
 
@@ -86,6 +92,12 @@ See [docs/model-selection.md](docs/model-selection.md) for benchmark links and g
 ## Custom Scenarios
 
 Edit `config/game.yaml` to define your scenario (title, scenario text, goals, players, advisors). See the existing file for the full schema.
+
+## Upstream
+
+- **Original project:** [IQTLabs/snowglobe](https://github.com/IQTLabs/snowglobe)
+- **Paper:** [arxiv.org/abs/2404.11446](https://arxiv.org/abs/2404.11446)
+- **Original authors:** Daniel Hogan et al. (IQTLabs / In-Q-Tel)
 
 ## License
 
