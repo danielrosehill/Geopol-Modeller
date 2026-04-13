@@ -1,4 +1,4 @@
-Research a topic related to the snowglobe project and save findings to the planning/research/ directory.
+Research a topic related to the geopol project and save findings to the planning/research/ directory.
 
 $ARGUMENTS is the research topic or question.
 

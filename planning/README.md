@@ -1,6 +1,6 @@
-# Snowglobe Planning
+# Geopol Forecaster Planning
 
-Research notes, design docs, and task tracking for this fork of the Snow Globe wargaming framework.
+Research notes, design docs, and task tracking for this fork of the Geopol Forecaster wargaming framework.
 
 ## Structure
 

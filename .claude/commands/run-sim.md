@@ -1,4 +1,4 @@
-Run a Snowglobe wargaming simulation on the Modal cloud backend using the snowglobe MCP server.
+Run a Geopol Forecaster wargaming simulation on the Modal cloud backend using the geopol MCP server.
 
 $ARGUMENTS format: `<scenario-name> [pool-name] [ref-urls...]`
 

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "llm-snowglobe"
+name = "geopol-forecaster"
 version = "2.0.0-dev"
-description = "Snow Globe multi-agent wargaming platform — OpenRouter + LangGraph"
+description = "Geopol Forecaster — multi-agent geopolitical wargaming platform (OpenRouter + LangGraph)"
 license = "Apache-2.0"
 authors = ["Daniel Hogan <6313241+dphogan@users.noreply.github.com>"]
 readme = "README.md"
@@ -24,6 +24,7 @@ edge-tts = "*"
 trafilatura = "*"
 sse-starlette = "*"
 httpx = "*"
+huggingface_hub = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.9.0"
@@ -32,11 +33,11 @@ pytest = "*"
 pytest-asyncio = "*"
 
 [tool.poetry.scripts]
-snowglobe = "llm_snowglobe.cli:main"
-snowglobe-web = "llm_snowglobe.web.app:main"
-snowglobe_server = "llm_snowglobe.scripts:server"
-snowglobe_game = "llm_snowglobe.user_defined_game:main"
-snowglobe_simulation = "llm_snowglobe.user_defined_sim:main"
+geopol = "geopol_forecaster.cli:main"
+geopol-web = "geopol_forecaster.web.app:main"
+geopol-server = "geopol_forecaster.scripts:server"
+geopol-game = "geopol_forecaster.user_defined_game:main"
+geopol-sim = "geopol_forecaster.user_defined_sim:main"
 
 [build-system]
 requires = ["poetry-core"]

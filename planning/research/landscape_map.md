@@ -1,4 +1,4 @@
-# Snow Globe: Competitive Landscape Map
+# Geopol Forecaster: Competitive Landscape Map
 
 > LLM-based wargaming, policy simulation, and adjacent multi-agent simulation tools.
 >
@@ -12,7 +12,7 @@ These are frameworks specifically built for LLM-driven wargaming or political/ge
 
 | Project | Origin | Year | Open Source | Focus | Architecture |
 |---------|--------|------|-------------|-------|-------------|
-| **Snow Globe** | IQT Labs | 2024 | Yes (Apache 2.0) | Open-ended qualitative wargames, political/seminar games | LLM agents with personas, control/player/team roles, LangGraph loop |
+| **Geopol Forecaster** | IQT Labs | 2024 | Yes (Apache 2.0) | Open-ended qualitative wargames, political/seminar games | LLM agents with personas, control/player/team roles, LangGraph loop |
 | **WarAgent** | AGI Research (Rutgers) | 2023 | Yes | Historical conflict simulation (WWI, WWII, Warring States) | Country-as-agent, action selection from predefined set, GPT-4/Claude |
 | **LLMWargaming** | Stanford HAI / ancorso | 2024 | Yes | Crisis escalation research (US-China scenarios) | Wargame with 107 human experts as baseline, LLM vs human comparison |
 | **WargamesAI** | user1342 | 2024 | Yes | General-purpose professional wargaming toolkit | LLM umpiring, dice/card mechanics, PDF persona extraction |
@@ -24,7 +24,7 @@ These are frameworks specifically built for LLM-driven wargaming or political/ge
 
 | Paper | Authors | Venue | Key Finding |
 |-------|---------|-------|-------------|
-| [Open-Ended Wargames with Large Language Models](https://arxiv.org/abs/2404.11446) | Hogan & Brennen (IQT Labs) | arXiv 2024 | Snow Globe's foundational paper; demonstrates AI-human hybrid wargaming |
+| [Open-Ended Wargames with Large Language Models](https://arxiv.org/abs/2404.11446) | Hogan & Brennen (IQT Labs) | arXiv 2024 | Geopol Forecaster's foundational paper; demonstrates AI-human hybrid wargaming |
 | [Escalation Risks from Language Models in Military and Diplomatic Decision-Making](https://arxiv.org/abs/2401.03408) | Rivera et al. (Stanford/Georgia Tech) | FAccT 2024 | All five tested LLMs show escalation tendencies; GPT-3.5 and Llama-2 most escalation-prone |
 | [War and Peace (WarAgent)](https://arxiv.org/html/2403.13433v1) | Hua et al. (Rutgers) | OpenReview 2024 | LLM agents replicate macro outcomes of historical wars (alliances, war declarations) |
 | [Human vs. Machine: Language Models and Wargames](https://arxiv.org/html/2403.03407v1) | Multiple authors | arXiv 2024 | Compares LLM and human decision-making in structured wargame scenarios |
@@ -40,7 +40,7 @@ These are not wargaming-specific but provide the underlying orchestration patter
 
 | Framework | Maintainer | Architecture | Relevance to Wargaming |
 |-----------|-----------|-------------|----------------------|
-| **LangGraph** | LangChain | State graph with cycles, checkpointing, human-in-the-loop | Snow Globe's simulation loop engine; inspectable/pausable state |
+| **LangGraph** | LangChain | State graph with cycles, checkpointing, human-in-the-loop | Geopol Forecaster's simulation loop engine; inspectable/pausable state |
 | **AutoGen (AG2)** | Microsoft Research | Conversational GroupChat, multi-turn agent debate | Natural for negotiation/deliberation simulations; expensive at scale (20+ LLM calls per round) |
 | **CrewAI** | CrewAI Inc. | Role-based crews, sequential/hierarchical processes | Good for structured workflows; 30-60% faster than AutoGen, 34% fewer tokens |
 | **OpenAI Agents SDK** | OpenAI | Tool-calling agents with handoffs | Simpler but less flexible for multi-party simulation |
@@ -74,7 +74,7 @@ These are not wargaming-specific but provide the underlying orchestration patter
 
 | Organization | Initiative | Status | Details |
 |-------------|-----------|--------|---------|
-| **CIA / Intelligence Community** | Snow Globe adoption | Published Dec 2025 in *Studies in Intelligence* (Vol. 69, No. 4) | CIA-IQT joint wargame conducted April 2025; lessons from human-AI teaming in war games |
+| **CIA / Intelligence Community** | Geopol Forecaster adoption | Published Dec 2025 in *Studies in Intelligence* (Vol. 69, No. 4) | CIA-IQT joint wargame conducted April 2025; lessons from human-AI teaming in war games |
 | **Johns Hopkins APL** | GenWar Lab | Lab opening 2026 | Generative AI wargaming lab; classified versions being built for DoD and IC; plain-English scenario specification |
 | **U.S. Army CGSC** | AI-Enabled Wargaming | Mandated default method starting AY 2026-2027 | Custom Vantage agent with 128K context window; joint task force exercises |
 | **U.S. Air Force** | WarEngine concept + Decision Advantage Sprints | RFI stage (2025) | Human-machine teaming in wargames; accessible simulation platform |
@@ -104,9 +104,9 @@ These are not wargaming-specific but provide the underlying orchestration patter
 
 ---
 
-## 4. Snow Globe's Key Differentiators
+## 4. Geopol Forecaster's Key Differentiators
 
-| Feature | Snow Globe | WarAgent | WargamesAI | GenWar | Concordia |
+| Feature | Geopol Forecaster | WarAgent | WargamesAI | GenWar | Concordia |
 |---------|-----------|----------|------------|--------|-----------|
 | **Open-ended play** (no predefined action menus) | Yes | No (predefined actions) | Partial | Unknown | Yes |
 | **Persona-based agents** | Yes (detailed persona documents) | Country-level only | Yes (PDF extraction) | Yes | Yes |
@@ -118,9 +118,9 @@ These are not wargaming-specific but provide the underlying orchestration patter
 | **Published academic paper** | Yes (arXiv 2024) | Yes | No | Yes (JHU APL) | Yes |
 | **Intelligence community adoption** | Yes (CIA, *Studies in Intelligence* Dec 2025) | No | No | Yes (DoD/IC classified) | No |
 
-### What makes Snow Globe unique
+### What makes Geopol Forecaster unique
 
-1. **Truly open-ended**: Player actions are not restricted to predefined options. Most competitors (WarAgent, escalation studies) use structured action spaces. Snow Globe agents generate free-form natural language responses, closer to real seminar wargaming.
+1. **Truly open-ended**: Player actions are not restricted to predefined options. Most competitors (WarAgent, escalation studies) use structured action spaces. Geopol Forecaster agents generate free-form natural language responses, closer to real seminar wargaming.
 
 2. **Persona depth**: Each agent receives a detailed written persona that shapes its responses, going beyond simple role labels (e.g., "China") to nuanced characterizations of individual decision-makers.
 
@@ -134,26 +134,26 @@ These are not wargaming-specific but provide the underlying orchestration patter
 
 ---
 
-## 5. Gaps in the Landscape That Snow Globe Could Fill
+## 5. Gaps in the Landscape That Geopol Forecaster Could Fill
 
-### Underserved areas where Snow Globe has or could have an advantage
+### Underserved areas where Geopol Forecaster has or could have an advantage
 
-| Gap | Current State | Opportunity for Snow Globe |
+| Gap | Current State | Opportunity for Geopol Forecaster |
 |-----|--------------|---------------------------|
 | **Escalation tracking and measurement** | Stanford/Georgia Tech showed LLMs escalate unpredictably, but no open framework includes built-in escalation metrics | Add quantitative escalation scoring to each round; enable systematic escalation analysis across models and scenarios |
 | **Scenario libraries** | Most tools ship with one or two scenarios; no shared repository of reusable wargame scenarios exists | Build a community scenario library (YAML configs) covering different crisis types, regions, and complexity levels |
 | **Cross-model behavioral comparison** | Research papers compare models but tools do not make this easy | OpenRouter integration already enables this; add structured comparison outputs (e.g., how does DeepSeek vs Claude handle the same Taiwan scenario?) |
 | **Reproducibility and replay** | Most frameworks run once and produce a transcript; hard to replay with variations | LangGraph checkpointing already supports this; expose branching/replay in the CLI |
-| **Non-defense applications** | Almost all tools focus on military/geopolitical scenarios | Snow Globe's architecture is scenario-agnostic; expand examples to corporate crisis, pandemic response, climate negotiation, election simulation |
+| **Non-defense applications** | Almost all tools focus on military/geopolitical scenarios | Geopol Forecaster's architecture is scenario-agnostic; expand examples to corporate crisis, pandemic response, climate negotiation, election simulation |
 | **Accessibility for non-technical users** | GenWar promises plain-English scenario specification but is classified; open tools require Python knowledge | Build a web UI or simplified CLI wizard for scenario creation and game execution |
-| **Post-game analysis** | Most tools produce raw transcripts; limited structured analysis | Snow Globe already has report generation; enhance with automated pattern extraction, decision tree visualization, and comparative analysis |
-| **Evaluation against human baselines** | Only LLMWargaming (Stanford) has done this systematically | Partner with policy schools or think tanks to collect human baseline data for Snow Globe scenarios |
+| **Post-game analysis** | Most tools produce raw transcripts; limited structured analysis | Geopol Forecaster already has report generation; enhance with automated pattern extraction, decision tree visualization, and comparative analysis |
+| **Evaluation against human baselines** | Only LLMWargaming (Stanford) has done this systematically | Partner with policy schools or think tanks to collect human baseline data for Geopol Forecaster scenarios |
 | **Multi-language support** | All tools operate in English only | OpenRouter's model diversity includes models strong in Chinese, Arabic, Russian -- enable wargames where agents communicate in their "native" language |
 | **Real-time data feeds** | Tavily provides pre-game research but not live updates during play | Integrate live news/data feeds that can inject real-world developments mid-simulation |
 
 ### Strategic positioning
 
-Snow Globe sits at a unique intersection: it is the only open-source framework that combines truly open-ended play, persona-based agents, current events grounding, and documented intelligence community adoption. The closest competitors are either:
+Geopol Forecaster sits at a unique intersection: it is the only open-source framework that combines truly open-ended play, persona-based agents, current events grounding, and documented intelligence community adoption. The closest competitors are either:
 
 - **Too narrow**: WarAgent only does historical conflicts with predefined actions
 - **Too classified**: GenWar is building classified versions for DoD/IC
@@ -161,17 +161,17 @@ Snow Globe sits at a unique intersection: it is the only open-source framework t
 - **Too experimental**: SIM-1 and LLM-Diplomacy are one-off research projects, not maintained frameworks
 - **Too simplistic**: WargamesAI includes dice/card mechanics but lacks the sophisticated planning and adjudication pipeline
 
-The primary competitive risk is GenWar (JHU APL), which has significant DoD funding and is building classified capabilities. However, GenWar's classified nature means it cannot serve the broader policy, academic, and think-tank community that CSIS argues needs access to wargaming tools. Snow Globe is well-positioned to be the open-source standard for LLM wargaming outside classified environments.
+The primary competitive risk is GenWar (JHU APL), which has significant DoD funding and is building classified capabilities. However, GenWar's classified nature means it cannot serve the broader policy, academic, and think-tank community that CSIS argues needs access to wargaming tools. Geopol Forecaster is well-positioned to be the open-source standard for LLM wargaming outside classified environments.
 
 ---
 
 ## Sources
 
-### Snow Globe and IQT Labs
+### Geopol Forecaster and IQT Labs
 - [Open-Ended Wargames with Large Language Models (arXiv)](https://arxiv.org/abs/2404.11446)
-- [IQT Labs Snow Globe (GitHub)](https://github.com/IQTLabs/snowglobe)
-- [Snow Globe Multi-Player AI System (CIA Studies in Intelligence, Dec 2025)](https://www.cia.gov/resources/csi/studies-in-intelligence/studies-in-intelligence-vol-69-no-4-extracts-december-2025/snow-globe-multi-player-ai-system-lessons-from-human-ai-teaming-in-war-games)
-- [Snow Globe on PyPI](https://pypi.org/project/llm-snowglobe/)
+- [IQT Labs Geopol Forecaster (GitHub)](https://github.com/IQTLabs/geopol)
+- [Geopol Forecaster Multi-Player AI System (CIA Studies in Intelligence, Dec 2025)](https://www.cia.gov/resources/csi/studies-in-intelligence/studies-in-intelligence-vol-69-no-4-extracts-december-2025/snow-globe-multi-player-ai-system-lessons-from-human-ai-teaming-in-war-games)
+- [Geopol Forecaster on PyPI](https://pypi.org/project/llm-geopol/)
 
 ### Direct Competitors
 - [WarAgent (GitHub)](https://github.com/agiresearch/WarAgent)

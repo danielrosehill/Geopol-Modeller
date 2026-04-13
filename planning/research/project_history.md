@@ -1,8 +1,8 @@
-# Snow Globe -- Project History and Background
+# Geopol Forecaster -- Project History and Background
 
 ## Organization
 
-**Snow Globe** was created by **IQT Labs**, the applied research division of **In-Q-Tel (IQT)**. In-Q-Tel is an independent, non-profit venture capital firm based in Tysons, Virginia, founded in 1999. Its mission is to identify and deliver cutting-edge technologies to the U.S. intelligence community (CIA, DIA, FBI, NGA, NSA, DHS, U.S. Cyber Command, and allied intelligence services in the UK and Australia).
+**Geopol Forecaster** was created by **IQT Labs**, the applied research division of **In-Q-Tel (IQT)**. In-Q-Tel is an independent, non-profit venture capital firm based in Tysons, Virginia, founded in 1999. Its mission is to identify and deliver cutting-edge technologies to the U.S. intelligence community (CIA, DIA, FBI, NGA, NSA, DHS, U.S. Cyber Command, and allied intelligence services in the UK and Australia).
 
 IQT Labs (formerly Lab41) is IQT's hands-on technical research arm, focused on exploring how national security agencies can leverage emerging machine learning and AI capabilities.
 
@@ -21,12 +21,12 @@ A follow-up article in *Studies in Intelligence* (December 2025) added three co-
 
 ## Original GitHub Repository
 
-- **URL**: https://github.com/IQTLabs/snowglobe
-- **Internal GitLab** (referenced in git history): `gitlab.iqt.org:labs/snowglobe_dev`
+- **URL**: https://github.com/IQTLabs/geopol
+- **Internal GitLab** (referenced in git history): `gitlab.iqt.org:labs/geopol_dev`
 - **License**: Apache 2.0
-- **PyPI**: https://pypi.org/project/llm-snowglobe/
+- **PyPI**: https://pypi.org/project/llm-geopol/
 
-The fork at `danielrosehill/snowglobe` was derived from `IQTLabs/snowglobe`.
+The fork at `danielrosehill/geopol` was derived from `IQTLabs/geopol`.
 
 ## Academic Papers
 
@@ -40,11 +40,11 @@ The fork at `danielrosehill/snowglobe` was derived from `IQTLabs/snowglobe`.
 - **Category**: cs.CL (Computation and Language)
 - **License**: CC BY-SA 4.0
 
-The paper introduces Snow Globe as an LLM-powered multi-agent system for automating qualitative (open-ended) wargames, as opposed to the quantitative games that prior AI automation had focused on. It describes the software architecture and demonstrates two case studies: an AI incident response tabletop exercise and a geopolitical crisis simulation.
+The paper introduces Geopol Forecaster as an LLM-powered multi-agent system for automating qualitative (open-ended) wargames, as opposed to the quantitative games that prior AI automation had focused on. It describes the software architecture and demonstrates two case studies: an AI incident response tabletop exercise and a geopolitical crisis simulation.
 
 ### CIA Studies in Intelligence Article
 
-- **Title**: "Snow Globe Multi-Player AI System: Lessons from Human-AI Teaming in War Games"
+- **Title**: "Geopol Forecaster Multi-Player AI System: Lessons from Human-AI Teaming in War Games"
 - **Authors**: Andrea Brennen, Rachel Grunspan, Daniel Hogan, Jessica D. Smith, Elizabeth VanderVeen
 - **Journal**: *Studies in Intelligence*, Vol. 69, No. 4 (Extracts)
 - **Date**: December 2025
@@ -57,10 +57,10 @@ This article documents the collaboration between IQT Labs and the CIA's DDI Futu
 
 | Date | Milestone |
 |------|-----------|
-| Oct 16, 2023 | First commit on internal GitLab (`gitlab.iqt.org:labs/snowglobe_dev`) -- Dockerfile and initial scripts |
+| Oct 16, 2023 | First commit on internal GitLab (`gitlab.iqt.org:labs/geopol_dev`) -- Dockerfile and initial scripts |
 | Oct--Dec 2023 | Early development: OpenAI, Hugging Face, llama.cpp model backends; player/control architecture |
 | Apr 4, 2024 | Apache 2.0 license added (preparing for open-source release) |
-| Apr 16, 2024 | GitHub repository created at `IQTLabs/snowglobe` |
+| Apr 16, 2024 | GitHub repository created at `IQTLabs/geopol` |
 | Apr 17, 2024 | arXiv preprint submitted (2404.11446) |
 | Apr--Sep 2024 | Continued development: model setup scripts, version updates, dependency refinements |
 | Apr 2025 | Azure OpenAI support added |

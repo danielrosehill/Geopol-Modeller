@@ -1,5 +1,5 @@
 services:
-  snowglobe:
+  geopol:
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,23 +12,23 @@ services:
               capabilities: [gpu]
     command: ["./start_sim.sh"]
     # command: "tail -f /dev/null"
-    image: snowglobe:latest
+    image: geopol:latest
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    container_name: snowglobe
-    hostname: snowglobe
+    container_name: geopol
+    hostname: geopol
     healthcheck:
-      test: bash -c "[ -f /data/snowglobe/local/game.id ]"
+      test: bash -c "[ -f /data/geopol/local/game.id ]"
       timeout: 3s
       retries: 20
     volumes:
-      - '${PWD}/config/local:/home/snowglobe/.config/snowglobe'
-      - '${PWD}/logs:/home/snowglobe/logs'
-      - '${PWD}/data:/data/snowglobe'
+      - '${PWD}/config/local:/home/geopol/.config/geopol'
+      - '${PWD}/logs:/home/geopol/logs'
+      - '${PWD}/data:/data/geopol'
     # ports:
     #   - 8080:8000
 
-  snowglobe-ui:
+  geopol-ui:
     build:
       context: .
       dockerfile: Dockerfile
@@ -39,23 +39,23 @@ services:
     #         - driver: nvidia
     #           count: all
     #           capabilities: [gpu]
-    command: "snowglobe_server -c /home/snowglobe/.config/snowglobe/wotr_unmasked.yaml -l /home/snowglobe/logs/local/snowglobe-ui.log"
-    image: snowglobe:latest
+    command: "geopol_server -c /home/geopol/.config/geopol/wotr_unmasked.yaml -l /home/geopol/logs/local/geopol-ui.log"
+    image: geopol:latest
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    container_name: snowglobe-ui
-    hostname: snowglobe-ui
+    container_name: geopol-ui
+    hostname: geopol-ui
     volumes:
-      - '${PWD}/config/local:/home/snowglobe/.config/snowglobe'
-      - '${PWD}/logs:/home/snowglobe/logs'
-      - '${PWD}/data:/data/snowglobe'
+      - '${PWD}/config/local:/home/geopol/.config/geopol'
+      - '${PWD}/logs:/home/geopol/logs'
+      - '${PWD}/data:/data/geopol'
     ports:
       - 8080:8000
     depends_on:
-      snowglobe:
+      geopol:
         condition: service_healthy
 
-#   snowglobe-openai:
+#   geopol-openai:
 #     build:
 #       context: .
 #       dockerfile: Dockerfile
@@ -67,25 +67,25 @@ services:
 #               count: all
 #               capabilities: [gpu]
 #     command: ["./start_sim_openai.sh"]
-#     image: snowglobe:latest
+#     image: geopol:latest
 #     stdin_open: true # docker run -i
 #     tty: true # docker run -t
-#     container_name: snowglobe-openai
-#     hostname: snowglobe-openai
+#     container_name: geopol-openai
+#     hostname: geopol-openai
 #     healthcheck:
-#       test: bash -c "[ -f /data/snowglobe/openai/game.id ]"
+#       test: bash -c "[ -f /data/geopol/openai/game.id ]"
 #       timeout: 3s
 #       retries: 20
 #     volumes:
-#       - '${PWD}/config/openai:/home/snowglobe/.config/snowglobe'
-#       - '${PWD}/logs:/home/snowglobe/logs'
-#       - '${PWD}/data:/data/snowglobe'
+#       - '${PWD}/config/openai:/home/geopol/.config/geopol'
+#       - '${PWD}/logs:/home/geopol/logs'
+#       - '${PWD}/data:/data/geopol'
 #     secrets:
 #       - openai_key
 #     # ports:
 #     #   - 8080:8000
 
-#   snowglobe-ui-openai:
+#   geopol-ui-openai:
 #     build:
 #       context: .
 #       dockerfile: Dockerfile
@@ -96,20 +96,20 @@ services:
 #     #         - driver: nvidia
 #     #           count: all
 #     #           capabilities: [gpu]
-#     command: "snowglobe_server -c /home/snowglobe/.config/snowglobe/wotr_unmasked-openai.yaml -l /home/snowglobe/logs/openai/snowglobe-ui.log"
-#     image: snowglobe:latest
+#     command: "geopol_server -c /home/geopol/.config/geopol/wotr_unmasked-openai.yaml -l /home/geopol/logs/openai/geopol-ui.log"
+#     image: geopol:latest
 #     stdin_open: true # docker run -i
 #     tty: true # docker run -t
-#     container_name: snowglobe-ui-openai
-#     hostname: snowglobe-ui-openai
+#     container_name: geopol-ui-openai
+#     hostname: geopol-ui-openai
 #     volumes:
-#       - '${PWD}/config/openai:/home/snowglobe/.config/snowglobe'
-#       - '${PWD}/logs:/home/snowglobe/logs'
-#       - '${PWD}/data:/data/snowglobe'
+#       - '${PWD}/config/openai:/home/geopol/.config/geopol'
+#       - '${PWD}/logs:/home/geopol/logs'
+#       - '${PWD}/data:/data/geopol'
 #     ports:
 #       - 8081:8000
 #     depends_on:
-#       snowglobe-openai:
+#       geopol-openai:
 #         condition: service_healthy
 # secrets:
 #   openai_key:

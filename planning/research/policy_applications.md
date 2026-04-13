@@ -2,7 +2,7 @@
 
 *Research compiled April 2026*
 
-Snow Globe is an open-ended wargaming framework that uses LLMs as player agents in political and seminar wargames. This document surveys how multi-agent LLM simulation --- and Snow Globe specifically --- could be applied to policy analysis, prediction, and institutional decision-making.
+Geopol Forecaster is an open-ended wargaming framework that uses LLMs as player agents in political and seminar wargames. This document surveys how multi-agent LLM simulation --- and Geopol Forecaster specifically --- could be applied to policy analysis, prediction, and institutional decision-making.
 
 ---
 
@@ -14,7 +14,7 @@ Multi-agent LLM simulations can model stakeholder reactions to proposed legislat
 
 **Concrete example:** The "Political Actor Agent" system (AAAI 2025) simulates legislative roll-call votes by assigning LLM agents the personas of individual legislators, complete with voting histories and stated positions. It achieves meaningful predictive accuracy on whether bills pass or fail.
 
-**How Snow Globe fits:** A scenario could define agents for key committee chairs, industry lobby groups, grassroots advocacy organizations, and executive branch officials. The planning agent would brief all participants on the bill text and current political dynamics. Multiple simulation runs would reveal which coalitions form, where compromises emerge, and what unintended consequences different stakeholders identify.
+**How Geopol Forecaster fits:** A scenario could define agents for key committee chairs, industry lobby groups, grassroots advocacy organizations, and executive branch officials. The planning agent would brief all participants on the bill text and current political dynamics. Multiple simulation runs would reveal which coalitions form, where compromises emerge, and what unintended consequences different stakeholders identify.
 
 ### 1.2 Diplomatic Scenario Planning
 
@@ -24,7 +24,7 @@ LLM agents have demonstrated measurable competence in negotiation and diplomacy.
 - **Meta's Cicero** (2022): The first AI to play Diplomacy at human level, combining natural language negotiation with strategic planning. Researchers subsequently used Cicero's value function to detect deceptive proposals.
 - **NegotiationArena** (ICML 2024): A benchmark showing LLMs can conduct multi-party negotiations with distinct strategies.
 
-**Application to real diplomacy:** Snow Globe's persona system could model state actors with distinct national interests, domestic political constraints, and historical grievances. The Tavily-powered planning agent would inject current intelligence about ongoing negotiations, economic conditions, and military postures. Running dozens of simulations would map the space of possible treaty outcomes, identifying fragile agreements versus robust ones.
+**Application to real diplomacy:** Geopol Forecaster's persona system could model state actors with distinct national interests, domestic political constraints, and historical grievances. The Tavily-powered planning agent would inject current intelligence about ongoing negotiations, economic conditions, and military postures. Running dozens of simulations would map the space of possible treaty outcomes, identifying fragile agreements versus robust ones.
 
 **Limitation:** Current LLMs process only text and are blind to nonverbal communication channels --- body language, tone, and cultural nuance --- that are critical in real diplomatic settings.
 
@@ -121,7 +121,7 @@ No published system specifically targets this, representing a significant opport
 
 ### 3.1 Intelligence Community
 
-Snow Globe has the strongest institutional validation here. The CIA's Center for the Study of Intelligence published a study on Snow Globe in *Studies in Intelligence* (Vol. 69, No. 4, December 2025), documenting "Lessons from Human-AI Teaming in War Games." IQT Labs (In-Q-Tel's applied research arm) built an integration between Snow Globe and the ICB Project, a dataset of 496 historical geopolitical crisis scenarios.
+Geopol Forecaster has the strongest institutional validation here. The CIA's Center for the Study of Intelligence published a study on Geopol Forecaster in *Studies in Intelligence* (Vol. 69, No. 4, December 2025), documenting "Lessons from Human-AI Teaming in War Games." IQT Labs (In-Q-Tel's applied research arm) built an integration between Geopol Forecaster and the ICB Project, a dataset of 496 historical geopolitical crisis scenarios.
 
 **Key institutional use:** Analysts use the system to rapidly explore "what if" branches of developing situations, testing how different actors might respond to events before they unfold.
 
@@ -182,7 +182,7 @@ The central challenge. A 2025 systematic review ("Validation is the central chal
 ### 4.2 Ensemble Approaches
 
 Running many simulations is essential, not optional:
-- Snow Globe's original paper demonstrates running "repeated iterations of the same simulation with randomized LLM output" to show "a range of possible outcomes"
+- Geopol Forecaster's original paper demonstrates running "repeated iterations of the same simulation with randomized LLM output" to show "a range of possible outcomes"
 - FlockVote runs multiple instances to produce outcome distributions rather than point predictions
 - The FOMC In Silico system combines LLM simulation with Monte Carlo Bayesian voting models
 - Cross-model ensembles (running the same scenario across different LLM providers) can identify model-specific biases
@@ -209,7 +209,7 @@ LLM simulation works best as a complement to, not replacement for, traditional p
 CSIS's report identifies a critical gap: wargaming results are rarely shared across agencies, reducing their cumulative value. AI-enabled simulations could address this through:
 - Documented prompts and agent configurations as reproducible methods sections
 - Structured data labeling of simulation outputs for meta-analysis
-- Open-source frameworks (like Snow Globe) that enable independent replication
+- Open-source frameworks (like Geopol Forecaster) that enable independent replication
 - Version-controlled scenario definitions that allow exact reproduction
 
 ---
@@ -220,7 +220,7 @@ CSIS's report identifies a critical gap: wargaming results are rarely shared acr
 
 | System | Developer | Status | Application |
 |--------|-----------|--------|-------------|
-| **Snow Globe** | IQT Labs / CIA CSI | Published in *Studies in Intelligence* (Dec 2025); open-source | Political wargaming with human-AI teaming |
+| **Geopol Forecaster** | IQT Labs / CIA CSI | Published in *Studies in Intelligence* (Dec 2025); open-source | Political wargaming with human-AI teaming |
 | **GenWar TTX** | Johns Hopkins APL | Dedicated lab opening 2026 | Senior leader tabletop exercises |
 | **CSIS + Scale AI** | CSIS Futures Lab | Active partnership since 2023 | Strategic-level wargaming, decision support |
 | **Mantis + New Lines** | Mantis Analytics / New Lines Institute | Launched September 2025 | Geopolitical risk assessment and forecasting |
@@ -241,9 +241,9 @@ CSIS's report identifies a critical gap: wargaming results are rarely shared acr
 ### 5.3 Institutional Adoption Timeline
 
 - **2022:** Meta's Cicero demonstrates human-level Diplomacy play
-- **2023:** CSIS partners with Scale AI for LLM wargaming; IQT Labs releases Snow Globe
-- **2024:** WarAgent, Richelieu published at NeurIPS; Fable demonstrates SIM-1; Snow Globe paper on arXiv
-- **2025:** CIA publishes Snow Globe findings; CGSC mandates AI wargaming for AY2026-27; New Lines/Mantis launch commercial platform; FlockVote validated against 2024 election; FOMC simulation papers published; APL announces GenWar Lab
+- **2023:** CSIS partners with Scale AI for LLM wargaming; IQT Labs releases Geopol Forecaster
+- **2024:** WarAgent, Richelieu published at NeurIPS; Fable demonstrates SIM-1; Geopol Forecaster paper on arXiv
+- **2025:** CIA publishes Geopol Forecaster findings; CGSC mandates AI wargaming for AY2026-27; New Lines/Mantis launch commercial platform; FlockVote validated against 2024 election; FOMC simulation papers published; APL announces GenWar Lab
 - **2026:** GenWar Lab facility opens; AI wargaming becomes standard in U.S. military education
 
 ---
@@ -260,7 +260,7 @@ The geopolitical risk analytics platform market was valued at approximately $3.5
 - Direct contracts with defense agencies, intelligence community, and state departments
 - Current wargames cost $100K-$1M+ each; AI-enabled versions at 10-20% of that cost represent clear value
 - Long-term maintenance and scenario development contracts
-- Precedent: Scale AI's CSIS partnership; IQT Labs' Snow Globe development
+- Precedent: Scale AI's CSIS partnership; IQT Labs' Geopol Forecaster development
 
 **Tier 2 --- Policy Consulting Platform (SaaS):**
 - Subscription access for think tanks, academic institutions, and NGOs
@@ -282,7 +282,7 @@ Following the pattern identified in AI consulting market analysis:
 2. **Platform phase:** Standardize the most common simulation types (crisis response, regulatory impact, diplomatic negotiation) into configurable products.
 3. **Marketplace phase:** Enable third parties to create and share scenario templates, agent personas, and validation datasets.
 
-Snow Globe's open-source, model-agnostic architecture (OpenRouter integration, YAML-based configuration, pluggable model pools) is well-suited for this progression.
+Geopol Forecaster's open-source, model-agnostic architecture (OpenRouter integration, YAML-based configuration, pluggable model pools) is well-suited for this progression.
 
 ### 6.4 Competitive Landscape
 
@@ -292,7 +292,7 @@ Snow Globe's open-source, model-agnostic architecture (OpenRouter integration, Y
 - **Johns Hopkins APL (GenWar):** Government-funded, defense-focused, not commercially available
 - **Palantir / Anduril:** Adjacent capabilities in defense AI, potential entrants
 
-### 6.5 Differentiation Opportunities for Snow Globe
+### 6.5 Differentiation Opportunities for Geopol Forecaster
 
 - **Open-source foundation:** Transparency and reproducibility that classified systems cannot offer; essential for academic and NGO adoption
 - **Model diversity:** OpenRouter integration means simulations are not locked to a single LLM provider, enabling cross-model ensemble analysis
@@ -315,9 +315,9 @@ Snow Globe's open-source, model-agnostic architecture (OpenRouter integration, Y
 
 ## Sources
 
-### Snow Globe and IQT Labs
-- [Snow Globe GitHub (IQT Labs)](https://github.com/IQTLabs/snowglobe)
-- [Snow Globe Multi-Player AI System --- CIA Studies in Intelligence, Vol. 69, No. 4 (December 2025)](https://www.cia.gov/resources/csi/studies-in-intelligence/studies-in-intelligence-vol-69-no-4-extracts-december-2025/snow-globe-multi-player-ai-system-lessons-from-human-ai-teaming-in-war-games)
+### Geopol Forecaster and IQT Labs
+- [Geopol Forecaster GitHub (IQT Labs)](https://github.com/IQTLabs/geopol)
+- [Geopol Forecaster Multi-Player AI System --- CIA Studies in Intelligence, Vol. 69, No. 4 (December 2025)](https://www.cia.gov/resources/csi/studies-in-intelligence/studies-in-intelligence-vol-69-no-4-extracts-december-2025/snow-globe-multi-player-ai-system-lessons-from-human-ai-teaming-in-war-games)
 - [Open-Ended Wargames with Large Language Models (arXiv:2404.11446)](https://arxiv.org/abs/2404.11446)
 
 ### Military and Defense

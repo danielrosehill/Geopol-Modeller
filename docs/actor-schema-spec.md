@@ -1,6 +1,6 @@
 # Actor Schema Specification v1.0
 
-Reusable schema for defining actors in snowglobe wargaming simulations.
+Reusable schema for defining actors in geopol wargaming simulations.
 Designed for geopolitical, diplomatic, and conflict scenarios but
 applicable to any multi-agent simulation.
 
@@ -162,7 +162,7 @@ active_actors:                  # Optional filter — omit to use all
 
 ## Compatibility
 
-This schema is designed for the snowglobe simulation engine but can be
+This schema is designed for the geopol simulation engine but can be
 consumed by any multi-agent system. The `persona` field is the minimum
 viable actor definition; all other fields enrich simulation fidelity.
 

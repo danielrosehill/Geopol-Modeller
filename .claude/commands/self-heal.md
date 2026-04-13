@@ -6,9 +6,9 @@ Steps:
 
 1. **Load run history from the predictions database:**
    ```bash
-   cd /home/daniel/repos/github/forks/snowglobe
+   cd /home/daniel/repos/github/forks/geopol
    python3 -c "
-   from src.llm_snowglobe.predictions.store import PredictionStore
+   from src.geopol_forecaster.predictions.store import PredictionStore
    import json
    store = PredictionStore()
    runs = store.get_runs()
@@ -25,7 +25,7 @@ Steps:
 3. **Pull detailed assessment data for each run:**
    ```bash
    python3 -c "
-   from src.llm_snowglobe.predictions.store import PredictionStore
+   from src.geopol_forecaster.predictions.store import PredictionStore
    import json
    store = PredictionStore()
    for run in store.get_runs():
@@ -84,8 +84,8 @@ Steps:
    - Editing `config/pools.yaml` to swap models
    - Editing actor YAML files in `config/actors/` to refine personas, red_lines, constraints
    - Editing scenario YAML files in `config/scenarios/` to adjust nature, timeframes, questions
-   - Editing `src/llm_snowglobe/predictions/extractor.py` to improve the extraction prompt
-   - Editing `src/llm_snowglobe/predictions/accuracy.py` to refine the grading prompt
+   - Editing `src/geopol_forecaster/predictions/extractor.py` to improve the extraction prompt
+   - Editing `src/geopol_forecaster/predictions/accuracy.py` to refine the grading prompt
    - Adding calibration notes to actor personas
 
 8. **After implementing changes, summarise what was changed and why**, so the next run can be compared against this baseline. Note the git diff for the pipeline_versions changelog.

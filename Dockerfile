@@ -1,5 +1,5 @@
 FROM nvidia/cuda:12.6.3-devel-ubuntu24.04
-LABEL org.iqt.name="snowglobe"
+LABEL org.iqt.name="geopol"
 
 RUN apt update && apt install -y \
     python3 \
@@ -13,7 +13,7 @@ RUN apt update && apt install -y \
     ninja-build
 
 # User account
-ARG username=snowglobe
+ARG username=geopol
 ARG groupname=$username
 ARG uid=1000
 ARG gid=$uid
@@ -31,4 +31,4 @@ RUN python3 -m venv /home/$username/.venv
 ENV PATH=/home/$username/.venv/bin:"$PATH"
 RUN pip install cmake && \
     CMAKE_ARGS="-DGGML_CUDA=on" pip install .
-# RUN snowglobe_config
+# RUN geopol_config

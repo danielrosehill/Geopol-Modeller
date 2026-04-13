@@ -22,17 +22,17 @@ Uses OpenRouter model pools and optional Tavily briefing.
 import asyncio
 import os
 
-import llm_snowglobe as snowglobe
+import geopol_forecaster as geopol
 
 
 async def run_simulation(pool_name=None, verbosity=1):
     # Load pools config
     pools_path = os.path.join(os.path.dirname(__file__), "..", "config", "pools.yaml")
-    pools, active, base_url = snowglobe.core.load_pools(pools_path)
+    pools, active, base_url = geopol.core.load_pools(pools_path)
     pool = pools.get(pool_name or active)
 
     # Create LLM client
-    client = snowglobe.LLMClient(base_url=base_url)
+    client = geopol.LLMClient(base_url=base_url)
 
     # Scenario
     title = "Azuristan and Crimsonia"
@@ -62,18 +62,18 @@ indicate that they want Tyriana to become part of Crimsonia."""
     }
 
     # Planning agent — research current events
-    planner = snowglobe.PlanningAgent(
+    planner = geopol.PlanningAgent(
         llm_client=client, model=pool.planner, verbosity=verbosity
     )
     briefing = await planner.create_briefing(scenario=scenario, title=title)
 
     # Set up dummy database (no human players in this sim)
     db_path = os.path.join(os.path.dirname(__file__), "..")
-    db = snowglobe.Database(ioid="sim_ac", path=db_path, initialize=True)
+    db = geopol.Database(ioid="sim_ac", path=db_path, initialize=True)
 
     # Create players
     players = [
-        snowglobe.Player(
+        geopol.Player(
             database=db,
             verbosity=verbosity,
             llm_client=client,
@@ -81,7 +81,7 @@ indicate that they want Tyriana to become part of Crimsonia."""
             name="President of Azuristan",
             persona=f"the leader of Azuristan. {goals['azuristan_dove']}",
         ),
-        snowglobe.Player(
+        geopol.Player(
             database=db,
             verbosity=verbosity,
             llm_client=client,
@@ -92,7 +92,7 @@ indicate that they want Tyriana to become part of Crimsonia."""
     ]
 
     # Create narrator (Control)
-    narrator = snowglobe.Control(
+    narrator = geopol.Control(
         database=db,
         verbosity=verbosity,
         llm_client=client,
@@ -103,17 +103,17 @@ indicate that they want Tyriana to become part of Crimsonia."""
     async def player_respond_fn(player_config, history):
         player_obj = next(p for p in players if p.name == player_config["name"])
         # Build a History object from the state's history list
-        h = snowglobe.History()
+        h = geopol.History()
         for entry in history:
             h.add(entry["name"], entry["text"])
         # Inject briefing into the history if not already there
         return await player_obj.respond(history=h)
 
     async def adjudicate_fn(history, responses, nature, timestep, mode):
-        h = snowglobe.History()
+        h = geopol.History()
         for entry in history:
             h.add(entry["name"], entry["text"])
-        r = snowglobe.History()
+        r = geopol.History()
         for entry in responses:
             r.add(entry["name"], entry["text"])
         return await narrator.adjudicate(
@@ -121,13 +121,13 @@ indicate that they want Tyriana to become part of Crimsonia."""
         )
 
     async def assess_fn(history, query, mc=None):
-        h = snowglobe.History()
+        h = geopol.History()
         for entry in history:
             h.add(entry["name"], entry["text"])
         return await narrator.assess(history=h, query=query, mc=mc)
 
     # Run via LangGraph
-    graph = snowglobe.build_simulation_graph()
+    graph = geopol.build_simulation_graph()
     initial_state = {
         "scenario": scenario,
         "briefing": briefing,

@@ -1,6 +1,6 @@
 # Known Weaknesses, Limitations, and Criticisms of Using LLMs for Wargaming and Policy Simulation
 
-**Context:** Snow Globe is an open-ended wargaming framework that uses LLMs as player agents in political/seminar wargames (Hogan & Brennen, 2024). This document surveys the academic literature on the weaknesses, risks, and criticisms of this approach.
+**Context:** Geopol Forecaster is an open-ended wargaming framework that uses LLMs as player agents in political/seminar wargames (Hogan & Brennen, 2024). This document surveys the academic literature on the weaknesses, risks, and criticisms of this approach.
 
 **Last updated:** 2026-04-12
 
@@ -16,7 +16,7 @@
 6. [Validation Challenges](#6-validation-challenges)
 7. [Ethical Concerns](#7-ethical-concerns)
 8. [Defenses and Rebuttals](#8-defenses-and-rebuttals)
-9. [Snow Globe Authors' Own Stated Limitations](#9-snow-globe-authors-own-stated-limitations)
+9. [Geopol Forecaster Authors' Own Stated Limitations](#9-snow-globe-authors-own-stated-limitations)
 10. [References](#10-references)
 
 ---
@@ -37,7 +37,7 @@ The most extensively documented weakness of LLM wargaming is the consistent tend
 
 - **Hawk personas amplify escalation.** When LLM agents are assigned "hawk" personas, "armed conflict is seen more often when more hawks are involved." However, even without aggressive persona assignments, baseline escalation tendencies persist.
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
 Any multi-agent LLM wargame must account for the inherent escalation bias in current models. Simulation results may systematically overstate conflict intensity relative to how human experts would play the same scenario.
 
@@ -61,7 +61,7 @@ LLMs are fundamentally weak at maintaining distinct, consistent personas over ex
 
 - **Farcical harmony.** In wargame dialogue specifically, LLM-generated "discussions lack quality and maintain a farcical harmony." Players rarely opposed each other, instead offering "token support for predetermined positions" (Lamparth et al., 2024).
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
 The multi-agent deliberation that is central to seminar wargaming may produce artificially harmonious outcomes. Agent-to-agent debates may lack the authentic disagreement and adversarial thinking that makes human wargames valuable.
 
@@ -79,9 +79,9 @@ LLMs generate fluent, authoritative-sounding text that may contain fabricated fa
 
 - **Confabulation of reasoning chains.** LLMs may "merge distinct concepts or events" during inference, producing plausible but incorrect causal narratives about how crises escalate or resolve.
 
-- **Paradoxical utility in open-ended games.** The Snow Globe authors acknowledge this tension directly: "Hallucination, which in other applications is so often harmful, is the key to making open-ended LLM wargames work." The creative generation that makes open-ended scenarios possible is mechanistically identical to the process that produces fabricated facts.
+- **Paradoxical utility in open-ended games.** The Geopol Forecaster authors acknowledge this tension directly: "Hallucination, which in other applications is so often harmful, is the key to making open-ended LLM wargames work." The creative generation that makes open-ended scenarios possible is mechanistically identical to the process that produces fabricated facts.
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
 Outputs that read as coherent strategic narratives may be built on fabricated premises. Without domain-expert review, there is no reliable automated way to distinguish creative scenario development from dangerous confabulation.
 
@@ -99,7 +99,7 @@ Outputs that read as coherent strategic narratives may be built on fabricated pr
 
 - **No sensitivity to player background.** LLM simulations show "sensitivity to command instructions" but "no sensitivity to player background attributes," failing to differentiate between players with radically different expertise or temperament.
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
 Multi-turn wargames requiring sustained strategic planning over many rounds may see progressive degradation of strategic coherence. The depth of reasoning may be adequate for initial moves but insufficient for the long-arc planning that characterizes real geopolitical strategy.
 
@@ -111,7 +111,7 @@ Multi-turn wargames requiring sustained strategic planning over many rounds may 
 
 - **Temperature=0 does not guarantee determinism.** Research demonstrates that "temperature=0 is not a mathematical guarantee of determinism. It is merely a request to the engine to be 'less random.'" Models "are not deterministic even with a temperature of 0, and the degree of stability changes from model to model."
 
-- **Intentional randomness in Snow Globe.** The Snow Globe authors state explicitly that "no two runs of a simulated wargame produce identical results," framing this as a feature reflecting real-world unpredictability rather than a bug.
+- **Intentional randomness in Geopol Forecaster.** The Geopol Forecaster authors state explicitly that "no two runs of a simulated wargame produce identical results," framing this as a feature reflecting real-world unpredictability rather than a bug.
 
 - **Behavioral drift over simulation runs.** "Agents tend to 'forget' early instructions or exhibit behavioral drift over long simulation runs," making reproducibility -- "a cornerstone of scientific inquiry" -- "notoriously difficult."
 
@@ -124,7 +124,7 @@ Multiple runs can partially address stochasticity, but this introduces its own c
 - How should divergent outcomes be aggregated?
 - Do probability distributions over outcomes reflect genuine uncertainty or just model noise?
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
 Simulation results from single runs should be treated with extreme caution. The framework's value depends on running many iterations and analyzing distributions, but there is no established methodology for determining when enough runs have been performed.
 
@@ -148,9 +148,9 @@ How do you know LLM wargame outputs are meaningful? This is perhaps the deepest 
 
 - **Black-box outputs unsuited to governance.** Critics argue that LLM simulations "risk reproducing stereotypes or producing 'black-box' outputs unsuited to accountable governance."
 
-### Implications for Snow Globe
+### Implications for Geopol Forecaster
 
-The Snow Globe authors themselves caution against "placing too much credence in the raw probabilities." Without validated benchmarks, results should be interpreted as exploratory thought experiments rather than predictive tools.
+The Geopol Forecaster authors themselves caution against "placing too much credence in the raw probabilities." Without validated benchmarks, results should be interpreted as exploratory thought experiments rather than predictive tools.
 
 ---
 
@@ -202,7 +202,7 @@ Despite the criticisms, proponents make several substantive arguments for LLM wa
 
 ### Complementary, Not Replacement
 
-- Proponents emphasize "the human always in the loop" -- LLM agents augment rather than replace human players. The Snow Globe framework explicitly supports hybrid human-AI gameplay at every stage.
+- Proponents emphasize "the human always in the loop" -- LLM agents augment rather than replace human players. The Geopol Forecaster framework explicitly supports hybrid human-AI gameplay at every stage.
 
 - "Technology alone will not overcome a failed analytical process" -- LLMs are tools that require rigorous methodology around them.
 
@@ -220,7 +220,7 @@ Despite the criticisms, proponents make several substantive arguments for LLM wa
 
 ---
 
-## 9. Snow Globe Authors' Own Stated Limitations
+## 9. Geopol Forecaster Authors' Own Stated Limitations
 
 Hogan & Brennen (2024) acknowledge several limitations in their original paper:
 

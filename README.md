@@ -4,15 +4,15 @@
 
 **Multi-actor LLM simulation for geopolitical forecasting, policy modelling, and contingency planning**
 
-Geopol Modeller is a fork of [Snow Globe](https://github.com/IQTLabs/snowglobe) by [IQTLabs](https://github.com/IQTLabs) (In-Q-Tel). The original project demonstrated that every stage of a text-based wargame -- from scenario preparation through post-game analysis -- can be carried out by LLMs. Read the original paper [here](https://arxiv.org/abs/2404.11446).
+Geopol Modeller is a fork of [Geopol Forecaster](https://github.com/IQTLabs/geopol) by [IQTLabs](https://github.com/IQTLabs) (In-Q-Tel). The original project demonstrated that every stage of a text-based wargame -- from scenario preparation through post-game analysis -- can be carried out by LLMs. Read the original paper [here](https://arxiv.org/abs/2404.11446).
 
 This fork rewrites the stack, adds a scenario/actor system designed for real-world crisis forecasting, and introduces prediction tracking with accuracy grading against ground truth.
 
 ## Stack Comparison
 
-Forked 12 April 2026 from [IQTLabs/snowglobe](https://github.com/IQTLabs/snowglobe).
+Forked 12 April 2026 from [IQTLabs/geopol](https://github.com/IQTLabs/geopol).
 
-| Component | Original Snow Globe | This Fork (Geopol Modeller) |
+| Component | Original Geopol Forecaster | This Fork (Geopol Modeller) |
 |-----------|--------------------|-----------------------------|
 | **LLM access** | LangChain + local models (llama-cpp, transformers/torch) | OpenRouter gateway (any provider via OpenAI SDK) |
 | **Model selection** | Single model, configured in code | Model pools (YAML config, selectable at runtime) |
@@ -165,13 +165,13 @@ export OPENROUTER_API_KEY=your_key_here
 export TAVILY_API_KEY=your_key_here  # optional, for current-events research
 
 # Run with interactive model pool menu
-snowglobe
+geopol
 
 # Run a specific scenario with a specific pool
-snowglobe --scenario iran-israel-war --pool deepseek --report
+geopol --scenario iran-israel-war --pool deepseek --report
 
 # List available scenarios
-snowglobe --list-scenarios
+geopol --list-scenarios
 ```
 
 ## Model Pools
@@ -200,13 +200,13 @@ Scenarios are YAML files in `config/scenarios/`. Each defines actors (inline or 
 Actor clusters follow a [formal schema](docs/actor-schema-spec.md) supporting personas, red lines, constraints, capabilities, internal factions, and influence models.
 
 ```bash
-snowglobe --list-scenarios            # see available scenarios
-snowglobe --scenario iran-israel-war --pool deepseek --report
+geopol --list-scenarios            # see available scenarios
+geopol --scenario iran-israel-war --pool deepseek --report
 ```
 
 ## Prediction Tracking & Accuracy
 
-Every simulation run automatically extracts structured predictions from the assessment phase and stores them in `.snowglobe_data/predictions.db`. Each prediction includes:
+Every simulation run automatically extracts structured predictions from the assessment phase and stores them in `.geopol_data/predictions.db`. Each prediction includes:
 
 - **Prediction text** -- a specific, falsifiable claim
 - **Probability** -- numeric confidence (0.0-1.0)
@@ -226,11 +226,11 @@ Predictions are graded against real-world outcomes using a 4-point rubric aligne
 | `not_yet_testable` | -- | Window still open or insufficient data to assess |
 
 ```bash
-snowglobe assess --all                # grade all predictions with closed windows
-snowglobe assess --run-id abc123      # grade a specific run
-snowglobe predictions list            # list stored predictions
-snowglobe predictions summary         # accuracy summary
-snowglobe changelog                   # pipeline version history
+geopol assess --all                # grade all predictions with closed windows
+geopol assess --run-id abc123      # grade a specific run
+geopol predictions list            # list stored predictions
+geopol predictions summary         # accuracy summary
+geopol changelog                   # pipeline version history
 ```
 
 ### Self-Healing Loop
@@ -290,7 +290,7 @@ by the same author:
 
 ## Upstream
 
-- **Original project:** [IQTLabs/snowglobe](https://github.com/IQTLabs/snowglobe)
+- **Original project:** [IQTLabs/geopol](https://github.com/IQTLabs/geopol)
 - **Paper:** [arxiv.org/abs/2404.11446](https://arxiv.org/abs/2404.11446)
 - **Original authors:** Daniel Hogan et al. (IQTLabs / In-Q-Tel)
 

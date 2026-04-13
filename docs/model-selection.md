@@ -1,6 +1,6 @@
 # Model Selection Guide
 
-Snowglobe uses [OpenRouter](https://openrouter.ai/) as a unified API gateway, giving access to models from every major provider through a single endpoint.
+Geopol Forecaster uses [OpenRouter](https://openrouter.ai/) as a unified API gateway, giving access to models from every major provider through a single endpoint.
 
 ## Model Pools
 

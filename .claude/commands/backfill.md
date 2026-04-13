@@ -15,7 +15,7 @@ Steps:
    - Third word: number of runs per pool (default: 1)
 
 2. **Validate inputs:**
-   - Verify the scenario exists: `snowglobe --list-scenarios`
+   - Verify the scenario exists: `geopol --list-scenarios`
    - Verify each pool exists in `config/pools.yaml`
    - Confirm with the user: "This will run N simulations (pools x count). Each takes ~2-5 minutes. Proceed?"
 
@@ -28,15 +28,15 @@ Steps:
 4. **Run simulations sequentially:**
    For each pool, for each iteration:
    ```bash
-   cd /home/daniel/repos/github/forks/snowglobe
-   snowglobe --scenario <name> --pool <pool> --report --rich false
+   cd /home/daniel/repos/github/forks/geopol
+   geopol --scenario <name> --pool <pool> --report --rich false
    ```
    Between runs, report progress: "Completed run N/M (pool: X, iteration: Y)"
 
 5. **After all runs complete, show a summary:**
    ```bash
    python3 -c "
-   from src.llm_snowglobe.predictions.store import PredictionStore
+   from src.geopol_forecaster.predictions.store import PredictionStore
    store = PredictionStore()
    runs = store.get_runs()
    print(f'Total runs: {len(runs)}')

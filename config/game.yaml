@@ -1,5 +1,5 @@
-data_directory: /data/snowglobe/
-game_id_file: /data/snowglobe/game.id
+data_directory: /data/geopol/
+game_id_file: /data/geopol/game.id
 title: 'Azuristan and Crimsonia'
 scenario: |
     Azuristan and Crimsonia are neighboring countries in Central Asia.  Azuristan is a Western-backed democracy that suffers from endemic corruption.  Crimsonia is controlled by an autocratic government that stifles dissent and commits human rights violations.

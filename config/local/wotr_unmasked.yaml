@@ -1,5 +1,5 @@
-data_directory: /data/snowglobe/sim
-game_id_file: /data/snowglobe/sim/game.id
+data_directory: /data/geopol/sim
+game_id_file: /data/geopol/sim/game.id
 title: 'Whiskey on the Rocks'
 scenario: |-
     Sweden and the USSR are enmeshed in a crisis over the unauthorized entry of a Soviet U-137 submarine into a restricted Swedish military zone.

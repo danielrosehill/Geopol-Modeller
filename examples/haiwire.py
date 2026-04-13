@@ -17,7 +17,7 @@
 import os
 import csv
 import random
-import llm_snowglobe as snowglobe
+import geopol_forecaster as geopol
 
 def load_csv(path):
     # Load a CSV file as a list of dictionaries
@@ -29,7 +29,7 @@ def load_csv(path):
     return datalist
 
 
-class HAIwire(snowglobe.Control):
+class HAIwire(geopol.Control):
     def __init__(self,
                  incident_path=os.path.join(os.path.dirname(__file__),
                                             'haiwire_files', 'incidents.csv'),
@@ -37,7 +37,7 @@ class HAIwire(snowglobe.Control):
                                           'haiwire_files', 'injects.csv')):
         super().__init__()
 
-        self.player = snowglobe.Player(
+        self.player = geopol.Player(
             llm=self.llm,
             name='Incident Response Team',
             persona='the management of a technology company')
@@ -92,7 +92,7 @@ class HAIwire(snowglobe.Control):
 
         self.header('Discussion', h=0)
         for assessment_set in self.assessment_sets:
-            set_history = snowglobe.History()
+            set_history = geopol.History()
             for assessment in assessment_set:
                 self.header(assessment, h=1)
                 response = await self.assess(

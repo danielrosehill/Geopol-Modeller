@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "snowglobe": {
+    "geopol": {
       "command": "fastmcp",
       "args": ["run", "mcp_server.py"]
     }

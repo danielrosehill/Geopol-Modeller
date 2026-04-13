@@ -1,5 +1,5 @@
 #! /bin/sh
-snowglobe_config && \
-snowglobe_simulation -c /home/snowglobe/.config/snowglobe/wotr_unmasked.yaml \
--l /home/snowglobe/logs/local/snowglobe.log --runs 5 \
+geopol_config && \
+geopol_simulation -c /home/geopol/.config/geopol/wotr_unmasked.yaml \
+-l /home/geopol/logs/local/geopol.log --runs 5 \
 --simulation-name WotR-Sim --simulation-mode

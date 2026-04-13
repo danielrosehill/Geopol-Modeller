@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-image_name=snowglobe
-container_name=snowglobe
+image_name=geopol
+container_name=geopol
 
 if [ -z "$(docker images -q $image_name)" ]; then
     docker build -f Dockerfile -t $image_name \

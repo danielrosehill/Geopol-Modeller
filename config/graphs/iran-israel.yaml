@@ -1,7 +1,7 @@
 # Scenario Subgraph Configuration: Iran-Israel
 #
 # This file defines scenario-specific simulation behavior that augments
-# the core snowglobe graph (setup → respond → adjudicate → assess).
+# the core geopol graph (setup → respond → adjudicate → assess).
 # The core engine remains generic; this config injects domain-specific
 # hooks for information asymmetry, exogenous shocks, escalation tracking,
 # and adaptive pacing.

@@ -1,4 +1,4 @@
-# Snowglobe / Geopol Modeller — Use Case Roadmap
+# Geopol Forecaster / Geopol Modeller — Use Case Roadmap
 
 Potential applications of multi-actor LLM simulation beyond the current
 Iran-Israel conflict scenario. The core engine is domain-agnostic; these

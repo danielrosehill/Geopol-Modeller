@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Snowglobe MCP Server — exposes the wargaming simulator as MCP tools.
+"""Geopol Forecaster MCP Server — exposes the wargaming simulator as MCP tools.
 
 Wraps the Modal webhook backend so any MCP client (Claude Code, Claude Desktop,
 etc.) can trigger and manage simulations via formal tool definitions.
@@ -31,9 +31,9 @@ if _env_path.exists():
             os.environ.setdefault(key.strip(), value.strip())
 
 mcp = FastMCP(
-    name="snowglobe",
+    name="geopol",
     instructions=(
-        "Snowglobe is a multi-actor LLM wargaming simulator. Use these tools to "
+        "Geopol Forecaster is a multi-actor LLM wargaming simulator. Use these tools to "
         "run geopolitical simulations, list available scenarios and model pools, "
         "check on running simulations, and download PDF reports."
     ),
@@ -45,7 +45,7 @@ def _get_config():
     """Resolve webhook URL and secret from env (loaded from .env)."""
     url = os.environ.get(
         "SNOWGLOBE_WEBHOOK_URL",
-        "https://carrotcakeai--snowglobe-webhook.modal.run",
+        "https://carrotcakeai--geopol-webhook.modal.run",
     )
     secret = os.environ.get("SNOWGLOBE_WEBHOOK_SECRET", "")
     return url, secret

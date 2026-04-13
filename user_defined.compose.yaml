@@ -1,5 +1,5 @@
 services:
-  snowglobe:
+  geopol:
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,24 +10,24 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    command: "snowglobe_game"
-    image: snowglobe:latest
+    command: "geopol_game"
+    image: geopol:latest
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    container_name: snowglobe
-    hostname: snowglobe
+    container_name: geopol
+    hostname: geopol
     healthcheck:
-      test: bash -c "[ -f /data/snowglobe/game.id ]"
+      test: bash -c "[ -f /data/geopol/game.id ]"
       timeout: 3s
       retries: 20
     volumes:
       - '${PWD}/config:/config'
-      - '${PWD}/logs:/home/snowglobe/logs'
-      - '${PWD}/data:/data/snowglobe'
+      - '${PWD}/logs:/home/geopol/logs'
+      - '${PWD}/data:/data/geopol'
     # ports:
     #   - 8080:8000
 
-  snowglobe-ui:
+  geopol-ui:
     build:
       context: .
       dockerfile: Dockerfile
@@ -38,18 +38,18 @@ services:
     #         - driver: nvidia
     #           count: all
     #           capabilities: [gpu]
-    command: "snowglobe_server"
-    image: snowglobe:latest
+    command: "geopol_server"
+    image: geopol:latest
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    container_name: snowglobe-ui
-    hostname: snowglobe-ui
+    container_name: geopol-ui
+    hostname: geopol-ui
     volumes:
       - '${PWD}/config:/config'
-      - '${PWD}/logs:/home/snowglobe/logs'
-      - '${PWD}/data:/data/snowglobe'
+      - '${PWD}/logs:/home/geopol/logs'
+      - '${PWD}/data:/data/geopol'
     ports:
       - 8080:8000
     depends_on:
-      snowglobe:
+      geopol:
         condition: service_healthy

@@ -16,10 +16,10 @@
 
 import random
 import asyncio
-import llm_snowglobe as snowglobe
+import geopol_forecaster as geopol
 
 
-class AzuristanCrimsonia(snowglobe.Control):
+class AzuristanCrimsonia(geopol.Control):
     def __init__(self):
         super().__init__()
 
@@ -35,7 +35,7 @@ class AzuristanCrimsonia(snowglobe.Control):
 
         self.title = 'Azuristan and Crimsonia'
         self.players = [
-            snowglobe.Player(
+            geopol.Player(
                 llm=self.llm,
                 name='President of Azuristan',
                 kind='human',
@@ -44,14 +44,14 @@ class AzuristanCrimsonia(snowglobe.Control):
                     'chatrooms': [gameroom, chatroom],
                     'infodocs': ['ac_game_help'],
                 }),
-            snowglobe.Player(
+            geopol.Player(
                 llm=self.llm,
                 name='Premier of Crimsonia',
                 persona='the leader of Crimsonia.  {}'.format(goals[
                     'crimsonia_dove'])),
         ]
         self.advisors = [
-            snowglobe.Player(
+            geopol.Player(
                 llm=self.llm,
                 name='Advisor to the President of Azuristan',
                 persona='an advisor to the leader of Azuristan.  {}'.format(
@@ -74,7 +74,7 @@ The animosity between Azuristan and Crimsonia extends back over centuries of eth
         self.mode = ['geopol']
 
         # User interface properties
-        prop = snowglobe.db.add_property
+        prop = geopol.db.add_property
         for player in self.players:
             if player.kind == 'human':
                 prop(player.gameroom, 'title', 'Play the Game')
@@ -83,7 +83,7 @@ The animosity between Azuristan and Crimsonia extends back over centuries of eth
                 prop(player.chatroom, 'instruction', 'Ask your AI advisor.')
                 for doc in player.infodocs:
                     p
-        snowglobe.db.commit()
+        geopol.db.commit()
 
     async def game(self):
         # Setup
@@ -100,7 +100,7 @@ The animosity between Azuristan and Crimsonia extends back over centuries of eth
         # Moves
         for move in range(self.moves):
             self.header('Move ' + str(move + 1), h=1)
-            responses = snowglobe.History()
+            responses = geopol.History()
             for player in self.players:
                 self.header('### ' + player.name, h=2)
                 if player.kind == 'human':

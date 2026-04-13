@@ -1,5 +1,5 @@
-data_directory: /data/snowglobe/openai
-game_id_file: /data/snowglobe/openai/game.id
+data_directory: /data/geopol/openai
+game_id_file: /data/geopol/openai/game.id
 source: "azure"
 model: "gpt-4o"
 title: 'Whiskey on the Rocks'

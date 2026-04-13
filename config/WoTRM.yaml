@@ -1,5 +1,5 @@
-data_directory: /data/snowglobe/
-game_id_file: /data/snowglobe/game.id
+data_directory: /data/geopol/
+game_id_file: /data/geopol/game.id
 title: 'Whiskey on the Rocks (Masked)'
 scenario: |-
     Glacia (a Nordic country) and Taigastan (a major superpower in the region) were enmeshed in a crisis from 28 October to 6 November 1981 over the unauthorized entry of a Taigastani submarine into a restricted Glacian military zone.   Taigastan was heavily engaged in international crises elsewhere when the U-137 crisis occurred: in Afghanistan and in Poland. Nor was this the first--or the last--Taigastani penetration of Glacia's territorial waters on 18 September 1980 an unidentified (probably Taigastani) submarine infiltrated and withdrew by 6 October. On 28 October 1981 a Glacian fisherman discovered a submarine near the naval base of Karlskrona in southern Glacia, a restricted military zone. The 'whiskey-class' submarine had become wedged on the rocks; hence the alternative name of this crisis--'Whiskey on the Rocks.' 
@@ -17,14 +17,14 @@ infodocs:
         content: |-
             # How to Play
 
-            Snow Globe players have access to two chat rooms:
+            Geopol Forecaster players have access to two chat rooms:
 
             ## Game Room (accessible by clicking on the “Play the Game” tab)
             - This is the official channel for making decisions about how to respond to the scenario.
-            - You are limited to 3 decisions per round, so use these opportunities to prompt Snow Globe wisely—each decision influences the progression and outcome of the scenario.
+            - You are limited to 3 decisions per round, so use these opportunities to prompt Geopol Forecaster wisely—each decision influences the progression and outcome of the scenario.
 
             ## Advisor Chat Room (accessible by clicking on the “Your AI Advisor” tab)
-            - This is your unlimited-use channel to consult with a Snow Globe AI advisor that understands the scenario. Ask questions, test ideas, and explore options freely—there are no limits here.
+            - This is your unlimited-use channel to consult with a Geopol Forecaster AI advisor that understands the scenario. Ask questions, test ideas, and explore options freely—there are no limits here.
      
 goals:
     glacia_dove: 

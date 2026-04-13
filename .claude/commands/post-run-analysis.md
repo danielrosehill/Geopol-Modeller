@@ -22,9 +22,9 @@ Steps:
 
 1. **List available runs:**
    ```bash
-   cd /home/daniel/repos/github/forks/snowglobe
+   cd /home/daniel/repos/github/forks/geopol
    python3 -c "
-   from src.llm_snowglobe.predictions.store import PredictionStore
+   from src.geopol_forecaster.predictions.store import PredictionStore
    import json
    store = PredictionStore()
    runs = store.get_runs()
@@ -45,20 +45,20 @@ Steps:
 
 4. **Run the accuracy assessment:**
    ```bash
-   cd /home/daniel/repos/github/forks/snowglobe
-   snowglobe assess --run-id <RUN_ID>
+   cd /home/daniel/repos/github/forks/geopol
+   geopol assess --run-id <RUN_ID>
    ```
    This uses the built-in `AccuracyAgent` which:
    - Searches for ground truth via Tavily
    - Grades each prediction using the rubric above
-   - Stores results in `.snowglobe_data/predictions.db`
+   - Stores results in `.geopol_data/predictions.db`
 
 5. **Generate the accuracy report:**
    ```bash
    python3 -c "
-   from src.llm_snowglobe.predictions.store import PredictionStore
-   from src.llm_snowglobe.predictions.accuracy import AccuracyAgent
-   from src.llm_snowglobe.predictions.models import GRADE_SCORES
+   from src.geopol_forecaster.predictions.store import PredictionStore
+   from src.geopol_forecaster.predictions.accuracy import AccuracyAgent
+   from src.geopol_forecaster.predictions.models import GRADE_SCORES
    import json
    store = PredictionStore()
    run_id = '<RUN_ID>'

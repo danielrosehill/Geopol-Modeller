@@ -1,4 +1,4 @@
-"""Modal deployment for Snowglobe wargaming simulator.
+"""Modal deployment for Geopol Forecaster wargaming simulator.
 
 Architecture:
   - Webhook endpoint receives authenticated POST to trigger simulations
@@ -6,18 +6,18 @@ Architecture:
   - Results returned to caller or stored in persistent volume
 
 Deploy:   modal deploy modal_app.py
-Trigger:  POST https://carrotcakeai--snowglobe-webhook.modal.run
+Trigger:  POST https://carrotcakeai--geopol-webhook.modal.run
           Header: X-Webhook-Secret: <secret>
           Body: {"scenario": "iran-israel-war", "pool": "deepseek", "refs": [...]}
 """
 
 import modal
 
-app = modal.App("snowglobe")
+app = modal.App("geopol")
 
 # --- Image ---
 
-snowglobe_image = (
+geopol_image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("wget", "fontconfig")
     # Install Typst binary
@@ -52,30 +52,30 @@ snowglobe_image = (
         "pydantic",
         "platformdirs",
     )
-    .add_local_dir("src/llm_snowglobe", remote_path="/root/src/llm_snowglobe", copy=True)
+    .add_local_dir("src/geopol_forecaster", remote_path="/root/src/geopol_forecaster", copy=True)
     .add_local_dir("config", remote_path="/root/config", copy=True)
     .run_commands(
-        "cd /root && PYTHONPATH=/root/src python -c 'import llm_snowglobe; print(\"package OK\")'"
+        "cd /root && PYTHONPATH=/root/src python -c 'import geopol_forecaster; print(\"package OK\")'"
     )
 )
 
 # --- Secrets ---
-# modal secret create snowglobe-secrets \
+# modal secret create geopol-secrets \
 #   OPENROUTER_API_KEY=... \
 #   TAVILY_API_KEY=... \
 #   SNOWGLOBE_WEBHOOK_SECRET=...
 
-secrets = modal.Secret.from_name("snowglobe-secrets")
+secrets = modal.Secret.from_name("geopol-secrets")
 
 # --- Persistent volume for reports ---
 
-reports_volume = modal.Volume.from_name("snowglobe-reports", create_if_missing=True)
+reports_volume = modal.Volume.from_name("geopol-reports", create_if_missing=True)
 
 
 # --- Simulation function (long-running) ---
 
 @app.function(
-    image=snowglobe_image,
+    image=geopol_image,
     secrets=[secrets],
     volumes={"/data/reports": reports_volume},
     timeout=1800,  # 30 min max
@@ -84,7 +84,7 @@ reports_volume = modal.Volume.from_name("snowglobe-reports", create_if_missing=T
 async def run_simulation(scenario_name: str, pool_name: str,
                          reference_urls: list[str] | None = None,
                          timeframes: list[str] | None = None) -> dict:
-    """Run a full snowglobe simulation and return results."""
+    """Run a full geopol simulation and return results."""
     import sys
     import os
 
@@ -92,10 +92,10 @@ async def run_simulation(scenario_name: str, pool_name: str,
     os.chdir("/root")
 
     os.makedirs("/data/reports", exist_ok=True)
-    os.makedirs(".snowglobe_data/reports", exist_ok=True)
+    os.makedirs(".geopol_data/reports", exist_ok=True)
 
-    from llm_snowglobe.scenario_runner import run_scenario
-    from llm_snowglobe.core.llm import load_pools
+    from geopol_forecaster.scenario_runner import run_scenario
+    from geopol_forecaster.core.llm import load_pools
 
     scenario_path = f"/root/config/scenarios/{scenario_name}.yaml"
     pools_path = "/root/config/pools.yaml"
@@ -122,7 +122,7 @@ async def run_simulation(scenario_name: str, pool_name: str,
     # Copy report to persistent volume
     import shutil
     from pathlib import Path
-    reports_dir = Path(".snowglobe_data/reports")
+    reports_dir = Path(".geopol_data/reports")
     pdf_filename = None
     if reports_dir.exists():
         for pdf in reports_dir.glob("*.pdf"):
@@ -149,7 +149,7 @@ async def run_simulation(scenario_name: str, pool_name: str,
 # --- Webhook endpoint ---
 
 @app.function(
-    image=snowglobe_image,
+    image=geopol_image,
     secrets=[secrets],
     volumes={"/data/reports": reports_volume},
 )
@@ -164,7 +164,7 @@ def webhook():
     from pydantic import BaseModel
     from pathlib import Path
 
-    api = FastAPI(title="Snowglobe Webhook")
+    api = FastAPI(title="Geopol Forecaster Webhook")
     WEBHOOK_SECRET = os.environ.get("SNOWGLOBE_WEBHOOK_SECRET", "")
 
     def _check_auth(request: Request):
@@ -183,7 +183,7 @@ def webhook():
 
     @api.get("/health")
     async def health():
-        return {"status": "ok", "app": "snowglobe"}
+        return {"status": "ok", "app": "geopol"}
 
     @api.post("/run")
     async def trigger_run(req: SimRequest, request: Request):
@@ -263,7 +263,7 @@ def webhook():
 
         import sys
         sys.path.insert(0, "/root/src")
-        from llm_snowglobe.core.llm import load_pools as lp
+        from geopol_forecaster.core.llm import load_pools as lp
         pools, active, _ = lp("/root/config/pools.yaml")
         return [
             {"name": n, "active": n == active, "player": p.player}
