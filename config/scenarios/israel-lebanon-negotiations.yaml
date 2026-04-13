@@ -6,12 +6,13 @@ title: "Israel-Lebanon Ceasefire Negotiations"
 actor_cluster: israel-lebanon
 
 scenario: |
-  DATE: 12 April 2026
+  DATE: 13 April 2026
 
-  TRIGGER EVENT: Israeli Prime Minister Netanyahu has authorized direct
-  negotiations with Lebanon "as soon as possible," aimed at disarming Hezbollah
-  and establishing formal relations between the two countries. Talks are expected
-  to begin next week at the US State Department in Washington.
+  TRIGGER EVENT: Lebanese and Israeli officials are scheduled to meet for
+  direct talks at the US State Department in Washington on Tuesday, April 15 —
+  a rare and historic event. Israeli Prime Minister Netanyahu has authorized the
+  negotiations, aimed at disarming Hezbollah and establishing formal relations
+  between the two countries.
 
   CONTEXT:
   - On April 8, the US and Iran agreed to a two-week ceasefire in the 2026 Iran
