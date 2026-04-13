@@ -19,6 +19,7 @@ app = modal.App("geopol")
 
 geopol_image = (
     modal.Image.debian_slim(python_version="3.12")
+    .run_commands("echo 'cache-bust-20260413'")  # force fresh image build
     .apt_install("wget", "fontconfig")
     # Install Typst binary
     .run_commands(
@@ -52,8 +53,8 @@ geopol_image = (
         "pydantic",
         "platformdirs",
     )
-    .add_local_dir("src/geopol_forecaster", remote_path="/root/src/geopol_forecaster", copy=True)
-    .add_local_dir("config", remote_path="/root/config", copy=True)
+    .add_local_dir("src/geopol_forecaster", remote_path="/root/src/geopol_forecaster")
+    .add_local_dir("config", remote_path="/root/config")
     .run_commands(
         # Remove stale llm_snowglobe package if cached from a previous image
         "rm -rf /root/src/llm_snowglobe",

@@ -562,7 +562,7 @@ async def run_scenario(
     _move_counter = [0]
     _current_escalation = [None]  # track for adaptive tempo
 
-    async def adjudicate_fn(history, responses, nature, timestep=None, mode=None):
+    async def adjudicate_fn(history, responses, nature=None, timestep=None, mode=None, **kwargs):
         # Use timeframe label for current move if available
         if timeframes and _move_counter[0] < len(timeframes):
             timestep = timeframes[_move_counter[0]]
