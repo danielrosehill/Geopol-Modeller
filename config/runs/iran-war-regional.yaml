@@ -1,0 +1,18 @@
+# Run config: Iran War — Regional Dynamics
+# Same trigger but with Gulf + regional actors and additional questions.
+
+name: Iran War Regional
+description: >
+  Iran war simulation with expanded actor set including UAE, Qatar, Oman,
+  Jordan, Egypt. Uses both core and regional question banks.
+
+scenario: iran-war-regional
+actor_cluster: iran-war-expanded
+graph_config: iran-israel
+questions:
+  - iran-war-core
+  - iran-war-regional
+timeframe: medium
+nature: 0.6
+mode:
+  - geopol

@@ -1,0 +1,75 @@
+# Question bank: Israel-US Bilateral
+# Assessment questions for the US-Israel alliance dynamics scenario.
+
+name: Israel-US Bilateral
+description: >
+  Questions covering bipartisan consensus, aid conditionality, generational
+  shifts, Saudi normalization, ICC/ICJ, and the Israel lobby landscape.
+
+questions:
+  - id: bipartisan_consensus
+    text: "Is the bipartisan consensus on unconditional US support for Israel permanently broken, or can it be reconstructed?"
+
+  - id: aid_conditionality
+    text: "What is the probability that the US Congress passes legislation conditioning military aid to Israel within 2 years?"
+
+  - id: generational_shift
+    text: "How does the generational shift in US public opinion translate into concrete policy changes, and on what timeline?"
+
+  - id: saudi_normalization
+    text: "What is the probability that Saudi-Israeli normalization is achieved within 1 year, and what does it require?"
+
+  - id: aipac_effectiveness
+    text: "Does AIPAC's spending successfully contain the progressive challenge, or does it accelerate backlash?"
+
+  - id: future_dem_admin
+    text: "What is the most likely trajectory for US-Israel relations under a future Democratic administration?"
+
+  - id: icc_icj_impact
+    text: "How does the ICC/ICJ legal pressure affect the bilateral relationship — does the US sustain its shielding indefinitely?"
+
+mc_questions:
+  - id: military_aid_status
+    question: "What is the state of US military aid to Israel in 2 years?"
+    options:
+      - "Unchanged — $3.8B+ baseline with emergency supplements as needed"
+      - "Maintained at baseline but with new reporting/transparency requirements"
+      - "Partially conditioned — specific offensive weapons categories restricted"
+      - "Significantly reduced due to legislative action or presidential decision"
+      - "Increased — new MOU negotiated with higher baseline"
+
+  - id: domestic_politics
+    question: "What is the dominant dynamic in US domestic politics on Israel?"
+    options:
+      - "Bipartisan consensus restored — Israel returns to a unifying issue"
+      - "Stable partisan split — Republicans pro-Israel, Democrats divided but majority supportive"
+      - "Accelerating partisan divergence — Israel becomes a wedge issue like abortion or guns"
+      - "Generational takeover — younger cohort's views reshape both parties"
+      - "Issue salience fades — other crises push Israel off the agenda"
+
+  - id: saudi_normalization_mc
+    question: "What happens with Saudi-Israeli normalization?"
+    options:
+      - "Full normalization deal achieved including Palestinian component"
+      - "Partial deal — diplomatic recognition without full resolution of Palestinian issue"
+      - "Deal framework agreed but implementation stalls"
+      - "Negotiations continue without breakthrough"
+      - "Normalization shelved indefinitely due to Gaza aftermath"
+
+  - id: campus_movement
+    question: "How does the campus/youth protest movement evolve?"
+    options:
+      - "Intensifies and becomes a permanent feature of US politics"
+      - "Matures into an organized political movement with electoral impact"
+      - "Peaks and gradually subsides as media attention shifts"
+      - "Fragments — internal divisions between liberal Zionists and anti-Zionists weaken it"
+      - "Suppressed by state legislation and university crackdowns"
+
+  - id: icc_status
+    question: "What is the status of ICC proceedings against Israeli officials?"
+    options:
+      - "Warrants effectively nullified — no enforcement by any significant state"
+      - "Warrants restrict Israeli officials' travel but have no policy impact"
+      - "Warrants create a growing diplomatic crisis — some EU states signal enforcement"
+      - "US sanctions on ICC succeed in paralyzing the court"
+      - "ICC proceedings expand and begin to affect the bilateral relationship"

@@ -1,0 +1,17 @@
+# Run config: Iran-Israel War — Core actors
+# Composes scenario + actors + questions + timeframe + graph config.
+
+name: Iran War Core
+description: >
+  Full Iran-Israel war simulation with the comprehensive 25-actor set,
+  information asymmetry, domain shocks, and escalation tracking.
+
+scenario: iran-israel-war
+actor_cluster: iran-israel-full
+graph_config: iran-israel
+questions:
+  - iran-war-core
+timeframe: medium
+nature: 0.6
+mode:
+  - geopol

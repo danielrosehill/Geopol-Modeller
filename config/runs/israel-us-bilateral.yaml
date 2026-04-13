@@ -1,0 +1,15 @@
+# Run config: Israel-US Bilateral Relationship
+
+name: Israel-US Bilateral
+description: >
+  US-Israel alliance dynamics simulation covering partisan divide,
+  generational shifts, aid conditionality, and Saudi normalization.
+
+scenario: israel-us-bilateral
+actor_cluster: israel-us-bilateral
+questions:
+  - israel-us-bilateral
+timeframe: long
+nature: 0.5
+mode:
+  - geopol

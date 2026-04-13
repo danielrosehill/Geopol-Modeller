@@ -1,0 +1,9 @@
+# Timeframe: Medium
+# Three moves covering immediate response through 2-week trajectory.
+
+name: Medium
+description: "24h initial response, 72h escalation dynamics, 2-week trajectory"
+timeframes:
+  - "+24h"
+  - "+72h"
+  - "+2 weeks"

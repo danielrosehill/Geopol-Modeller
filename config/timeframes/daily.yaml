@@ -1,0 +1,8 @@
+# Timeframe: Daily
+# Two-day cycle — good for fast-moving crises.
+
+name: Daily
+description: "Day-by-day tracking over 48 hours"
+timeframes:
+  - "+24h"
+  - "+48h"

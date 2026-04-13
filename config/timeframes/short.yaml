@@ -1,0 +1,7 @@
+# Timeframe: Short
+# Single 24-hour snapshot — fastest simulation, one move.
+
+name: Short
+description: "Immediate 24-hour response window"
+timeframes:
+  - "+24h"

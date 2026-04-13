@@ -1,0 +1,11 @@
+# Timeframe: Long
+# Five moves spanning 24 hours to 3 months.
+
+name: Long
+description: "Full arc from immediate response to quarterly trajectory"
+timeframes:
+  - "+24h"
+  - "+72h"
+  - "+2 weeks"
+  - "+1 month"
+  - "+3 months"

@@ -1,0 +1,56 @@
+# Question bank: Iran War — Core
+# Reusable assessment questions for Iran-Israel war scenarios.
+
+name: Iran War Core
+description: >
+  Core assessment questions for Iran-Israel conflict simulations.
+  Covers dominant trajectory, escalation, and oil market impact.
+
+questions:
+  - id: trajectory
+    text: "In one sentence, what is the dominant trajectory?"
+
+  - id: escalation_path
+    text: "What is the most dangerous escalation path that emerged?"
+
+  - id: most_consequential
+    text: "Which actor's response was most consequential in shaping the outcome?"
+
+  - id: kinetic_probability
+    text: "What is the probability that the Iran-Israel conflict escalates to direct sustained kinetic exchange within 2 weeks?"
+
+  - id: hormuz_impact
+    text: "Does the Strait of Hormuz blockade hold, and what is its impact on global energy markets?"
+
+mc_questions:
+  - id: iran_blockade_response
+    question: "Does Iran attempt to physically challenge the blockade?"
+    options:
+      - "Yes — direct naval confrontation"
+      - "Yes — mines or asymmetric naval action"
+      - "No — diplomatic/rhetorical response only"
+      - "No — but activates proxies instead"
+
+  - id: israel_strikes
+    question: "Does Israel launch strikes on Iranian targets?"
+    options:
+      - "Yes"
+      - "No"
+      - "Prepares but holds"
+
+  - id: oil_prices
+    question: "What happens to oil prices?"
+    options:
+      - "Spike above $150/barrel"
+      - "Spike to $120-150 range"
+      - "Moderate increase ($100-120)"
+      - "Markets wait for clarity"
+
+  - id: escalation_level
+    question: "What is the escalation level at the end of the timeframe?"
+    options:
+      - "De-escalation / diplomacy"
+      - "Proxy exchanges only (baseline)"
+      - "Direct Iran-Israel strikes"
+      - "Sustained mutual strikes"
+      - "Full conventional war"

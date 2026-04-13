@@ -185,15 +185,47 @@ def _add_run_args(parser):
         help="Reference URLs to fetch and include in the briefing context",
     )
 
-    # Scenario selection
-    scenario_group = parser.add_argument_group("scenario selection")
+    # Scenario / run selection
+    scenario_group = parser.add_argument_group("scenario and run selection")
+    scenario_group.add_argument(
+        "--run", type=str, default=None, metavar="NAME",
+        help="Use a run config from config/runs/ (composes scenario + actors + questions + timeframe)",
+    )
     scenario_group.add_argument(
         "--scenario", type=str, default=None, metavar="NAME",
-        help="Run a named scenario from config/scenarios/ (e.g. hormuz-blockade-apr2026)",
+        help="Run a named scenario from config/scenarios/",
+    )
+    scenario_group.add_argument(
+        "--questions", type=str, default=None, metavar="NAME",
+        help="Use a question bank from config/questions/ (overrides run/scenario defaults)",
+    )
+    scenario_group.add_argument(
+        "--question", type=str, nargs="+", default=None, metavar="TEXT",
+        help="Run only specific questions (by text or partial match)",
+    )
+    scenario_group.add_argument(
+        "--timeframe", type=str, default=None, metavar="NAME",
+        help="Use a timeframe from config/timeframes/ (overrides run/scenario defaults)",
     )
     scenario_group.add_argument(
         "--list-scenarios", action="store_true", default=False,
         help="List available scenarios and exit",
+    )
+    scenario_group.add_argument(
+        "--list-runs", action="store_true", default=False,
+        help="List available run configs and exit",
+    )
+    scenario_group.add_argument(
+        "--list-questions", action="store_true", default=False,
+        help="List available question banks and exit",
+    )
+    scenario_group.add_argument(
+        "--list-timeframes", action="store_true", default=False,
+        help="List available timeframes and exit",
+    )
+    scenario_group.add_argument(
+        "--list-actors", action="store_true", default=False,
+        help="List available actor clusters and exit",
     )
 
     # Pool selection
@@ -228,15 +260,22 @@ def parse_args():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 examples:
-  geopol                              Run default scenario with pool menu
-  geopol --scenario hormuz-blockade-apr2026
-                                         Run a named scenario
-  geopol --pool anthropic             Run with a specific pool (no menu)
-  geopol --pool deepseek --report     Run and generate PDF report
-  geopol assess                       Run accuracy assessment on predictions
+  geopol --run iran-war-core --pool deepseek
+                                      Run a composed run config
+  geopol --scenario iran-israel-war --pool anthropic
+                                      Run a scenario directly
+  geopol --run iran-war-core --question "Does Iran attempt"
+                                      Run with a single question (partial match)
+  geopol --scenario iran-israel-war --questions iran-war-core --timeframe medium
+                                      Override questions and timeframe
+  geopol --list-runs                  List available run configs
+  geopol --list-scenarios             List available scenarios
+  geopol --list-questions             List available question banks
+  geopol --list-timeframes            List available timeframes
+  geopol --list-actors                List available actor clusters
+  geopol assess                       Run accuracy assessment
   geopol predictions list             List tracked predictions
   geopol predictions summary          Show accuracy summary
-  geopol predictions import PATH      Import from a Geopol forecast repo
   geopol changelog                    Show pipeline version history
         """,
     )
@@ -327,48 +366,134 @@ def find_config_dir():
     return None
 
 
-def list_scenarios(config_dir):
-    """Print available scenarios from config/scenarios/."""
-    scenarios_dir = os.path.join(config_dir, "scenarios")
-    if not os.path.isdir(scenarios_dir):
-        print("No scenarios directory found.")
+def _list_yaml_dir(config_dir, subdir, label, detail_fn=None):
+    """Generic lister for YAML entity directories."""
+    entity_dir = os.path.join(config_dir, subdir)
+    if not os.path.isdir(entity_dir):
+        print(f"No {subdir}/ directory found.")
         return
 
     from ruamel.yaml import YAML
     yaml = YAML(typ="safe")
 
     print()
-    print("  Available scenarios:")
+    print(f"  Available {label}:")
     print("  " + "-" * 60)
-    for f in sorted(os.listdir(scenarios_dir)):
-        if f.endswith(".yaml") or f.endswith(".yml"):
-            name = f.rsplit(".", 1)[0]
-            try:
-                with open(os.path.join(scenarios_dir, f)) as fh:
-                    data = yaml.load(fh)
-                title = data.get("title", "")
-                actors = data.get("actor_cluster", "inline")
-                # Resolve timeframe display
-                if data.get("timeframes"):
-                    tf = " → ".join(data["timeframes"])
-                elif data.get("timeframe_preset"):
-                    tf = f"preset:{data['timeframe_preset']}"
-                else:
-                    moves = data.get("moves", "?")
-                    ts = data.get("timestep", "?")
-                    tf = f"{moves}×{ts}"
-                print(f"  {name:<35} {title}")
-                print(f"  {'':35} actors: {actors}, {tf}")
-            except Exception:
-                print(f"  {name:<35} (error reading file)")
+    for f in sorted(os.listdir(entity_dir)):
+        if not (f.endswith(".yaml") or f.endswith(".yml")):
+            continue
+        if f.startswith("_"):
+            continue
+        name = f.rsplit(".", 1)[0]
+        try:
+            with open(os.path.join(entity_dir, f)) as fh:
+                data = yaml.load(fh)
+            if detail_fn:
+                detail_fn(name, data)
+            else:
+                title = data.get("title") or data.get("name") or ""
+                desc = data.get("description", "")
+                if isinstance(desc, str) and len(desc) > 60:
+                    desc = desc[:57] + "..."
+                print(f"  {name:<30} {title}")
+                if desc:
+                    print(f"  {'':30} {desc}")
+        except Exception:
+            print(f"  {name:<30} (error reading file)")
     print()
+
+
+def list_scenarios(config_dir):
+    """Print available scenarios from config/scenarios/."""
+    def detail(name, data):
+        title = data.get("title", "")
+        mode = ", ".join(data.get("mode", ["geopol"]))
+        print(f"  {name:<30} {title}")
+        print(f"  {'':30} mode: {mode}")
+    _list_yaml_dir(config_dir, "scenarios", "scenarios", detail)
+
+
+def list_runs(config_dir):
+    """Print available run configs from config/runs/."""
+    def detail(name, data):
+        title = data.get("name", "")
+        scenario = data.get("scenario", "?")
+        actors = data.get("actor_cluster", "?")
+        tf = data.get("timeframe", "?")
+        qs = data.get("questions", [])
+        if isinstance(qs, str):
+            qs = [qs]
+        q_str = ", ".join(qs) if qs else "inline"
+        print(f"  {name:<30} {title}")
+        print(f"  {'':30} scenario: {scenario}, actors: {actors}")
+        print(f"  {'':30} timeframe: {tf}, questions: {q_str}")
+    _list_yaml_dir(config_dir, "runs", "run configs", detail)
+
+
+def list_questions(config_dir):
+    """Print available question banks from config/questions/."""
+    def detail(name, data):
+        title = data.get("name", "")
+        n_q = len(data.get("questions", []))
+        n_mc = len(data.get("mc_questions", []))
+        print(f"  {name:<30} {title}")
+        print(f"  {'':30} {n_q} open-ended + {n_mc} multiple-choice")
+    _list_yaml_dir(config_dir, "questions", "question banks", detail)
+
+
+def list_timeframes(config_dir):
+    """Print available timeframes from config/timeframes/."""
+    def detail(name, data):
+        title = data.get("name", "")
+        tfs = data.get("timeframes", [])
+        moves = len(tfs)
+        tf_str = " → ".join(tfs)
+        print(f"  {name:<30} {title} ({moves} moves)")
+        print(f"  {'':30} {tf_str}")
+    _list_yaml_dir(config_dir, "timeframes", "timeframes", detail)
+
+
+def list_actors(config_dir):
+    """Print available actor clusters from config/actors/."""
+    def detail(name, data):
+        if not data:
+            print(f"  {name:<30} (empty file)")
+            return
+        title = data.get("name", "")
+        actors = data.get("actors", [])
+        if not isinstance(actors, list):
+            actors = []
+        n = len(actors)
+        names = []
+        for a in actors[:5]:
+            if isinstance(a, dict):
+                names.append(a.get("name") or a.get("id", "?"))
+            else:
+                names.append(str(a))
+        suffix = f" +{n - 5} more" if n > 5 else ""
+        print(f"  {name:<30} {title} ({n} actors)")
+        if names:
+            print(f"  {'':30} {', '.join(names)}{suffix}")
+    _list_yaml_dir(config_dir, "actors", "actor clusters", detail)
 
 
 def _run_simulation(args, config_dir, pools_path):
     """Handle simulation run (default command and 'run' subcommand)."""
-    # List scenarios and exit
+    # List entity commands
     if getattr(args, "list_scenarios", False):
         list_scenarios(config_dir)
+        sys.exit(0)
+    if getattr(args, "list_runs", False):
+        list_runs(config_dir)
+        sys.exit(0)
+    if getattr(args, "list_questions", False):
+        list_questions(config_dir)
+        sys.exit(0)
+    if getattr(args, "list_timeframes", False):
+        list_timeframes(config_dir)
+        sys.exit(0)
+    if getattr(args, "list_actors", False):
+        list_actors(config_dir)
         sys.exit(0)
 
     # Pool selection
@@ -384,17 +509,33 @@ def _run_simulation(args, config_dir, pools_path):
     else:
         pool_name, pool, base_url = select_pool(pools_path)
 
-    # Scenario mode vs legacy mode
-    if args.scenario:
-        # Resolve scenario file
-        scenario_path = os.path.join(config_dir, "scenarios", f"{args.scenario}.yaml")
+    # Run config mode (first-class entity composition)
+    run_arg = getattr(args, "run", None)
+    if run_arg:
+        run_config_path = os.path.join(config_dir, "runs", f"{run_arg}.yaml")
+        if not os.path.exists(run_config_path):
+            run_config_path = os.path.join(config_dir, "runs", f"{run_arg}.yml")
+        if not os.path.exists(run_config_path):
+            print(f"Run config not found: {run_arg}")
+            print("Use --list-runs to see available run configs.")
+            sys.exit(1)
+
+        # The run config references a scenario — resolve the scenario path
+        from ruamel.yaml import YAML
+        yaml = YAML(typ="safe")
+        with open(run_config_path) as fh:
+            run_data = yaml.load(fh)
+
+        # Apply CLI overrides to the run config
+        if getattr(args, "questions", None):
+            run_data["questions"] = [args.questions]
+        if getattr(args, "timeframe", None):
+            run_data["timeframe"] = args.timeframe
+
+        scenario_name = run_data.get("scenario")
+        scenario_path = os.path.join(config_dir, "scenarios", f"{scenario_name}.yaml")
         if not os.path.exists(scenario_path):
-            scenario_path = os.path.join(config_dir, "scenarios", f"{args.scenario}.yml")
-        if not os.path.exists(scenario_path):
-            scenario_path = args.scenario
-        if not os.path.exists(scenario_path):
-            print(f"Scenario not found: {args.scenario}")
-            print("Use --list-scenarios to see available scenarios.")
+            print(f"Scenario '{scenario_name}' referenced by run config not found.")
             sys.exit(1)
 
         from .scenario_runner import run_scenario
@@ -414,7 +555,70 @@ def _run_simulation(args, config_dir, pools_path):
             reference_urls=args.refs,
             track_predictions=getattr(args, "track", True),
             sync_hf=getattr(args, "sync_hf", True),
+            run_config_path=run_config_path,
+            question_filter=getattr(args, "question", None),
         ))
+
+    # Scenario mode (with optional entity overrides)
+    elif args.scenario:
+        # Resolve scenario file
+        scenario_path = os.path.join(config_dir, "scenarios", f"{args.scenario}.yaml")
+        if not os.path.exists(scenario_path):
+            scenario_path = os.path.join(config_dir, "scenarios", f"{args.scenario}.yml")
+        if not os.path.exists(scenario_path):
+            scenario_path = args.scenario
+        if not os.path.exists(scenario_path):
+            print(f"Scenario not found: {args.scenario}")
+            print("Use --list-scenarios to see available scenarios.")
+            sys.exit(1)
+
+        # If --questions or --timeframe specified, build a synthetic run config
+        run_config_path = None
+        if getattr(args, "questions", None) or getattr(args, "timeframe", None):
+            # Create a transient run config from CLI args
+            import tempfile
+            from ruamel.yaml import YAML
+            yaml = YAML()
+            run_data = {"scenario": args.scenario}
+            if getattr(args, "questions", None):
+                run_data["questions"] = [args.questions]
+            if getattr(args, "timeframe", None):
+                run_data["timeframe"] = args.timeframe
+            tmp = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".yaml", delete=False, dir=os.path.join(config_dir, "runs"),
+            )
+            yaml.dump(run_data, tmp)
+            tmp.close()
+            run_config_path = tmp.name
+
+        from .scenario_runner import run_scenario
+        asyncio.run(run_scenario(
+            scenario_path=scenario_path,
+            pool_name=pool_name,
+            pool_override=pool,
+            base_url=base_url,
+            pools_path=pools_path,
+            verbosity=args.verbosity,
+            use_rich=args.rich,
+            checkpoint=args.checkpoint,
+            resume_path=args.resume,
+            report=args.report,
+            podcast=args.podcast,
+            podcast_voice=args.podcast_voice,
+            reference_urls=args.refs,
+            track_predictions=getattr(args, "track", True),
+            sync_hf=getattr(args, "sync_hf", True),
+            run_config_path=run_config_path,
+            question_filter=getattr(args, "question", None),
+        ))
+
+        # Clean up transient run config
+        if run_config_path and os.path.basename(run_config_path).startswith("tmp"):
+            try:
+                os.unlink(run_config_path)
+            except OSError:
+                pass
+
     else:
         from .examples_runner import run_ac_sim
         asyncio.run(run_ac_sim(

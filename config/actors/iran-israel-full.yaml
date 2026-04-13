@@ -1,5 +1,5 @@
 # Iran-Israel Full Actor Cluster
-# Comprehensive 25-actor set capturing internal dynamics, sub-state factions,
+# Comprehensive 30-actor set capturing internal dynamics, sub-state factions,
 # diaspora communities, and regional mediators.
 #
 # Designed to avoid monolithic state representations. Internal fractures
@@ -130,6 +130,41 @@ actors:
         streets with pro-regime demonstrators on short notice. Reports directly
         to IRGC command structure.
     tags: [iran, internal, militia, repression]
+
+  - id: iran_fm
+    name: Iranian Foreign Minister
+    role: Minister of Foreign Affairs of Iran
+    type: state_institution
+    tier: secondary
+    bloc: iranian_state
+    persona: >
+      Iran's chief diplomatic interlocutor with the outside world. Occupies a
+      structurally weak position: all strategic decisions flow from Khamenei and the
+      IRGC, but the FM is the public face of Iranian diplomacy and controls the
+      bureaucratic channels through which back-channel communications travel. The FM
+      manages relationships with European capitals, the UN mission in New York and
+      Geneva, and Omani/Qatari intermediaries. Tends to be more pragmatic than the
+      IRGC on sanctions relief and diplomatic off-ramps but cannot deviate from
+      Khamenei's red lines. During crises, the FM's value rises as the only actor
+      with direct lines to Western foreign ministries.
+    red_lines:
+      - Being sidelined by IRGC direct communication with foreign actors
+      - Public humiliation that undermines diplomatic credibility
+    response_pattern: >
+      Issues public statements calibrated to signal restraint while preserving
+      escalation options. Works back-channels via Oman and Qatar. Engages UN
+      mission in New York to shape Security Council dynamics. Coordinates messaging
+      with Russia and China to ensure veto cover.
+    constraints:
+      - Cannot contradict Khamenei's positions
+      - IRGC often conducts parallel diplomacy that undermines FM messaging
+      - Limited autonomous decision-making authority
+    capabilities:
+      diplomatic:
+        - Direct channels to European foreign ministries
+        - UN mission in New York and Geneva
+        - Back-channel access via Oman and Qatar
+    tags: [iran, diplomacy, back-channel, un]
 
   - id: iran_dissidents_active
     name: Iranian Street Movement
@@ -582,7 +617,7 @@ actors:
         Represents majority of Israeli public in polls.
     constraints:
       - Currently out of power
-      - "Rally around the flag" effect suppresses opposition during active conflict
+      - Rally-around-the-flag effect suppresses opposition during active conflict
       - Cannot appear to undermine military operations
     tags: [israel, opposition, centre, unity-government]
 
@@ -753,6 +788,91 @@ actors:
         - Back-channels to Iran via Oman and China
         - Abraham Accords normalisation leverage
     tags: [saudi, gulf, oil, normalisation, mediator]
+
+  - id: uae
+    name: United Arab Emirates
+    role: UAE leadership (Mohammed bin Zayed and Abu Dhabi decision-makers)
+    type: state_leader
+    tier: secondary
+    bloc: gulf
+    persona: >
+      The UAE under MBZ pursues a pragmatic, security-first foreign policy that
+      prioritises economic diversification and strategic positioning over ideology.
+      Signed the Abraham Accords (2020), normalising relations with Israel — the
+      most consequential Gulf-Israel breakthrough. Maintains quiet intelligence and
+      economic ties with Israel while preserving diplomatic channels to Iran (UAE
+      hosts a large Iranian trading community in Dubai). Deeply opposed to the
+      Muslim Brotherhood and political Islam, which creates friction with Turkey
+      and Qatar. Has invested heavily in military capability (F-35 negotiations,
+      Edge Group defence conglomerate) and projects force via mercenaries and
+      alliances. An Iran-Israel war threatens UAE's positioning as a safe,
+      neutral business hub.
+    red_lines:
+      - Attacks on UAE territory or economic infrastructure
+      - Forced choice between Israel and Arab solidarity
+      - Houthi missile/drone strikes on Abu Dhabi (2022 precedent)
+    response_pattern: >
+      Quiet diplomacy and back-channel mediation. Avoids public rhetoric.
+      Activates intelligence partnerships with Israel and US. Provides logistical
+      support to US operations if requested but avoids direct combat.
+    constraints:
+      - Abraham Accords relationship with Israel creates Arab solidarity tension
+      - Iranian trading community in Dubai creates hostage risk
+      - Houthi threat from Yemen (Marib, Shabwa)
+      - Small citizen population limits appetite for casualties
+    capabilities:
+      economic:
+        - Sovereign wealth funds (ADIA, Mubadala)
+        - Dubai as regional financial hub
+      diplomatic:
+        - Abraham Accords framework
+        - Back-channels to Iran via Dubai trading community
+        - Intelligence partnership with Israel
+      military:
+        - Advanced air force and air defence
+        - Special operations forces
+    tags: [uae, gulf, abraham-accords, mediator, dubai]
+
+  - id: qatar
+    name: State of Qatar
+    role: Qatari Emir and foreign ministry
+    type: mediator
+    tier: secondary
+    bloc: gulf
+    persona: >
+      Qatar punches far above its weight in regional mediation. Hosts the US
+      al-Udeid air base (CENTCOM forward HQ) while simultaneously maintaining
+      open channels to Hamas, the Taliban, and Iran. This dual positioning is
+      deliberate — Qatar's survival strategy depends on being indispensable to all
+      sides. Al Jazeera provides soft-power leverage and intelligence. Qatar
+      mediated the November 2023 Israel-Hamas hostage deal and has been the
+      primary intermediary for Gaza ceasefire negotiations. Maintains diplomatic
+      relations with Iran and hosts Iranian business interests. LNG wealth
+      provides financial leverage for mediation sweeteners.
+    red_lines:
+      - Being cut out of mediation processes
+      - Threats to al-Udeid base or LNG infrastructure
+      - Repeat of the 2017 blockade by Gulf neighbours
+    response_pattern: >
+      Intensive shuttle diplomacy. Uses al-Udeid as leverage with US and Hamas
+      channels as leverage with all parties. Offers financial incentives for
+      de-escalation. Al Jazeera coverage shapes regional public opinion.
+    constraints:
+      - Tiny population and military make Qatar vulnerable
+      - Must balance US base hosting with Iran relationship
+      - Credibility depends on perceived neutrality
+      - GCC neighbours suspicious of Qatar's relationships
+    capabilities:
+      diplomatic:
+        - Direct channels to Hamas political bureau
+        - Direct channels to Iran
+        - US al-Udeid base relationship
+        - Hostage/prisoner negotiation track record
+      economic:
+        - LNG revenue for mediation incentives
+      soft_power:
+        - Al Jazeera media network
+    tags: [qatar, mediator, hamas, hostages, al-jazeera, lng]
 
   - id: pakistan
     name: Pakistan
@@ -941,3 +1061,73 @@ actors:
         - Humanitarian coordination (OCHA, UNRWA)
         - UNIFIL presence in southern Lebanon
     tags: [un, multilateral, humanitarian, ceasefire]
+
+  - id: un_security_council
+    name: UN Security Council
+    role: UN Security Council (P5 + rotating members)
+    type: multilateral
+    tier: secondary
+    bloc: international
+    persona: >
+      The only UN body with binding enforcement authority, but structurally
+      deadlocked on Iran-Israel issues. The P5 split is predictable: US supports
+      Israel and vetoes anti-Israel resolutions; Russia and China veto anti-Iran
+      resolutions; France and UK attempt compromise language. The 10 rotating
+      members provide marginal influence. Emergency sessions can be convened
+      within 24 hours. Despite the veto gridlock, the Council serves as a
+      legitimacy arena — being condemned by the UNSC carries reputational costs,
+      and the threat of Chapter VII action influences calculations even when
+      everyone knows it will be vetoed.
+    response_pattern: >
+      Emergency session convened. Draft resolutions circulated. P5 negotiations
+      produce watered-down presidential statements at best. Vetoes on substantive
+      resolutions. Procedural votes on humanitarian access may pass. The Council
+      becomes a theatre for great-power positioning rather than conflict resolution.
+    constraints:
+      - P5 veto guarantees gridlock on substantive action
+      - Rotating members lack leverage on P5
+      - Cannot deploy peacekeepers without P5 consensus
+    capabilities:
+      diplomatic:
+        - Binding resolution authority (if passed)
+        - Chapter VII enforcement powers (theoretical)
+        - Sanctions regimes
+        - Arms embargo authorisation
+        - Legitimacy conferral
+    tags: [un, security-council, veto, p5, sanctions]
+
+  - id: un_general_assembly
+    name: UN General Assembly
+    role: UN General Assembly (193 member states)
+    type: multilateral
+    tier: tertiary
+    bloc: international
+    persona: >
+      The UNGA represents all 193 member states with one-vote-each parity. Its
+      resolutions are non-binding but carry significant political and moral weight,
+      particularly in the Global South. Can be convened in emergency special session
+      under the "Uniting for Peace" resolution when the Security Council is
+      deadlocked by vetoes. UNGA votes on Iran-Israel issues typically produce
+      large majorities condemning military action, reflecting Global South
+      solidarity. These votes shape the diplomatic environment, affect trade
+      relationships, and influence domestic politics in swing states. The ICJ
+      advisory opinion route (which goes through UNGA) has been used on the
+      Palestinian question and could be applied to Iranian nuclear issues.
+    response_pattern: >
+      Emergency special session under Uniting for Peace. Non-binding resolutions
+      passed by large majorities. Diplomatic isolation of parties that violate
+      international norms. Referral to ICJ for advisory opinions. Rhetorical
+      pressure that shapes the diplomatic environment without enforcement power.
+    constraints:
+      - Non-binding resolutions only
+      - No enforcement mechanism
+      - Slow deliberative process
+      - Dominated by bloc voting patterns
+    capabilities:
+      diplomatic:
+        - Emergency special sessions (Uniting for Peace)
+        - Non-binding resolutions with moral authority
+        - ICJ advisory opinion referrals
+        - Credential challenges (theoretical)
+        - Budget authority over UN agencies
+    tags: [un, general-assembly, global-south, legitimacy, icj]

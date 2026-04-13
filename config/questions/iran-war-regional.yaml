@@ -1,0 +1,32 @@
+# Question bank: Iran War — Regional
+# Extended questions for scenarios with Gulf and Arab state actors.
+# Designed to be used alongside iran-war-core or standalone.
+
+name: Iran War Regional
+description: >
+  Regional dynamics questions for Iran war simulations that include
+  Gulf states (UAE, Qatar, Oman), Jordan, and Egypt.
+
+questions:
+  - id: gulf_positioning
+    text: "How do the Gulf states (UAE, Qatar, Oman) position themselves between the US and Iran, and does any break ranks?"
+
+  - id: arab_stability
+    text: "Does Jordan or Egypt face domestic instability as a result of the crisis?"
+
+mc_questions:
+  - id: gulf_response
+    question: "How do Gulf states respond to the Hormuz blockade?"
+    options:
+      - "Rally behind the US — provide basing, logistics, diplomatic support"
+      - "Split — UAE/Bahrain support US, Qatar/Oman mediate or distance"
+      - "Unified opposition — demand US lift blockade to protect oil transit"
+      - "Quiet facilitation — help privately while criticizing publicly"
+
+  - id: regional_realignment
+    question: "Does the crisis produce a regional diplomatic realignment?"
+    options:
+      - "Yes — Arab states align more closely with the US/Israel axis"
+      - "Yes — Arab states distance from the US toward neutrality or China mediation"
+      - "No — existing alignments hold, crisis is contained"
+      - "Partial — Gulf states hedge, diversifying security partnerships"

@@ -1,10 +1,7 @@
 # Scenario: Israel-US Bilateral Relationship
-# Comprehensive simulation of the US-Israel alliance dynamics, partisan divide,
-# public opinion shifts, and strategic interdependence as of April 2026.
+# Pure situation description — runtime config lives in config/runs/
 
 title: "Israel-US Bilateral Relationship — Alliance Under Strain"
-
-actor_cluster: israel-us-bilateral
 
 scenario: |
   DATE: 13 April 2026
@@ -147,58 +144,5 @@ scenario: |
   6. How do the economic ties and tech interdependence operate as a stabilizing
      force independent of political dynamics?
 
-timeframe_preset: long
-
-nature: 0.5
 mode:
   - geopol
-
-questions:
-  - "Is the bipartisan consensus on unconditional US support for Israel permanently broken, or can it be reconstructed?"
-  - "What is the probability that the US Congress passes legislation conditioning military aid to Israel within 2 years?"
-  - "How does the generational shift in US public opinion translate into concrete policy changes, and on what timeline?"
-  - "What is the probability that Saudi-Israeli normalization is achieved within 1 year, and what does it require?"
-  - "Does AIPAC's spending successfully contain the progressive challenge, or does it accelerate backlash?"
-  - "What is the most likely trajectory for US-Israel relations under a future Democratic administration?"
-  - "How does the ICC/ICJ legal pressure affect the bilateral relationship — does the US sustain its shielding indefinitely?"
-
-mc_questions:
-  - question: "What is the state of US military aid to Israel in 2 years?"
-    options:
-      - "Unchanged — $3.8B+ baseline with emergency supplements as needed"
-      - "Maintained at baseline but with new reporting/transparency requirements"
-      - "Partially conditioned — specific offensive weapons categories restricted"
-      - "Significantly reduced due to legislative action or presidential decision"
-      - "Increased — new MOU negotiated with higher baseline"
-
-  - question: "What is the dominant dynamic in US domestic politics on Israel?"
-    options:
-      - "Bipartisan consensus restored — Israel returns to a unifying issue"
-      - "Stable partisan split — Republicans pro-Israel, Democrats divided but majority supportive"
-      - "Accelerating partisan divergence — Israel becomes a wedge issue like abortion or guns"
-      - "Generational takeover — younger cohort's views reshape both parties"
-      - "Issue salience fades — other crises push Israel off the agenda"
-
-  - question: "What happens with Saudi-Israeli normalization?"
-    options:
-      - "Full normalization deal achieved including Palestinian component"
-      - "Partial deal — diplomatic recognition without full resolution of Palestinian issue"
-      - "Deal framework agreed but implementation stalls"
-      - "Negotiations continue without breakthrough"
-      - "Normalization shelved indefinitely due to Gaza aftermath"
-
-  - question: "How does the campus/youth protest movement evolve?"
-    options:
-      - "Intensifies and becomes a permanent feature of US politics"
-      - "Matures into an organized political movement with electoral impact"
-      - "Peaks and gradually subsides as media attention shifts"
-      - "Fragments — internal divisions between liberal Zionists and anti-Zionists weaken it"
-      - "Suppressed by state legislation and university crackdowns"
-
-  - question: "What is the status of ICC proceedings against Israeli officials?"
-    options:
-      - "Warrants effectively nullified — no enforcement by any significant state"
-      - "Warrants restrict Israeli officials' travel but have no policy impact"
-      - "Warrants create a growing diplomatic crisis — some EU states signal enforcement"
-      - "US sanctions on ICC succeed in paralyzing the court"
-      - "ICC proceedings expand and begin to affect the bilateral relationship"

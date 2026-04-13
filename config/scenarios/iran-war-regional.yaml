@@ -1,11 +1,7 @@
-# Scenario: Iran War — Regional (with Gulf actors)
-# Same trigger as iran-israel-war but uses the expanded actor cluster
-# with UAE, Qatar, Oman, Jordan, Egypt alongside the core Iran-Israel set.
+# Scenario: Iran War — Regional
+# Same trigger as iran-israel-war. Runtime config lives in config/runs/.
 
 title: "Iran War — Regional Dynamics"
-
-actor_cluster: iran-war-expanded
-graph_config: iran-israel
 
 scenario: |
   DATE: 12 April 2026
@@ -39,60 +35,5 @@ scenario: |
   - Do Iranian proxies (Hezbollah, Houthis) activate in response?
   - Does this escalate to direct Iran-Israel kinetic exchange?
 
-# --- Timeframe Configuration ---
-# Each move simulates one timeframe step. Use presets or define custom.
-#
-# Presets (set timeframe_preset instead of custom timeframes):
-#   short:    ["+24h"]
-#   medium:   ["+24h", "+72h", "+2 weeks"]
-#   long:     ["+24h", "+72h", "+2 weeks", "+1 month", "+3 months"]
-#   daily:    ["+24h", "+48h"]
-#
-# Custom: define timeframes list directly (overrides preset)
-
-timeframe_preset: short
-
-# Uncomment to use custom timeframes instead of a preset:
-# timeframes:
-#   - "+24h"
-#   - "+72h"
-#   - "+1 week"
-#   - "+1 month"
-
-nature: true
 mode:
   - geopol
-
-questions:
-  - "In one sentence, what is the dominant trajectory?"
-  - "What is the most dangerous escalation path that emerged?"
-  - "Which actor's response was most consequential in shaping the outcome?"
-
-mc_questions:
-  - question: "Does Iran attempt to physically challenge the blockade?"
-    options:
-      - "Yes — direct naval confrontation"
-      - "Yes — mines or asymmetric naval action"
-      - "No — diplomatic/rhetorical response only"
-      - "No — but activates proxies instead"
-
-  - question: "Does Israel launch strikes on Iranian targets?"
-    options:
-      - "Yes"
-      - "No"
-      - "Prepares but holds"
-
-  - question: "What happens to oil prices?"
-    options:
-      - "Spike above $150/barrel"
-      - "Spike to $120-150 range"
-      - "Moderate increase ($100-120)"
-      - "Markets wait for clarity"
-
-  - question: "What is the escalation level at the end of the timeframe?"
-    options:
-      - "De-escalation / diplomacy"
-      - "Proxy exchanges only (baseline)"
-      - "Direct Iran-Israel strikes"
-      - "Sustained mutual strikes"
-      - "Full conventional war"

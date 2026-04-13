@@ -25,7 +25,7 @@ description: >
 
 visibility:
   blocs:
-    iranian_state: [khamenei, irgc, basij]
+    iranian_state: [khamenei, irgc, basij, iran_fm]
     axis_of_resistance: [hezbollah, houthis, iraqi_pmf]
     iranian_opposition: [iran_dissidents_active, iran_dissidents_silent]
     iranian_diaspora: [pahlavi_diaspora]
@@ -33,11 +33,13 @@ visibility:
     israeli_opposition: [israeli_opposition]
     lebanese_state: [laf, lebanon_gov]
     us: [trump, centcom]
-    gulf: [mbs]
+    gulf: [mbs, uae, qatar]
     kurdish: [kurds]
     russia_china: [russia, china]
     independent: [pakistan, turkey]
-    international: [un_sg]
+    international: [un_sg, un_security_council, un_general_assembly]
+    # Actors NOT in any bloc see everything — intentional for mediators:
+    # oman, jordan, sisi, us_envoy, france_envoy, syria_hts, hamas_political, pa_president
 
   rules:
     # All actors see the public adjudicated narrative
@@ -63,6 +65,9 @@ visibility:
       - from: independent
         to: [iranian_state, us, gulf]
         type: mediation  # Pakistan, Turkey mediate
+      - from: gulf
+        to: iranian_state
+        type: back_channel  # Gulf-Iran de-escalation channels
 
 # ============================================================
 #  EXOGENOUS SHOCKS
