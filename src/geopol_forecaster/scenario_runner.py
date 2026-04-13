@@ -527,12 +527,17 @@ async def run_scenario(
             # Build a human-readable run name
             run_name = f"{title} — {pool_name or 'custom'} pool"
 
+            actor_names_list = [a["name"] for a in actors] if actors else []
+
             run_record = PredictionRun(
                 scenario_title=title,
                 run_name=run_name,
                 scenario_hash=scenario_hash,
                 pool_name=pool_name or "custom",
                 models_used=models_dict,
+                moves_total=moves_total,
+                timestep=timestep,
+                actors=actor_names_list,
                 runtime_seconds=runtime_seconds,
                 source="geopol-forecaster",
             )
@@ -541,12 +546,11 @@ async def run_scenario(
             # Extract structured predictions via LLM
             if verbosity >= 1:
                 print("[track] Extracting predictions from assessments...")
-            actor_names = [a["name"] for a in actors] if actors else []
             extractor = PredictionExtractor(llm_client=client, model=pool.narrator)
             predictions = await extractor.extract(
                 assessments=result["assessments"],
                 run_id=run_record.id,
-                actor_names=actor_names,
+                actor_names=actor_names_list,
             )
             if predictions:
                 store.save_predictions_batch(predictions)

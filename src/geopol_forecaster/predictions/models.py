@@ -90,6 +90,9 @@ class PredictionRun(BaseModel):
     scenario_hash: Optional[str] = None
     pool_name: Optional[str] = None
     models_used: Optional[dict] = None
+    moves_total: Optional[int] = None
+    timestep: Optional[str] = None
+    actors: Optional[list[str]] = None
     runtime_seconds: Optional[float] = None
     checkpoint_path: Optional[str] = None
     report_path: Optional[str] = None

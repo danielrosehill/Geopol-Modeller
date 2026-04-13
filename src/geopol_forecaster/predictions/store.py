@@ -22,6 +22,9 @@ CREATE TABLE IF NOT EXISTS runs (
     scenario_hash TEXT,
     pool_name TEXT,
     models_used TEXT,
+    moves_total INTEGER,
+    timestep TEXT,
+    actors TEXT,
     runtime_seconds REAL,
     checkpoint_path TEXT,
     report_path TEXT,
@@ -75,13 +78,18 @@ CREATE TABLE IF NOT EXISTS schema_version (
 );
 """
 
-_CURRENT_SCHEMA_VERSION = 2
+_CURRENT_SCHEMA_VERSION = 3
 
 _MIGRATIONS = {
     2: [
         "ALTER TABLE runs ADD COLUMN run_name TEXT",
         "ALTER TABLE predictions ADD COLUMN actor_name TEXT",
         "ALTER TABLE predictions ADD COLUMN perspective_name TEXT",
+    ],
+    3: [
+        "ALTER TABLE runs ADD COLUMN moves_total INTEGER",
+        "ALTER TABLE runs ADD COLUMN timestep TEXT",
+        "ALTER TABLE runs ADD COLUMN actors TEXT",
     ],
 }
 
@@ -139,13 +147,16 @@ class PredictionStore:
         self._conn.execute(
             """INSERT OR REPLACE INTO runs
                (id, created_at, scenario_title, run_name, scenario_hash, pool_name,
-                models_used, runtime_seconds, checkpoint_path, report_path,
+                models_used, moves_total, timestep, actors,
+                runtime_seconds, checkpoint_path, report_path,
                 source, pipeline_version)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 run.id, run.created_at, run.scenario_title, run.run_name,
                 run.scenario_hash,
                 run.pool_name, json.dumps(run.models_used) if run.models_used else None,
+                run.moves_total, run.timestep,
+                json.dumps(run.actors) if run.actors else None,
                 run.runtime_seconds, run.checkpoint_path, run.report_path,
                 run.source, run.pipeline_version,
             ),
