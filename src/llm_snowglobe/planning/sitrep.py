@@ -83,7 +83,7 @@ class SitrepAgent:
         self.progress = progress
         self.tavily_api_key = tavily_api_key or os.environ.get("TAVILY_API_KEY")
 
-    async def research(self, scenario, title=None, num_queries=5):
+    async def research(self, scenario, title=None, num_queries=8):
         """Use Tavily to search for current-events context."""
         if not self.tavily_api_key:
             if self.progress:
@@ -104,11 +104,16 @@ class SitrepAgent:
         client = AsyncTavilyClient(api_key=self.tavily_api_key)
 
         # Generate search queries from the scenario
+        today = datetime.date.today().isoformat()
         query_prompt = (
             f"You are preparing a SITREP for a geopolitical simulation.\n"
+            f"Today's date is {today}.\n"
             f"Given this scenario, generate {num_queries} concise web search queries "
             f"to find the latest real-world developments, military postures, "
             f"diplomatic statements, and background context.\n"
+            f"Focus on developments from the last 72 hours. Include date terms "
+            f"like 'today', 'April 2026', or '{today}' in at least half the queries "
+            f"to bias results toward the most recent reporting.\n"
             f"Return only the queries, one per line.\n\n"
             f"Title: {title or 'Untitled'}\n\n"
             f"Scenario:\n{scenario[:3000]}"
@@ -134,7 +139,9 @@ class SitrepAgent:
         sources = []
         for query in queries:
             try:
-                response = await client.search(query, max_results=3)
+                response = await client.search(
+                    query, search_depth="advanced", max_results=5, days=3,
+                )
                 for result in response.get("results", []):
                     title_r = result.get("title", "")
                     content = result.get("content", "")
