@@ -1,17 +1,17 @@
 # Scenario: Iran-Israel War
-# Configurable prediction timeframes
+# Pure situation description — runtime config lives in config/runs/
 
 title: "Iran-Israel War"
 
-actor_cluster: iran-israel-full
-graph_config: iran-israel
-
 scenario: |
-  DATE: 12 April 2026
+  DATE: 13 April 2026
 
-  TRIGGER EVENT: US President Donald Trump has declared that the US Navy will
-  begin blockading the Strait of Hormuz "effective immediately." The announcement
-  comes amid escalating tensions in the Iran-Israel conflict.
+  TRIGGER EVENT: The United States has announced it will begin blockading
+  Iranian ports, with the US military set to enforce a naval blockade
+  targeting Iran's maritime commerce. Tehran has condemned the move as
+  "piracy" and an act of aggression. The announcement comes amid
+  escalating tensions in the Iran-Israel conflict and follows the
+  breakdown of nuclear negotiations.
 
   CONTEXT:
   - The Iran-Israel conflict has been escalating through direct strikes and proxy warfare
@@ -38,60 +38,5 @@ scenario: |
   - Do Iranian proxies (Hezbollah, Houthis) activate in response?
   - Does this escalate to direct Iran-Israel kinetic exchange?
 
-# --- Timeframe Configuration ---
-# Each move simulates one timeframe step. Use presets or define custom.
-#
-# Presets (set timeframe_preset instead of custom timeframes):
-#   short:    ["+24h"]
-#   medium:   ["+24h", "+72h", "+2 weeks"]
-#   long:     ["+24h", "+72h", "+2 weeks", "+1 month", "+3 months"]
-#   daily:    ["+24h", "+48h"]
-#
-# Custom: define timeframes list directly (overrides preset)
-
-timeframe_preset: short
-
-# Uncomment to use custom timeframes instead of a preset:
-# timeframes:
-#   - "+24h"
-#   - "+72h"
-#   - "+1 week"
-#   - "+1 month"
-
-nature: true
 mode:
   - geopol
-
-questions:
-  - "In one sentence, what is the dominant trajectory?"
-  - "What is the most dangerous escalation path that emerged?"
-  - "Which actor's response was most consequential in shaping the outcome?"
-
-mc_questions:
-  - question: "Does Iran attempt to physically challenge the blockade?"
-    options:
-      - "Yes — direct naval confrontation"
-      - "Yes — mines or asymmetric naval action"
-      - "No — diplomatic/rhetorical response only"
-      - "No — but activates proxies instead"
-
-  - question: "Does Israel launch strikes on Iranian targets?"
-    options:
-      - "Yes"
-      - "No"
-      - "Prepares but holds"
-
-  - question: "What happens to oil prices?"
-    options:
-      - "Spike above $150/barrel"
-      - "Spike to $120-150 range"
-      - "Moderate increase ($100-120)"
-      - "Markets wait for clarity"
-
-  - question: "What is the escalation level at the end of the timeframe?"
-    options:
-      - "De-escalation / diplomacy"
-      - "Proxy exchanges only (baseline)"
-      - "Direct Iran-Israel strikes"
-      - "Sustained mutual strikes"
-      - "Full conventional war"

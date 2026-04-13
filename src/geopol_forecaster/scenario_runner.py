@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
-"""Generic scenario runner — loads any scenario YAML + optional actor cluster."""
+"""Generic scenario runner — loads any scenario YAML + optional actor cluster.
+
+Supports two modes:
+1. Run config (config/runs/*.yaml) — composes scenario, actors, questions,
+   timeframe, graph config as first-class entities.
+2. Legacy scenario (config/scenarios/*.yaml with inline questions/timeframes) —
+   backward compatible.
+"""
 
 import os
 import random
@@ -17,6 +24,7 @@ from .output.checkpoint import save_checkpoint, load_checkpoint
 from .graph_config import load_graph_config, parse_escalation_from_output
 
 
+# Legacy hardcoded presets — used as fallback when config/timeframes/ not found
 TIMEFRAME_PRESETS = {
     "short": ["+24h"],
     "medium": ["+24h", "+72h", "+2 weeks"],
@@ -25,6 +33,10 @@ TIMEFRAME_PRESETS = {
 }
 
 
+# ============================================================
+#  Entity loaders
+# ============================================================
+
 def load_scenario(scenario_path):
     """Load a scenario YAML file and return the parsed dict."""
     yaml = YAML(typ="safe")
@@ -32,10 +44,69 @@ def load_scenario(scenario_path):
         return yaml.load(f)
 
 
-def resolve_timeframes(scenario_data):
+def load_questions_file(questions_name, config_dir):
+    """Load a questions YAML from config/questions/<name>.yaml.
+
+    Returns:
+        (questions_list, mc_questions_list) where each is a list ready
+        for the simulation.
+    """
+    questions_path = os.path.join(config_dir, "questions", f"{questions_name}.yaml")
+    if not os.path.exists(questions_path):
+        raise FileNotFoundError(f"Questions file not found: {questions_path}")
+    yaml = YAML(typ="safe")
+    with open(questions_path, "r") as f:
+        data = yaml.load(f)
+
+    questions = [q["text"] for q in data.get("questions", [])]
+    mc_questions = []
+    for mcq in data.get("mc_questions", []):
+        mc_questions.append([mcq["question"], mcq["options"]])
+
+    return questions, mc_questions
+
+
+def load_timeframe_file(timeframe_name, config_dir):
+    """Load a timeframe YAML from config/timeframes/<name>.yaml.
+
+    Returns:
+        List of timeframe strings like ["+24h", "+72h", "+2 weeks"].
+    """
+    timeframe_path = os.path.join(config_dir, "timeframes", f"{timeframe_name}.yaml")
+    if not os.path.exists(timeframe_path):
+        # Fall back to hardcoded presets
+        if timeframe_name in TIMEFRAME_PRESETS:
+            return TIMEFRAME_PRESETS[timeframe_name]
+        raise FileNotFoundError(f"Timeframe file not found: {timeframe_path}")
+    yaml = YAML(typ="safe")
+    with open(timeframe_path, "r") as f:
+        data = yaml.load(f)
+    return list(data.get("timeframes", ["+24h"]))
+
+
+def load_run_config(run_path):
+    """Load a run config YAML from config/runs/<name>.yaml.
+
+    A run config composes:
+      - scenario (reference to config/scenarios/)
+      - actor_cluster (reference to config/actors/)
+      - graph_config (reference to config/graphs/)
+      - questions (list of references to config/questions/)
+      - timeframe (reference to config/timeframes/)
+      - nature, mode, pool (runtime params)
+
+    Returns:
+        Parsed dict.
+    """
+    yaml = YAML(typ="safe")
+    with open(run_path, "r") as f:
+        return yaml.load(f)
+
+
+def resolve_timeframes(scenario_data, config_dir=None):
     """Resolve timeframes from scenario config.
 
-    Priority: custom timeframes > preset > legacy timestep/moves fields.
+    Priority: custom timeframes > preset file > preset name > legacy timestep/moves.
 
     Returns:
         (timeframes, timestep, moves_total) where timeframes is a list of
@@ -46,11 +117,18 @@ def resolve_timeframes(scenario_data):
     if custom:
         return list(custom), custom[0], len(custom)
 
-    # Named preset
-    preset_name = scenario_data.get("timeframe_preset")
+    # Named preset — try file first, then hardcoded
+    preset_name = scenario_data.get("timeframe_preset") or scenario_data.get("timeframe")
     if preset_name:
+        if config_dir:
+            try:
+                timeframes = load_timeframe_file(preset_name, config_dir)
+                return list(timeframes), timeframes[0], len(timeframes)
+            except FileNotFoundError:
+                pass
+        # Hardcoded fallback
         if preset_name not in TIMEFRAME_PRESETS:
-            print(f"Warning: unknown timeframe_preset '{preset_name}', "
+            print(f"Warning: unknown timeframe '{preset_name}', "
                   f"available: {', '.join(TIMEFRAME_PRESETS.keys())}")
         timeframes = TIMEFRAME_PRESETS.get(preset_name, TIMEFRAME_PRESETS["short"])
         return list(timeframes), timeframes[0], len(timeframes)
@@ -59,6 +137,77 @@ def resolve_timeframes(scenario_data):
     timestep = scenario_data.get("timestep", "month")
     moves = scenario_data.get("moves", 3)
     return None, timestep, moves
+
+
+def resolve_questions(run_data, scenario_data, config_dir,
+                      question_filter=None):
+    """Resolve questions from run config, scenario, or individual selection.
+
+    Args:
+        run_data: Run config dict (may be None for legacy mode).
+        scenario_data: Scenario dict (may have inline questions).
+        config_dir: Path to config/ directory.
+        question_filter: Optional list of question IDs or texts to select.
+
+    Returns:
+        (questions, mc_questions) where questions is a list of strings
+        and mc_questions is a list of [question, options] pairs.
+    """
+    all_questions = []
+    all_mc_questions = []
+
+    # Load from run config question references
+    if run_data and run_data.get("questions"):
+        q_refs = run_data["questions"]
+        if isinstance(q_refs, str):
+            q_refs = [q_refs]
+        for q_ref in q_refs:
+            qs, mcs = load_questions_file(q_ref, config_dir)
+            all_questions.extend(qs)
+            all_mc_questions.extend(mcs)
+
+    # Fall back to inline questions in scenario
+    if not all_questions and not all_mc_questions:
+        for q in scenario_data.get("questions", []):
+            if isinstance(q, dict):
+                all_questions.append(q.get("text", ""))
+            else:
+                all_questions.append(q)
+        for mcq in scenario_data.get("mc_questions", []):
+            all_mc_questions.append([mcq["question"], mcq["options"]])
+
+    # Default question if nothing found
+    if not all_questions and not all_mc_questions:
+        all_questions = ["In one sentence, what was the outcome?"]
+
+    # Apply question filter if specified
+    if question_filter:
+        filter_set = set(question_filter)
+        # Filter open-ended questions by text match or index
+        filtered_q = []
+        for i, q in enumerate(all_questions):
+            if q in filter_set or str(i) in filter_set:
+                filtered_q.append(q)
+            # Also match by question ID if we loaded from files
+            # (partial text match for convenience)
+            elif any(f.lower() in q.lower() for f in filter_set):
+                filtered_q.append(q)
+
+        # Filter MC questions similarly
+        filtered_mc = []
+        for mc_q, mc_opts in all_mc_questions:
+            if mc_q in filter_set:
+                filtered_mc.append([mc_q, mc_opts])
+            elif any(f.lower() in mc_q.lower() for f in filter_set):
+                filtered_mc.append([mc_q, mc_opts])
+
+        if filtered_q or filtered_mc:
+            all_questions = filtered_q
+            all_mc_questions = filtered_mc
+        else:
+            print(f"Warning: question filter matched nothing, using all questions.")
+
+    return all_questions, all_mc_questions
 
 
 def load_actor_registry(config_dir):
@@ -136,18 +285,25 @@ def build_persona(actor):
     return " ".join(parts)
 
 
-def resolve_actors(scenario_data, config_dir):
-    """Resolve actors from scenario inline definitions and/or cluster reference."""
+def resolve_actors(scenario_data, config_dir, run_data=None):
+    """Resolve actors from run config, scenario, or actor cluster."""
     actors = []
 
-    # Load from cluster if specified
-    cluster_name = scenario_data.get("actor_cluster")
+    # Actor cluster from run config or scenario
+    cluster_name = None
+    if run_data:
+        cluster_name = run_data.get("actor_cluster")
+    if not cluster_name:
+        cluster_name = scenario_data.get("actor_cluster")
+
     if cluster_name:
         cluster = load_actor_cluster(cluster_name, config_dir)
         cluster_actors = cluster.get("actors", [])
 
         # Filter to active_actors if specified
         active_ids = scenario_data.get("active_actors")
+        if run_data and run_data.get("active_actors"):
+            active_ids = run_data["active_actors"]
         if active_ids:
             active_set = set(active_ids)
             cluster_actors = [a for a in cluster_actors if a["id"] in active_set]
@@ -168,6 +324,46 @@ def resolve_actors(scenario_data, config_dir):
     return actors
 
 
+# ============================================================
+#  Run config resolver
+# ============================================================
+
+def resolve_run_config(run_path, config_dir):
+    """Resolve a run config into all component data.
+
+    Returns:
+        Dict with resolved scenario_data, actors, questions, timeframes,
+        and runtime params.
+    """
+    run_data = load_run_config(run_path)
+
+    # Load the scenario
+    scenario_name = run_data.get("scenario")
+    if not scenario_name:
+        raise ValueError("Run config must specify a 'scenario'.")
+    scenario_path = os.path.join(config_dir, "scenarios", f"{scenario_name}.yaml")
+    if not os.path.exists(scenario_path):
+        raise FileNotFoundError(f"Scenario not found: {scenario_path}")
+    scenario_data = load_scenario(scenario_path)
+
+    # Merge run-level fields into scenario_data for downstream compat
+    # (run config overrides scenario defaults)
+    for key in ("nature", "mode", "graph_config", "actor_cluster",
+                "timeframe", "timeframe_preset", "timeframes"):
+        if key in run_data and run_data[key] is not None:
+            scenario_data[key] = run_data[key]
+
+    # Map 'timeframe' key to 'timeframe_preset' for resolve_timeframes()
+    if "timeframe" in run_data and "timeframe_preset" not in scenario_data:
+        scenario_data["timeframe_preset"] = run_data["timeframe"]
+
+    return run_data, scenario_data, scenario_path
+
+
+# ============================================================
+#  Main runner
+# ============================================================
+
 async def run_scenario(
     scenario_path,
     pool_name=None,
@@ -184,24 +380,41 @@ async def run_scenario(
     reference_urls=None,
     track_predictions=True,
     sync_hf=True,
+    run_config_path=None,
+    question_filter=None,
 ):
-    """Run a simulation from a scenario YAML file."""
+    """Run a simulation from a scenario YAML file or run config.
+
+    Args:
+        scenario_path: Path to scenario YAML (used if run_config_path is None).
+        run_config_path: Path to run config YAML (overrides scenario_path).
+        question_filter: Optional list of question texts/IDs to run (subset).
+    """
 
     # Resolve config directory
     config_dir = os.path.dirname(scenario_path)
     if os.path.basename(config_dir) == "scenarios":
         config_dir = os.path.dirname(config_dir)
+    elif os.path.basename(config_dir) == "runs":
+        config_dir = os.path.dirname(config_dir)
 
-    # Load scenario
-    scenario_data = load_scenario(scenario_path)
+    # Load via run config or direct scenario
+    run_data = None
+    if run_config_path:
+        run_data, scenario_data, scenario_path = resolve_run_config(
+            run_config_path, config_dir,
+        )
+    else:
+        scenario_data = load_scenario(scenario_path)
+
     title = scenario_data["title"]
     scenario_text = scenario_data["scenario"]
-    timeframes, timestep, moves_total = resolve_timeframes(scenario_data)
+    timeframes, timestep, moves_total = resolve_timeframes(scenario_data, config_dir)
     nature = scenario_data.get("nature", True)
     mode = scenario_data.get("mode", ["geopol"])
 
     # Resolve actors
-    actors = resolve_actors(scenario_data, config_dir)
+    actors = resolve_actors(scenario_data, config_dir, run_data)
     if not actors:
         print("Error: No actors defined in scenario or actor cluster.")
         sys.exit(1)
@@ -215,6 +428,11 @@ async def run_scenario(
     actor_id_map = {a["name"]: a["id"] for a in actors}
     actor_name_map = {a["id"]: a["name"] for a in actors}
 
+    # Resolve questions
+    questions, mc_questions = resolve_questions(
+        run_data, scenario_data, config_dir, question_filter,
+    )
+
     if verbosity >= 1:
         print(f"\n  Scenario: {title}")
         print(f"  Actors:   {num_players}")
@@ -223,6 +441,7 @@ async def run_scenario(
         else:
             print(f"  Moves:    {moves_total} × {timestep}")
         print(f"  Actors:   {', '.join(a['name'] for a in actors)}")
+        print(f"  Questions: {len(questions)} open + {len(mc_questions)} MC")
         if graph_config.name != "default":
             features = []
             if graph_config.has_visibility_rules:
@@ -234,6 +453,8 @@ async def run_scenario(
             if graph_config.has_adaptive_tempo:
                 features.append("adaptive-tempo")
             print(f"  Subgraph: {graph_config.name} ({', '.join(features)})")
+        if run_data:
+            print(f"  Run config: {os.path.basename(run_config_path or '')}")
         print()
 
     # Load pool
@@ -341,10 +562,10 @@ async def run_scenario(
     _move_counter = [0]
     _current_escalation = [None]  # track for adaptive tempo
 
-    async def adjudicate_fn(history, responses, nature_val, timestep_val, mode_val):
+    async def adjudicate_fn(history, responses, nature, timestep=None, mode=None):
         # Use timeframe label for current move if available
         if timeframes and _move_counter[0] < len(timeframes):
-            timestep_val = timeframes[_move_counter[0]]
+            timestep = timeframes[_move_counter[0]]
 
         # Adaptive tempo: override timestep based on escalation level
         if graph_config.has_adaptive_tempo and _current_escalation[0] is not None:
@@ -352,7 +573,7 @@ async def run_scenario(
             if adaptive_ts:
                 if verbosity >= 2:
                     print(f"  [adaptive-tempo] escalation={_current_escalation[0]} → timestep={adaptive_ts}")
-                timestep_val = adaptive_ts
+                timestep = adaptive_ts
 
         _move_counter[0] += 1
 
@@ -366,7 +587,7 @@ async def run_scenario(
         # Shock injection: replace generic "unexpected consequences" with
         # domain-specific shocks from the graph config taxonomy
         shock_inject = None
-        if graph_config.has_shocks and random.random() < nature_val:
+        if graph_config.has_shocks and random.random() < nature:
             shock = graph_config.select_shock()
             if shock:
                 shock_inject = shock
@@ -377,7 +598,7 @@ async def run_scenario(
         custom_query = None
         if shock_inject or graph_config.has_escalation_tracking:
             parts = []
-            if "geopol" in mode_val:
+            if "geopol" in mode:
                 parts.append(
                     "Describe these plans being carried out, assuming the "
                     "leaders above issue no further orders."
@@ -385,7 +606,7 @@ async def run_scenario(
             else:
                 parts.append(
                     f"Weave these plans into a cohesive narrative of what "
-                    f"happens in the next {timestep_val}."
+                    f"happens in the next {timestep}."
                 )
 
             if shock_inject:
@@ -395,7 +616,7 @@ async def run_scenario(
                     f"{shock_inject['trigger']}\n"
                     f"Consequences: {shock_inject.get('consequences', '')}"
                 )
-            elif random.random() < nature_val:
+            elif random.random() < nature:
                 parts.append(" Include unexpected consequences.")
 
             parts.append(graph_config.get_escalation_prompt_suffix())
@@ -405,14 +626,14 @@ async def run_scenario(
             # We handled nature/shocks ourselves — pass nature=0 to avoid double-roll
             output = await narrator.adjudicate(
                 history=h, responses=r, nature=0,
-                timestep=timestep_val, mode=mode_val,
+                timestep=timestep, mode=mode,
                 query=custom_query,
             )
         else:
             # No graph config features active — use default adjudication
             output = await narrator.adjudicate(
-                history=h, responses=r, nature=nature_val,
-                timestep=timestep_val, mode=mode_val,
+                history=h, responses=r, nature=nature,
+                timestep=timestep, mode=mode,
             )
 
         # Parse escalation data from output if tracking is enabled
@@ -432,14 +653,6 @@ async def run_scenario(
         for entry in history:
             h.add(entry["name"], entry["text"])
         return await narrator.assess(history=h, query=query, mc=mc)
-
-    # Questions
-    questions = scenario_data.get("questions", [
-        "In one sentence, what was the outcome?",
-    ])
-    mc_questions = []
-    for mcq in scenario_data.get("mc_questions", []):
-        mc_questions.append([mcq["question"], mcq["options"]])
 
     # Build initial state
     initial_state = {
