@@ -17,6 +17,10 @@ For each prediction, provide:
 - probability: Numeric probability as a decimal 0.0-1.0
 - confidence: One of "Low", "Medium", "High", "Very High"
 - horizon: Time horizon using one of: 24h, 72h, 1w, 1m, 3m, 6m, 1y
+- actor_name: The primary actor/decision-maker this prediction is about (or null if systemic)
+- perspective_name: The analytical perspective (e.g. "military", "diplomatic", "economic", "consensus", or null)
+
+{actors_hint}
 
 Return a JSON array. If no extractable predictions exist, return [].
 
@@ -48,6 +52,7 @@ class PredictionExtractor:
         assessments: list[dict],
         run_id: str,
         run_date: str | None = None,
+        actor_names: list[str] | None = None,
     ) -> list[Prediction]:
         """Extract predictions from assessment Q&A pairs.
 
@@ -55,6 +60,7 @@ class PredictionExtractor:
             assessments: List of {"question": str, "answer": str} dicts.
             run_id: The run ID to associate predictions with.
             run_date: ISO date string for the simulation run (for computing windows).
+            actor_names: List of actor names in the simulation (for structured extraction).
 
         Returns:
             List of Prediction objects ready for storage.
@@ -75,6 +81,7 @@ class PredictionExtractor:
                 answer=answer,
                 run_id=run_id,
                 run_date=run_date,
+                actor_names=actor_names,
             )
             all_predictions.extend(preds)
 
@@ -86,11 +93,17 @@ class PredictionExtractor:
         answer: str,
         run_id: str,
         run_date: str,
+        actor_names: list[str] | None = None,
     ) -> list[Prediction]:
+        actors_hint = ""
+        if actor_names:
+            actors_hint = f"Actors in this simulation: {', '.join(actor_names)}\nUse these exact names for actor_name when applicable."
+
         prompt = EXTRACTION_PROMPT.format(
             question=question,
             answer=answer[:4000],
             run_date=run_date,
+            actors_hint=actors_hint,
         )
 
         response = await self.llm_client.complete(
@@ -168,6 +181,8 @@ class PredictionExtractor:
                 window_closes=window_closes,
                 source_question=question,
                 raw_answer=answer,
+                actor_name=item.get("actor_name"),
+                perspective_name=item.get("perspective_name"),
             ))
 
         return predictions

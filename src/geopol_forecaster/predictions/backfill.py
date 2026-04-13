@@ -125,6 +125,7 @@ def _import_forecasts_json(
     # Create run
     run = PredictionRun(
         scenario_title=title,
+        run_name=title,
         created_at=run_date + "T00:00:00+00:00",
         source="geopol-import",
     )
@@ -160,7 +161,9 @@ def _import_forecasts_json(
                     horizon=horizon,
                     window_opens=run_date,
                     window_closes=window_closes,
+                    source_question=f"{lens_name} lens — {horizon_key} forecast",
                     lens=lens_name,
+                    perspective_name=lens_name,
                     created_at=run_date + "T00:00:00+00:00",
                 ))
 
@@ -178,7 +181,9 @@ def _import_forecasts_json(
                 run_id=run.id,
                 prediction_text=text,
                 confidence=pred_obj.get("confidence"),
+                source_question="High-confidence consensus prediction",
                 lens="consensus",
+                perspective_name="consensus",
                 created_at=run_date + "T00:00:00+00:00",
             ))
 
@@ -207,6 +212,7 @@ def _import_chairman_report(
     # Create run
     run = PredictionRun(
         scenario_title=title,
+        run_name=title,
         created_at=run_date + "T00:00:00+00:00",
         source="geopol-import",
     )
@@ -299,7 +305,9 @@ def _parse_predictions_table(content: str, run_id: str, run_date: str) -> list[P
             horizon=horizon,
             window_opens=run_date,
             window_closes=window_closes,
+            source_question="Chairman report — key predictions table",
             lens="chairman",
+            perspective_name="chairman",
             created_at=run_date + "T00:00:00+00:00",
         ))
 

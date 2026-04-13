@@ -86,6 +86,7 @@ class PredictionRun(BaseModel):
     id: str = Field(default_factory=_new_id)
     created_at: str = Field(default_factory=_now_iso)
     scenario_title: str
+    run_name: Optional[str] = None
     scenario_hash: Optional[str] = None
     pool_name: Optional[str] = None
     models_used: Optional[dict] = None
@@ -109,6 +110,8 @@ class Prediction(BaseModel):
     source_question: Optional[str] = None
     raw_answer: Optional[str] = None
     lens: Optional[str] = None
+    actor_name: Optional[str] = None
+    perspective_name: Optional[str] = None
     created_at: str = Field(default_factory=_now_iso)
 
 

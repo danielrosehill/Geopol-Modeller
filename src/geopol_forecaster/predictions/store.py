@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS runs (
     id TEXT PRIMARY KEY,
     created_at TEXT NOT NULL,
     scenario_title TEXT NOT NULL,
+    run_name TEXT,
     scenario_hash TEXT,
     pool_name TEXT,
     models_used TEXT,
@@ -40,6 +41,8 @@ CREATE TABLE IF NOT EXISTS predictions (
     source_question TEXT,
     raw_answer TEXT,
     lens TEXT,
+    actor_name TEXT,
+    perspective_name TEXT,
     created_at TEXT NOT NULL
 );
 
@@ -72,7 +75,15 @@ CREATE TABLE IF NOT EXISTS schema_version (
 );
 """
 
-_CURRENT_SCHEMA_VERSION = 1
+_CURRENT_SCHEMA_VERSION = 2
+
+_MIGRATIONS = {
+    2: [
+        "ALTER TABLE runs ADD COLUMN run_name TEXT",
+        "ALTER TABLE predictions ADD COLUMN actor_name TEXT",
+        "ALTER TABLE predictions ADD COLUMN perspective_name TEXT",
+    ],
+}
 
 
 class PredictionStore:
@@ -93,13 +104,26 @@ class PredictionStore:
 
     def _create_tables(self):
         self._conn.executescript(_SCHEMA)
-        # Check/set schema version
+        # Check/set schema version and run migrations
         row = self._conn.execute(
             "SELECT version FROM schema_version ORDER BY version DESC LIMIT 1"
         ).fetchone()
-        if row is None:
+        current = row[0] if row else 0
+        if current == 0:
             self._conn.execute(
                 "INSERT INTO schema_version (version) VALUES (?)",
+                (_CURRENT_SCHEMA_VERSION,),
+            )
+            self._conn.commit()
+        elif current < _CURRENT_SCHEMA_VERSION:
+            for ver in range(current + 1, _CURRENT_SCHEMA_VERSION + 1):
+                for stmt in _MIGRATIONS.get(ver, []):
+                    try:
+                        self._conn.execute(stmt)
+                    except sqlite3.OperationalError:
+                        pass  # column already exists
+            self._conn.execute(
+                "UPDATE schema_version SET version = ?",
                 (_CURRENT_SCHEMA_VERSION,),
             )
             self._conn.commit()
@@ -114,12 +138,13 @@ class PredictionStore:
     def save_run(self, run: PredictionRun) -> str:
         self._conn.execute(
             """INSERT OR REPLACE INTO runs
-               (id, created_at, scenario_title, scenario_hash, pool_name,
+               (id, created_at, scenario_title, run_name, scenario_hash, pool_name,
                 models_used, runtime_seconds, checkpoint_path, report_path,
                 source, pipeline_version)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
-                run.id, run.created_at, run.scenario_title, run.scenario_hash,
+                run.id, run.created_at, run.scenario_title, run.run_name,
+                run.scenario_hash,
                 run.pool_name, json.dumps(run.models_used) if run.models_used else None,
                 run.runtime_seconds, run.checkpoint_path, run.report_path,
                 run.source, run.pipeline_version,
@@ -152,12 +177,13 @@ class PredictionStore:
             """INSERT OR REPLACE INTO predictions
                (id, run_id, prediction_text, probability, confidence, horizon,
                 window_opens, window_closes, source_question, raw_answer, lens,
-                created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                actor_name, perspective_name, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 pred.id, pred.run_id, pred.prediction_text, pred.probability,
                 pred.confidence, pred.horizon, pred.window_opens, pred.window_closes,
-                pred.source_question, pred.raw_answer, pred.lens, pred.created_at,
+                pred.source_question, pred.raw_answer, pred.lens,
+                pred.actor_name, pred.perspective_name, pred.created_at,
             ),
         )
         self._conn.commit()
@@ -168,13 +194,14 @@ class PredictionStore:
             """INSERT OR REPLACE INTO predictions
                (id, run_id, prediction_text, probability, confidence, horizon,
                 window_opens, window_closes, source_question, raw_answer, lens,
-                created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                actor_name, perspective_name, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             [
                 (
                     p.id, p.run_id, p.prediction_text, p.probability,
                     p.confidence, p.horizon, p.window_opens, p.window_closes,
-                    p.source_question, p.raw_answer, p.lens, p.created_at,
+                    p.source_question, p.raw_answer, p.lens,
+                    p.actor_name, p.perspective_name, p.created_at,
                 )
                 for p in preds
             ],

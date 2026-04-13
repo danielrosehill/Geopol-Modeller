@@ -1,4 +1,4 @@
-id,created_at,scenario_title,scenario_hash,pool_name,models_used,runtime_seconds,checkpoint_path,report_path,source,pipeline_version
-4a217fb2ab5e,2026-04-10T00:00:00+00:00,Iran Regime Change Forecast (10/04/2026),,,,,,,geopol-import,
-84e5ddf5ba3a,2026-04-09T00:00:00+00:00,Iran-Israel-US Ceasefire Prediction (09/04/2026),,,,,,,geopol-import,
-d825e1939be9,2026-03-24T00:00:00+00:00,Iran-Israel-US Conflict Trajectory (24/03/2026),,,,,,,geopol-import,
+id,created_at,scenario_title,run_name,scenario_hash,pool_name,models_used,runtime_seconds,checkpoint_path,report_path,source,pipeline_version
+6cea2efcf45e,2026-04-10T00:00:00+00:00,Iran Regime Change Forecast (10/04/2026),Iran Regime Change Forecast (10/04/2026),,,,,,,geopol-import,
+ce12b75210c8,2026-04-09T00:00:00+00:00,Iran-Israel-US Ceasefire Prediction (09/04/2026),Iran-Israel-US Ceasefire Prediction (09/04/2026),,,,,,,geopol-import,
+a22b2857a939,2026-03-24T00:00:00+00:00,Iran-Israel-US Conflict Trajectory (24/03/2026),Iran-Israel-US Conflict Trajectory (24/03/2026),,,,,,,geopol-import,

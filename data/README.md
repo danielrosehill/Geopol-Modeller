@@ -24,14 +24,16 @@ Structured predictions extracted from multi-agent geopolitical wargaming simulat
 | File | Description |
 |------|-------------|
 | `runs.csv` | Simulation run metadata — scenario, model pool, runtime, timestamps |
-| `predictions.csv` | Discrete testable predictions with probability estimates, time horizons, and prediction windows |
-| `assessments.csv` | Accuracy grades for predictions whose windows have closed |
+| `predictions.csv` | Discrete testable predictions with probability estimates, time horizons, actor attribution, and denormalized run metadata |
+| `assessments.csv` | Post-prediction accuracy grades for predictions whose evaluation windows have closed |
 
 ## How It Works
 
-Geopol Forecaster uses LLM agents with geopolitical personas to simulate multi-actor wargames. After each simulation run, an extractor agent parses the simulation output into discrete, testable predictions with probability estimates and time windows.
+Geopol Forecaster uses LLM agents with geopolitical personas to simulate multi-actor wargames. After each simulation run, an extractor agent parses the simulation output into discrete, testable predictions with probability estimates, time windows, and actor attribution.
 
-This dataset is automatically synced from the main repository via GitHub Actions on every push.
+Predictions are graded for accuracy once their evaluation windows close. The grading system uses real-world evidence to score each prediction.
+
+This dataset is automatically synced from the [main repository](https://github.com/danielrosehill/Geopol-Modeller) via GitHub Actions on every push.
 
 ## Schema
 
@@ -42,11 +44,12 @@ This dataset is automatically synced from the main repository via GitHub Actions
 | id | string | Unique run identifier |
 | created_at | datetime | When the run was executed |
 | scenario_title | string | Name of the scenario simulated |
+| run_name | string | Human-readable run name (scenario + pool) |
 | scenario_hash | string | Hash of scenario config for reproducibility |
 | pool_name | string | Model pool used (e.g. anthropic, deepseek, openai) |
-| models_used | json | Dict of model IDs by role |
+| models_used | json | Dict of model IDs by role (planner, narrator, player, advisor) |
 | runtime_seconds | float | Wall-clock simulation time |
-| source | string | Origin system |
+| source | string | Origin: `geopol-forecaster` (live run) or `geopol-import` (backfill) |
 
 ### predictions.csv
 
@@ -55,13 +58,18 @@ This dataset is automatically synced from the main repository via GitHub Actions
 | id | string | Unique prediction identifier |
 | run_id | string | FK to runs |
 | prediction_text | string | The testable prediction statement |
-| probability | float | Estimated probability (0-1) |
-| confidence | string | Confidence qualifier |
-| horizon | string | Time horizon (e.g. 1w, 1m, 3m) |
+| probability | float | Estimated probability (0.0-1.0) |
+| confidence | string | Confidence qualifier (Low, Medium, High, Very High) |
+| horizon | string | Time horizon (e.g. 24h, 72h, 1w, 1m, 3m, 6m, 1y) |
 | window_opens | datetime | Start of evaluation window |
 | window_closes | datetime | End of evaluation window |
-| source_question | string | The assessment question that generated this prediction |
-| lens | string | Analytical lens used |
+| source_question | string | The assessment question or lens that generated this prediction |
+| lens | string | Analytical lens (neutral, pessimistic, optimistic, consensus, chairman, etc.) |
+| actor_name | string | Primary actor/decision-maker this prediction is about (null if systemic) |
+| perspective_name | string | Analytical perspective used for this prediction |
+| run_name | string | Denormalized from runs — human-readable run name |
+| pool_name | string | Denormalized from runs — model pool used |
+| models_used | json | Denormalized from runs — model IDs by role |
 
 ### assessments.csv
 
@@ -69,13 +77,30 @@ This dataset is automatically synced from the main repository via GitHub Actions
 |--------|------|-------------|
 | id | string | Unique assessment identifier |
 | prediction_id | string | FK to predictions |
-| assessed_at | datetime | When the assessment was made |
-| grade | string | correct, largely_correct, partially_correct, incorrect, not_yet_testable |
-| score | float | Numeric score (1.0, 0.75, 0.5, 0.0) |
+| assessed_at | datetime | When the assessment was performed |
+| grade | string | `correct`, `largely_correct`, `partially_correct`, `incorrect`, `not_yet_testable` |
+| score | float | Numeric score: 1.0, 0.75, 0.5, 0.0, or null |
 | outcome_summary | string | What actually happened |
 | evidence_urls | json | Supporting evidence links |
-| assessor | string | Who/what performed the assessment |
+| evidence_text | string | Extracted evidence text |
+| assessor | string | Who/what performed the assessment (`auto` or manual) |
+| notes | string | Additional context |
+| prediction_text | string | Denormalized — the original prediction |
+| probability | float | Denormalized — original probability estimate |
+| horizon | string | Denormalized — original time horizon |
+| run_name | string | Denormalized — human-readable run name |
+| pool_name | string | Denormalized — model pool used |
+
+## Grading System
+
+| Grade | Score | Meaning |
+|-------|-------|---------|
+| correct | 1.0 | Prediction verified by evidence |
+| largely_correct | 0.75 | Core claim correct, minor details differ |
+| partially_correct | 0.5 | Some elements correct, others wrong |
+| incorrect | 0.0 | Prediction did not materialize |
+| not_yet_testable | null | Evaluation window still open or insufficient evidence |
 
 ## Source
 
-Generated by [Geopol Forecaster](https://github.com/danielrosehill/Geopol-Modeller) — a fork of the Snow Globe LLM wargaming framework.
+Generated by [Geopol Forecaster](https://github.com/danielrosehill/Geopol-Modeller) — a multi-agent geopolitical wargaming platform built on LangGraph and OpenRouter.
