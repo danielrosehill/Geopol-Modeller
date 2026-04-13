@@ -296,15 +296,15 @@ examples:
     cl_parser.add_argument("--limit", type=int, default=20,
                            help="Number of entries to show")
 
-    # --- 'sync-hf' subcommand ---
-    sync_parser = subparsers.add_parser(
-        "sync-hf", help="Sync all predictions to Hugging Face dataset",
+    # --- 'export' subcommand ---
+    export_parser = subparsers.add_parser(
+        "export", help="Export all predictions to data/ CSVs (for HF sync via GitHub Actions)",
     )
-    sync_parser.add_argument(
-        "--dataset-id", type=str, default=None,
-        help="HF dataset ID (default: danielrosehill/Geopol-Forecaster-Predictions)",
+    export_parser.add_argument(
+        "--output-dir", type=str, default=None,
+        help="Output directory (default: data/)",
     )
-    sync_parser.add_argument(
+    export_parser.add_argument(
         "-v", "--verbosity", type=int, default=1,
         help="Verbosity level 0-4 (default: 1)",
     )
@@ -526,20 +526,21 @@ def _run_changelog(args):
     print(get_changelog(store, limit=args.limit))
 
 
-def _run_sync_hf(args):
-    """Handle the 'sync-hf' subcommand."""
-    from .predictions.hf_sync import sync_to_huggingface
+def _run_export(args):
+    """Handle the 'export' subcommand."""
+    from .predictions.hf_sync import export_predictions_csv
 
     kwargs = {"verbosity": args.verbosity}
-    if args.dataset_id:
-        kwargs["dataset_id"] = args.dataset_id
+    if args.output_dir:
+        kwargs["output_dir"] = args.output_dir
 
-    counts = sync_to_huggingface(**kwargs)
+    counts = export_predictions_csv(**kwargs)
     total = sum(counts.values())
     if total:
-        print(f"\nSynced {total} total rows to Hugging Face.")
+        print(f"\nExported {total} total rows to data/ CSVs.")
+        print("Commit and push to sync to Hugging Face via GitHub Actions.")
     else:
-        print("\nNothing to sync.")
+        print("\nNothing to export.")
 
 
 def main():
@@ -561,8 +562,8 @@ def main():
         _run_changelog(args)
         return
 
-    if args.command == "sync-hf":
-        _run_sync_hf(args)
+    if args.command == "export":
+        _run_export(args)
         return
 
     # Default: run simulation (either 'run' subcommand or no subcommand)

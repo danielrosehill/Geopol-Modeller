@@ -1,39 +1,36 @@
-"""Sync the local prediction store to a Hugging Face dataset."""
+"""Export prediction data to CSV files in the data/ directory.
+
+These CSVs are committed to git and synced to the Hugging Face dataset
+(danielrosehill/Geopol-Forecaster-Predictions) via GitHub Actions on push.
+"""
 
 from __future__ import annotations
 
+import csv
+import json
 import os
-from typing import Optional
-
-HF_DATASET_ID = "danielrosehill/Geopol-Forecaster-Predictions"
 
 
-def sync_to_huggingface(
+def export_predictions_csv(
     db_path: str | None = None,
-    dataset_id: str = HF_DATASET_ID,
-    token: str | None = None,
+    output_dir: str | None = None,
     verbosity: int = 1,
 ) -> dict:
-    """Export all runs + predictions from the local SQLite store and push
-    to a Hugging Face dataset as Parquet.
+    """Export all runs, predictions, and assessments from the local SQLite
+    store to CSV files in the data/ directory.
 
-    Returns a dict with counts of rows synced per table.
+    Returns a dict with counts of rows exported per table.
     """
-    try:
-        from huggingface_hub import HfApi
-    except ImportError:
-        raise RuntimeError(
-            "huggingface_hub is required for HF sync. "
-            "Install it with: pip install huggingface_hub"
-        )
-
     from .store import PredictionStore
+
+    if output_dir is None:
+        output_dir = os.path.join(os.getcwd(), "data")
+    os.makedirs(output_dir, exist_ok=True)
 
     store = PredictionStore(db_path=db_path)
 
     runs = store.get_runs()
     predictions = store.get_predictions()
-    # Assessments — reuse the raw query since there's no get_all_assessments
     rows = store._conn.execute(
         "SELECT * FROM assessments ORDER BY assessed_at"
     ).fetchall()
@@ -41,15 +38,8 @@ def sync_to_huggingface(
 
     if not runs and not predictions:
         if verbosity >= 1:
-            print("[hf-sync] Nothing to sync — store is empty.")
+            print("[export] Nothing to export — store is empty.")
         return {"runs": 0, "predictions": 0, "assessments": 0}
-
-    # Build CSV content for each table
-    import csv
-    import io
-    import tempfile
-
-    api = HfApi(token=token or os.environ.get("HF_TOKEN"))
 
     counts = {}
 
@@ -62,9 +52,6 @@ def sync_to_huggingface(
             counts[name] = 0
             continue
 
-        # Flatten dict values to JSON strings for CSV compatibility
-        import json
-
         flat_data = []
         for row in data:
             flat = {}
@@ -75,30 +62,15 @@ def sync_to_huggingface(
                     flat[k] = v
             flat_data.append(flat)
 
-        buf = io.StringIO()
-        writer = csv.DictWriter(buf, fieldnames=flat_data[0].keys())
-        writer.writeheader()
-        writer.writerows(flat_data)
+        csv_path = os.path.join(output_dir, f"{name}.csv")
+        with open(csv_path, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=flat_data[0].keys())
+            writer.writeheader()
+            writer.writerows(flat_data)
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".csv", delete=False, prefix=f"{name}_"
-        ) as f:
-            f.write(buf.getvalue())
-            tmp_path = f.name
-
-        try:
-            api.upload_file(
-                path_or_fileobj=tmp_path,
-                path_in_repo=f"data/{name}.csv",
-                repo_id=dataset_id,
-                repo_type="dataset",
-                commit_message=f"Sync {name} ({len(flat_data)} rows)",
-            )
-            counts[name] = len(flat_data)
-            if verbosity >= 1:
-                print(f"[hf-sync] Pushed {len(flat_data)} {name} rows to {dataset_id}")
-        finally:
-            os.unlink(tmp_path)
+        counts[name] = len(flat_data)
+        if verbosity >= 1:
+            print(f"[export] Wrote {len(flat_data)} {name} rows → {csv_path}")
 
     store.close()
     return counts

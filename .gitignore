@@ -1,6 +1,5 @@
 *.swp
 logs
-data
 secrets
 .env
 __pycache__/

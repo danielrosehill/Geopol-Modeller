@@ -585,19 +585,19 @@ async def run_scenario(
             if verbosity >= 1:
                 print(f"[track] Prediction tracking failed: {e}")
 
-    # Sync predictions to Hugging Face
+    # Export predictions to data/ CSVs (synced to HF via GitHub Actions on push)
     if sync_hf and track_predictions:
         try:
-            from .predictions.hf_sync import sync_to_huggingface
+            from .predictions.hf_sync import export_predictions_csv
             if verbosity >= 1:
-                print("[hf-sync] Syncing predictions to Hugging Face...")
-            counts = sync_to_huggingface(verbosity=verbosity)
+                print("[export] Exporting predictions to data/ CSVs...")
+            counts = export_predictions_csv(verbosity=verbosity)
             if verbosity >= 1 and any(counts.values()):
                 total = sum(counts.values())
-                print(f"[hf-sync] Done — {total} rows synced.")
+                print(f"[export] Done — {total} rows exported.")
         except Exception as e:
             if verbosity >= 1:
-                print(f"[hf-sync] Sync failed: {e}")
+                print(f"[export] CSV export failed: {e}")
 
     # Post-simulation outputs
     if report:

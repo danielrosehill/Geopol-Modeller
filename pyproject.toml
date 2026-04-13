@@ -24,7 +24,6 @@ edge-tts = "*"
 trafilatura = "*"
 sse-starlette = "*"
 httpx = "*"
-huggingface_hub = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.9.0"
