@@ -55,7 +55,9 @@ geopol_image = (
     .add_local_dir("src/geopol_forecaster", remote_path="/root/src/geopol_forecaster", copy=True)
     .add_local_dir("config", remote_path="/root/config", copy=True)
     .run_commands(
-        "cd /root && PYTHONPATH=/root/src python -c 'import geopol_forecaster; print(\"package OK\")'"
+        # Remove stale llm_snowglobe package if cached from a previous image
+        "rm -rf /root/src/llm_snowglobe",
+        "cd /root && PYTHONPATH=/root/src python -c 'import geopol_forecaster; print(\"package OK\")'",
     )
 )
 
@@ -87,6 +89,12 @@ async def run_simulation(scenario_name: str, pool_name: str,
     """Run a full geopol simulation and return results."""
     import sys
     import os
+    import shutil
+
+    # Ensure stale llm_snowglobe package (old name) doesn't shadow geopol_forecaster
+    stale = "/root/src/llm_snowglobe"
+    if os.path.isdir(stale):
+        shutil.rmtree(stale)
 
     sys.path.insert(0, "/root/src")
     os.chdir("/root")
