@@ -8,6 +8,8 @@ Geopol Modeller is a fork of [Geopol Forecaster](https://github.com/IQTLabs/geop
 
 This fork rewrites the stack, adds a scenario/actor system designed for real-world crisis forecasting, and introduces prediction tracking with accuracy grading against ground truth.
 
+> **Note:** This is a different simulator from [danielrosehill/Geopol-Forecaster](https://github.com/danielrosehill/Geopol-Forecaster), which combines the original Snow Globe wargaming methodology with an LLM Council model (multiple LLM "advisors" deliberating in structured rounds). This repo (Geopol Modeller) uses the pure multi-actor simulation approach — LLM agents with geopolitical personas interact through a LangGraph state machine, producing emergent outcomes rather than structured council deliberation.
+
 ## Stack Comparison
 
 Forked 12 April 2026 from [IQTLabs/geopol](https://github.com/IQTLabs/geopol).

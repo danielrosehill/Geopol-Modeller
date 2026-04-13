@@ -1,0 +1,123 @@
+# Scenario: Israel-EU Relations — April 2026
+# Institutional and bilateral dynamics under strain
+
+title: "Israel-EU Relations: Institutional Fractures and Bilateral Realities"
+
+actor_cluster: israel-eu
+
+scenario: |
+  DATE: 13 April 2026
+
+  TRIGGER EVENT: The European Commission has announced a formal review of the
+  EU-Israel Association Agreement, citing Article 2 (human rights clause), after
+  a qualified majority of member states requested the review in the Foreign Affairs
+  Council. Hungary and Czech Republic voted against; Germany abstained. The review
+  is not a suspension — but it is the first time the mechanism has been formally
+  activated regarding Israel and represents a significant political escalation.
+
+  CONTEXT:
+  - The ICJ issued an advisory opinion in July 2024 declaring Israeli occupation
+    of Palestinian territories unlawful and calling on states to not render aid or
+    assistance. In January 2026, the ICJ ruled that Israel's conduct in Gaza
+    plausibly constitutes genocide, ordering provisional measures. EU member states
+    are split on implementation — Spain, Ireland, Belgium, and Slovenia cite legal
+    obligations to act; Germany and Italy emphasize the non-binding nature of
+    advisory opinions.
+  - The ICC issued arrest warrants for Israeli officials in late 2024. Most EU
+    states are ICC members and theoretically obligated to enforce warrants.
+    Netanyahu has not visited Europe since. Some EU states have signaled they
+    would comply; others (Hungary, Czech Republic) have explicitly said they
+    would not arrest Israeli leaders.
+  - EU-Israel bilateral trade reached approximately 36 billion euros in 2025. Israel
+    is associated to Horizon Europe, with Israeli researchers embedded in hundreds
+    of EU-funded projects. The tech and innovation relationship is deep — Israeli
+    cybersecurity, AI, and medtech firms have major European operations and customers.
+  - The European Parliament passed a non-binding resolution in March 2026 calling
+    for suspension of Horizon Europe association and review of trade preferences
+    until Israel complies with ICJ provisional measures. The resolution passed
+    with support from S&D, Greens/EFA, and The Left, with the EPP split.
+  - BDS campaigns and campus protests across Europe have intensified since late 2024.
+    Several European universities have severed institutional partnerships with
+    Israeli universities. Arms export license reviews or suspensions have occurred
+    in the Netherlands, Belgium, Spain, Italy, and (partially) Germany.
+  - Israel has accelerated its economic pivot toward Gulf states (Abraham Accords
+    trade with UAE, normalization dividends with Bahrain and Morocco) and Asian
+    partners (India defense cooperation, South Korea tech partnerships, expanded
+    China trade). Israeli officials have publicly stated that Europe is becoming
+    less relevant as a strategic partner.
+  - France under Macron has called for conditional EU engagement with Israel and
+    pushed for Palestinian state recognition as EU common policy. Germany under
+    Merz has resisted, arguing that the special historical relationship requires
+    dialogue over punitive measures.
+  - Hungary under Orban has vetoed every binding EU foreign policy statement on
+    Israel since October 2023, forcing the EU to rely on non-binding declarations
+    from the High Representative or individual member-state statements.
+  - The gap between EU institutional positions (increasingly critical) and actual
+    bilateral member-state relations (often pragmatic and cooperative) has widened
+    into a structural contradiction.
+
+  IMMEDIATE SITUATION:
+  The Association Agreement review has triggered a diplomatic crisis. Israel has
+  recalled its ambassador to the EU for consultations. The Israeli Foreign Ministry
+  has summoned EU ambassadors. Netanyahu has framed the review as "Europe repeating
+  its historical betrayals." Germany is attempting to mediate between the Commission
+  and Israel to prevent escalation to suspension. France is pushing for the review
+  to produce concrete conditions for continued preferential trade. Hungary is
+  threatening to block any review conclusions in the Council. The European Parliament
+  is demanding to be consulted. Meanwhile, bilateral trade, research cooperation,
+  and intelligence sharing continue largely undisturbed beneath the political storm.
+
+  KEY QUESTIONS AT STAKE:
+  - Does the Association Agreement review lead to concrete conditions, symbolic
+    recommendations, or quiet burial?
+  - Can Hungary continue to single-handedly block EU foreign policy consensus on Israel?
+  - Will the gap between EU institutional rhetoric and bilateral member-state
+    realities widen or narrow?
+  - Does Israel's pivot to Gulf/Asian partnerships reduce European leverage, or
+    does EU market access remain too important to forfeit?
+  - How do ICJ/ICC proceedings affect EU-Israel relations in practice — legal
+    obligation or political symbolism?
+  - Does European public opinion pressure translate into binding policy changes,
+    or does the institutional machinery absorb and defuse it?
+
+timeframe_preset: medium
+
+nature: 0.5
+mode:
+  - geopol
+
+questions:
+  - "What is the most likely outcome of the EU-Israel Association Agreement review within 6 months?"
+  - "What is the probability that the EU imposes concrete trade conditions on Israel within 1 year?"
+  - "Does Hungary's veto power on Israel-related EU foreign policy hold indefinitely, or is it circumvented?"
+  - "How significantly does Israel's Gulf/Asia economic pivot reduce European diplomatic leverage?"
+  - "What is the trajectory of EU-Israel R&D cooperation (Horizon Europe) over the next 2 years?"
+
+mc_questions:
+  - question: "What is the outcome of the Association Agreement review?"
+    options:
+      - "Concrete conditions — trade preferences linked to human rights benchmarks"
+      - "Symbolic recommendations — non-binding call for dialogue and monitoring"
+      - "Quiet burial — review concludes with no actionable outcome"
+      - "Escalation — review triggers partial suspension of the agreement"
+
+  - question: "How does the EU institutional-bilateral gap evolve?"
+    options:
+      - "Convergence — institutional pressure forces bilateral relationships to align"
+      - "Status quo — critical EU statements coexist with pragmatic bilateral ties"
+      - "Widening — member states openly defy EU institutional positions"
+      - "Fragmentation — EU foreign policy on Israel effectively ceases to exist as a common project"
+
+  - question: "What happens to EU-Israel economic cooperation?"
+    options:
+      - "Largely preserved — economic interdependence overrides political tensions"
+      - "Selective restrictions — settlement products and defense trade restricted, rest continues"
+      - "Significant disruption — Horizon Europe association suspended, trade preferences reviewed"
+      - "Major rupture — broad sanctions or suspension of association agreement"
+
+  - question: "What is the effect of Israel's diversification strategy on European leverage?"
+    options:
+      - "Minimal — EU remains Israel's largest trade partner and irreplaceable R&D ecosystem"
+      - "Moderate — Gulf and Asian partnerships reduce urgency of European ties but do not replace them"
+      - "Significant — Israel successfully reduces European economic dependence within 2 years"
+      - "Backfires — diversification rhetoric alienates Europe without delivering alternative partnerships at scale"

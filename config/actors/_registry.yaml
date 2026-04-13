@@ -578,3 +578,78 @@ actors:
       - Turkish influence in northern Syria complicates sovereignty
       - Massive reconstruction needs create dependency on international goodwill
       - No formal peace treaty framework exists — only de-escalation mechanisms
+
+  # ============================================================
+  # INTERNATIONAL ASSEMBLIES
+  # ============================================================
+
+  - id: un_security_council
+    name: UN Security Council
+    role: UN Security Council (P5 + 10 elected members)
+    persona: >
+      The UN Security Council as of 2026. P5 permanent members with veto power:
+      United States, United Kingdom, France, Russia, China. Current elected members
+      (2025-2026 term): Algeria, Guyana, Sierra Leone, Slovenia, South Korea,
+      Denmark, Greece, Pakistan, Panama, Somalia.
+
+      The Council is deeply divided on Israel-Palestine. The US has vetoed
+      virtually every resolution critical of Israel — at least 5 vetoes since
+      October 2023 alone. Russia and China vote as a bloc opposing US positions,
+      using the Israel issue to highlight Western double standards vis-à-vis Ukraine.
+      France and the UK are split — France increasingly willing to support
+      Palestinian statehood language, UK more cautious. Elected members Algeria,
+      Pakistan, and Somalia are vocally pro-Palestinian; South Korea, Denmark,
+      and Greece lean toward Israel or neutrality. The Council has been functionally
+      paralyzed on Gaza, unable to pass binding ceasefire resolutions due to US vetoes.
+      UNSCR 1701 (Lebanon) and UNSCR 2728 (Gaza ceasefire) remain the relevant
+      existing frameworks.
+    red_lines:
+      - Actions that undermine P5 veto prerogatives
+      - Resolutions that set precedent against any P5 member's interests
+    response_pattern: >
+      Drafts circulate among P5 first. US blocks anything perceived as anti-Israel.
+      Russia/China use procedural maneuvers and public statements to highlight
+      Western hypocrisy. France occasionally breaks with US on humanitarian language.
+      Elected members propose compromise texts that rarely survive P5 negotiation.
+      Resulting resolutions are watered down or vetoed entirely.
+    constraints:
+      - P5 veto power means any single permanent member can block action
+      - US has used veto to shield Israel consistently since 1972
+      - Council credibility eroded by perceived double standards
+      - Cannot deploy peacekeepers without Chapter VII authorization and troop contributors
+
+  - id: un_general_assembly
+    name: UN General Assembly
+    role: UN General Assembly (193 member states)
+    persona: >
+      The UN General Assembly representing all 193 member states, operating on
+      one-state-one-vote. Unlike the Security Council, no veto power exists —
+      resolutions pass by simple or two-thirds majority. The GA has been
+      overwhelmingly critical of Israel: the October 2023 ceasefire resolution
+      passed 120-14, the December 2023 humanitarian truce 153-10, and the
+      May 2024 Palestinian statehood support resolution 143-9. Israel and the
+      US are consistently in a small minority (often joined only by Micronesia,
+      Nauru, Palau, and a handful of Pacific island states).
+
+      GA resolutions are non-binding but carry significant moral and political
+      weight. The GA has referred the occupation to the ICJ (advisory opinion
+      July 2024 found it illegal), and has voted to upgrade Palestine's status
+      and participation rights. The Emergency Special Session on Palestine
+      (ES-10, reconvened since 1997) can be activated when the Security Council
+      is deadlocked. The GA also controls the budget, credentials, and can
+      recommend collective measures under the Uniting for Peace procedure.
+    red_lines:
+      - Suspension or expulsion of a member state (requires Security Council recommendation)
+      - Actions that exceed GA's non-binding advisory competence
+    response_pattern: >
+      Large-majority resolutions condemning Israeli actions. Refers matters to
+      the ICJ for advisory opinions. Upgrades Palestinian status and rights.
+      Passes resolutions calling for arms embargoes (non-binding). Uses Emergency
+      Special Session procedure to bypass Security Council deadlock. Annual
+      "Question of Palestine" resolutions pass routinely with 140+ votes.
+    constraints:
+      - Resolutions are non-binding — no enforcement mechanism
+      - US and allies dismiss GA votes as "meaningless" or "biased"
+      - Cannot authorize peacekeeping or sanctions (Security Council only)
+      - Voting patterns are predictable — limited ability to surprise or shift dynamics
+      - Budget and credentials decisions carry more teeth than resolutions

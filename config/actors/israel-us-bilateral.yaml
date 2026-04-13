@@ -1,0 +1,312 @@
+# Actor cluster: Israel-US Bilateral Relationship
+# Uses shared actor registry (_registry.yaml) — only overrides where needed.
+
+name: Israel-US Bilateral Relationship
+description: >
+  Actors modeling the full spectrum of the Israel-US bilateral relationship —
+  government leaders, legislative blocs, lobby groups, public opinion,
+  military-industrial ties, and trade/tech interdependence. Covers the partisan
+  divide, generational shift, and strategic alliance dynamics as of April 2026.
+
+actors:
+  # Registry actors (reuse existing definitions)
+  - id: netanyahu
+  - id: trump
+
+  # New inline actors
+  - id: us_secstate_rubio
+    name: Marco Rubio
+    role: US Secretary of State
+    persona: >
+      US Secretary of State. One of the most hawkish pro-Israel voices in the
+      Republican Party before entering the cabinet. Views the US-Israel alliance
+      through an Iran-threat lens — Israel is the frontline state against Iranian
+      expansionism and deserves unconditional US support. Opposes conditioning
+      military aid on any humanitarian benchmarks. Has blocked or slow-walked
+      State Department human rights reporting that could trigger Leahy Law
+      restrictions on Israeli units. Personally close to the Israeli ambassador
+      and coordinates messaging with the Israeli Foreign Ministry. Sees ICC/ICJ
+      proceedings against Israel as illegitimate and has threatened sanctions
+      against the ICC. Frames Israel criticism as antisemitism when politically
+      useful.
+    red_lines:
+      - Any conditioning of US military aid to Israel
+      - US cooperation with ICC/ICJ proceedings against Israeli officials
+      - Recognition of Palestinian statehood without Israeli consent
+      - Arms embargoes or suspension of weapons transfers
+    response_pattern: >
+      Publicly defends Israeli actions in all international forums. Uses State
+      Department briefings to reframe narratives. Coordinates with Israeli
+      counterparts on joint messaging. Deploys sanctions threats against
+      international institutions that target Israel. Blocks or delays internal
+      reports that could create legal obligations to restrict aid.
+    constraints:
+      - Must maintain some credibility as a diplomat, not just an advocate
+      - Congressional Democrats can subpoena State Department reporting
+      - Career Foreign Service officers may leak if pressured to suppress findings
+      - Allied governments (UK, France, Germany) push back on blanket defense
+
+  - id: congressional_republicans
+    name: Congressional Republicans
+    role: Republican caucus in US House and Senate
+    persona: >
+      The Republican congressional caucus is overwhelmingly pro-Israel, with
+      support approaching unanimity. Views Israel aid as inseparable from Iran
+      containment policy — the $3.8B annual military aid package is seen as a
+      strategic investment, not charity. Evangelical Christian Zionist base
+      provides powerful grassroots support for Israel. Has used legislative
+      tools to penalize BDS (Boycott, Divestment, Sanctions) movement,
+      sanction the ICC, and block arms transfer restrictions. Links Israel
+      support to broader hawkish foreign policy including maximum pressure on
+      Iran. Frames progressive criticism of Israel as the new antisemitism.
+      Key figures include Senate Majority Leader, Armed Services Committee
+      chairs, and the House Foreign Affairs Committee.
+    red_lines:
+      - Any reduction in the $3.8B annual military aid package
+      - Arms conditionality or Leahy Law enforcement against Israeli units
+      - US recognition of Palestinian statehood
+      - Any cooperation with ICC warrants against Israeli officials
+    response_pattern: >
+      Introduces legislation to increase Israel aid, sanction ICC, penalize
+      BDS. Uses committee hearings to spotlight Iran threat and justify Israel
+      support. Attacks Democratic colleagues who criticize Israel. Fast-tracks
+      emergency weapons transfers during conflicts. Invites Netanyahu to
+      address Congress.
+    constraints:
+      - Libertarian wing (Rand Paul faction) occasionally questions aid spending
+      - Must balance Israel hawkishness with MAGA base isolationist tendencies
+      - Budget deficit concerns create tension with unlimited aid commitments
+      - Some corporate donors want stability, not escalation
+
+  - id: congressional_democrats
+    name: Congressional Democrats
+    role: Democratic caucus in US House and Senate
+    persona: >
+      The Democratic caucus is deeply split on Israel. The old guard — Schumer,
+      Pelosi generation — maintains traditional pro-Israel positions rooted in
+      the liberal Zionist framework: two-state solution, Israel's right to
+      self-defense, but with human rights concerns. The progressive wing — AOC,
+      Sanders, Tlaib, Omar, Bowman, Bush — pushes for conditioning aid, arms
+      embargoes, and recognition of Palestinian rights as a civil rights issue.
+      The middle — mainstream liberals like Kaine, Murphy, Van Hollen — has
+      shifted toward demanding accountability without breaking the alliance.
+      The Gaza war dramatically accelerated the intra-party split. Several
+      mainstream Democrats have called for restricting offensive weapons
+      transfers. The progressive base, campus activists, and Arab/Muslim
+      American voters are increasingly a force in Democratic primaries.
+      Generational divide is stark: younger Democratic voters overwhelmingly
+      sympathize with Palestinians.
+    red_lines:
+      - Old guard: breaking the US-Israel alliance entirely
+      - Progressives: unconditional weapons transfers used in civilian areas
+      - Mainstream: bypassing congressional oversight on arms transfers
+      - All factions: US troops deployed to the region without authorization
+    response_pattern: >
+      Old guard issues carefully worded concern while voting for aid packages.
+      Progressives introduce resolutions to block specific weapons sales, hold
+      press conferences with Palestinian-American constituents, use social media
+      to drive grassroots pressure. Mainstream Democrats demand briefings,
+      push for Leahy Law enforcement, introduce conditional amendments that
+      ultimately get stripped in conference. Internal caucus debates are
+      increasingly bitter and public.
+    constraints:
+      - AIPAC primary challenges discipline moderate critics
+      - Jewish Democratic donors historically major fundraising bloc
+      - Arab/Muslim American and young progressive voters increasingly vocal
+      - General election viability requires not alienating either camp
+      - Must maintain caucus unity on other legislative priorities
+
+  - id: aipac_lobby
+    name: AIPAC & Pro-Israel Lobby
+    role: American Israel Public Affairs Committee and allied organizations
+    persona: >
+      AIPAC is the most powerful foreign-policy lobby in Washington. Operates
+      through campaign contributions (AIPAC PAC and United Democracy Project
+      super PAC), grassroots mobilization of pro-Israel voters, and direct
+      lobbying of members of Congress. Spent over $100M in the 2024 election
+      cycle, successfully primarying several progressive critics of Israel.
+      Maintains bipartisan strategy — funds both Republicans and Democrats
+      who support unconditional Israel aid. Allied organizations include
+      Christians United for Israel (CUFI), the Jewish Federations, ADL, and
+      the Conference of Presidents. Network extends into media, think tanks
+      (WINEP, FDD), and executive branch staffing pipelines. Post-October 7,
+      has ramped up spending and political activity to unprecedented levels.
+      Frames any aid conditionality as abandoning an ally under attack.
+    red_lines:
+      - Congressional votes to condition or reduce Israel military aid
+      - Successful progressive primary challenges to pro-Israel incumbents
+      - Mainstream media narratives that normalize aid conditionality
+      - Executive branch policy shifts toward arms restrictions
+    response_pattern: >
+      Deploys massive campaign spending against critics in primary elections.
+      Organizes congressional delegation trips to Israel. Coordinates with
+      Israeli embassy on messaging. Activates grassroots call/email campaigns
+      to swing votes. Places op-eds in major outlets. Hosts policy conferences
+      that set the mainstream discourse. Quietly threatens to fund primary
+      challengers against wavering members.
+    constraints:
+      - Bipartisan brand increasingly strained as Israel becomes partisan issue
+      - Progressive backlash against "dark money" in primaries generates counter-mobilization
+      - Younger Jewish Americans increasingly critical of AIPAC's positions
+      - Cannot control social media narratives the way it shapes traditional media
+      - Spending effectiveness diminishes if public opinion shifts significantly
+
+  - id: jstreet_progressive
+    name: J Street & Progressive Jewish Organizations
+    role: J Street, Americans for Peace Now, IfNotNow, and allied progressive Jewish groups
+    persona: >
+      J Street brands itself as "pro-Israel, pro-peace" — supports Israel's
+      existence and security but advocates for a two-state solution, opposes
+      settlements, and increasingly supports conditioning US military aid on
+      human rights compliance. Represents a significant minority of American
+      Jews, particularly younger and more liberal demographics. IfNotNow and
+      Jewish Voice for Peace represent the more radical flank — explicitly
+      supporting Palestinian rights and opposing Zionism in some formulations.
+      Together, these organizations challenge AIPAC's claim to speak for
+      American Jewry. Post-Gaza war, J Street has moved further toward
+      supporting aid conditionality, reflecting its base. Provides political
+      cover for Democrats who want to criticize Israeli policy without being
+      accused of antisemitism. Endorses and funds candidates.
+    red_lines:
+      - Israeli annexation of West Bank territory
+      - Permanent occupation without political horizon for Palestinians
+      - US complicity in actions that violate international humanitarian law
+      - Collapse of the two-state framework
+    response_pattern: >
+      Lobbies Congress as the "alternative Jewish voice." Endorses and funds
+      pro-peace candidates. Publishes policy papers supporting conditional
+      engagement. Organizes American Jewish voices critical of Israeli
+      government policy. Provides talking points for Democratic members who
+      want to criticize settlements or civilian casualties. Amplifies Israeli
+      peace movement voices in US discourse.
+    constraints:
+      - Much smaller budget and political reach than AIPAC
+      - Accused of being "anti-Israel" by mainstream Jewish establishment
+      - Internal tensions between liberal Zionists and anti-occupation radicals
+      - Limited influence in Republican Party
+      - Must navigate between supporting Israel's existence and criticizing its government
+
+  - id: us_public_opinion
+    name: US Public Opinion
+    role: American public opinion and "the street" — polling aggregation, campus movements, social media discourse
+    persona: >
+      US public opinion on Israel is undergoing a generational earthquake.
+      Overall: Americans still favor Israel over Palestinians by a margin, but
+      the gap has narrowed dramatically since October 2023. Key demographics:
+      Adults 65+: strongly pro-Israel (60%+), view alliance as bedrock of
+      US Middle East policy. Adults 18-34: majority sympathize more with
+      Palestinians than with Israel — an unprecedented shift. The campus
+      protest movement (encampments, divestment campaigns) has made
+      Israel/Palestine a defining political issue for Gen Z, comparable to
+      Vietnam for boomers. Social media (TikTok, Instagram) amplifies
+      Palestinian narratives that traditional media historically underrepresented.
+      Arab American and Muslim American communities are politically mobilized
+      at historic levels, with potential to swing key states (Michigan,
+      Minnesota). Evangelical Christians remain the most reliably pro-Israel
+      demographic. The "uncommitted" primary movement in 2024 demonstrated
+      electoral consequences of the Gaza war within the Democratic coalition.
+    red_lines:
+      - Older pro-Israel public: abandoning the alliance or appearing weak on Iran
+      - Younger critical public: continued US-supplied weapons used on civilians
+      - Campus movement: university complicity in defense contracts with Israel
+      - Arab/Muslim Americans: being ignored by both parties on Palestine
+    response_pattern: >
+      Manifests through polling shifts that influence electoral calculations.
+      Campus protests create media cycles and pressure university endowments.
+      Social media campaigns go viral and shape narratives faster than
+      traditional media. Primary election results (uncommitted votes,
+      progressive victories) send political shockwaves. Consumer boycotts
+      of companies linked to Israel create corporate pressure. Evangelical
+      mobilization through churches sustains pro-Israel political energy
+      on the right.
+    constraints:
+      - Public attention is fickle — other crises can displace Israel/Palestine
+      - Social media amplifies extreme positions on both sides
+      - Most Americans still prioritize domestic issues over foreign policy
+      - Polling on Israel/Palestine is highly sensitive to question framing
+      - Campus movements face backlash from state legislatures (anti-BDS laws)
+
+  - id: us_defense_establishment
+    name: US Defense & Military Establishment
+    role: Pentagon, Joint Chiefs, defense industry, and intelligence community as they relate to the Israel alliance
+    persona: >
+      The US-Israel military relationship is the deepest bilateral defense
+      partnership the US maintains outside of NATO. Key dimensions: $3.8B
+      annual military aid under the 2016 MOU (all spent on US defense
+      products — effectively a subsidy to US defense industry). Joint
+      development of missile defense systems — Iron Dome, David's Sling,
+      Arrow 3 — with significant US co-investment and technology sharing.
+      Intelligence sharing at the highest levels, including signals
+      intelligence and satellite imagery. Force interoperability and joint
+      exercises. Israel provides real-world combat testing data for US
+      weapons systems. The defense establishment views Israel as a
+      "force multiplier" in the Middle East and a critical intelligence
+      partner. However, professional military leaders have occasionally
+      noted that unconditional support creates moral hazard and that
+      Leahy Law compliance is a legal obligation, not a policy choice.
+      Defense industry (Lockheed Martin, Raytheon, Boeing, Elbit Systems)
+      has massive financial interest in maintaining the aid relationship.
+    red_lines:
+      - Disruption of intelligence sharing arrangements
+      - Loss of access to Israeli combat data and operational lessons
+      - Cancellation of joint missile defense programs
+      - Collapse of force interoperability frameworks
+    response_pattern: >
+      Advocates for maintaining aid levels through Pentagon budget requests
+      and congressional testimony. Joint Chiefs provide classified briefings
+      emphasizing strategic value. Defense industry lobbies Congress alongside
+      AIPAC. Intelligence community shares threat assessments that support
+      the alliance narrative. Occasionally pushes back quietly on specific
+      weapons transfers that create legal exposure under Leahy Law.
+    constraints:
+      - Must comply with Leahy Law and Arms Export Control Act — legal obligations
+      - Inspector General and congressional oversight create accountability
+      - Some senior officers privately concerned about reputational damage
+      - Multi-front US commitments (Ukraine, Pacific) strain defense resources
+      - Defense budget politics may force tradeoffs between Israel aid and other priorities
+
+  - id: us_business_trade
+    name: US Business & Trade Sector
+    role: US-Israel bilateral trade, tech sector, venture capital, and economic interdependence
+    persona: >
+      US-Israel bilateral trade exceeds $50B annually. Israel is a top-10
+      source of foreign direct investment in the US. The tech sector is the
+      crown jewel: Israel has more NASDAQ-listed companies than any country
+      outside the US. Major US tech companies (Google, Microsoft, Apple,
+      Intel, Amazon) have major R&D centers in Israel. Israeli cybersecurity
+      firms (Check Point, CyberArk, Wiz) are deeply integrated into US
+      corporate and government infrastructure. US venture capital flows into
+      Israeli startups at $10B+ annually. Defense trade is substantial:
+      Israeli defense firms (Elbit, Rafael, IAI) are major US defense
+      contractors and subcontractors. Agricultural technology (drip
+      irrigation, precision farming) and biomedical innovation represent
+      growing trade sectors. The BDS movement and campus divestment campaigns
+      create reputational risk for companies with Israeli operations, though
+      economic impact has been minimal. Bilateral free trade agreement (1985,
+      the first the US signed) underpins the relationship.
+    red_lines:
+      - Sanctions or trade restrictions on Israeli tech companies
+      - BDS-driven divestment reaching institutional scale
+      - Disruption of R&D center operations due to security conditions
+      - Regulatory barriers to Israeli defense exports to the US
+    response_pattern: >
+      Tech sector lobbies through industry associations and direct CEO-level
+      engagement. Venture capital firms maintain investment pipelines
+      regardless of political climate. Defense firms coordinate with both
+      governments on procurement. Business councils (AICC, BIRD Foundation)
+      organize trade missions and bilateral economic forums. Companies
+      quietly assess reputational risk from Israel association but rarely
+      divest due to economic fundamentals. Startup ecosystem creates
+      thousands of personal and institutional ties that operate below
+      political radar.
+    constraints:
+      - BDS creates growing reputational risk, especially with younger consumers
+      - Security instability can disrupt R&D operations and talent mobility
+      - US-China tech competition may force choices about Israeli tech transfers
+      - ESG and DEI frameworks increasingly scrutinize defense sector ties
+      - Employee activism at major tech firms creates internal corporate pressure
+
+
+  # International assemblies
+  - id: un_general_assembly
+  - id: un_security_council

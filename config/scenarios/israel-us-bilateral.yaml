@@ -1,0 +1,204 @@
+# Scenario: Israel-US Bilateral Relationship
+# Comprehensive simulation of the US-Israel alliance dynamics, partisan divide,
+# public opinion shifts, and strategic interdependence as of April 2026.
+
+title: "Israel-US Bilateral Relationship — Alliance Under Strain"
+
+actor_cluster: israel-us-bilateral
+
+scenario: |
+  DATE: 13 April 2026
+
+  SITUATION: The US-Israel bilateral relationship — historically described as
+  "unshakeable" — is undergoing its most significant structural stress test
+  since the 1956 Suez Crisis. The alliance remains operationally deep and
+  strategically critical, but the political foundations that sustained bipartisan
+  consensus for decades are fracturing along partisan, generational, and
+  ideological lines.
+
+  MILITARY ALLIANCE — UNPRECEDENTED DEPTH:
+  The 2024-2026 period saw the largest US military support operation for Israel
+  in history. During the multi-front conflicts following October 7, 2023, the
+  US provided:
+  - Emergency weapons transfers totaling $14B+ beyond the baseline $3.8B annual
+    MOU, including precision-guided munitions, artillery shells, and interceptor
+    missiles
+  - Deployment of two carrier strike groups to the Eastern Mediterranean as
+    deterrence against Iranian escalation
+  - Direct US military participation in intercepting Iranian ballistic missiles
+    and drones during the April 2024 Iranian strike on Israel
+  - Accelerated delivery of F-35 aircraft, KC-46 tankers, and bunker-buster
+    munitions
+  - Real-time intelligence sharing at an intensity not seen since the 1973
+    Yom Kippur War airlift
+  Joint missile defense programs are at peak integration: Iron Dome batteries
+  are now manufactured in the US (by Raytheon), David's Sling and Arrow 3 are
+  co-developed platforms, and the US is investing in Israel's Iron Beam laser
+  system as a potential game-changer for US force protection globally.
+
+  THE PARTISAN DIVIDE — A STRUCTURAL FRACTURE:
+  Support for Israel has become one of the most partisan issues in American
+  politics:
+  - Republicans: near-unanimous support. 90%+ of Republican voters and
+    virtually all Republican members of Congress view Israel as a critical
+    ally deserving unconditional support. Evangelical Christian Zionism
+    provides a powerful grassroots base. The Trump administration has been
+    the most pro-Israel in US history — recognizing Jerusalem, Golan Heights
+    sovereignty, and providing diplomatic cover at the UN, ICC, and ICJ.
+  - Democrats: deeply and bitterly divided. The old guard (Schumer, Pelosi
+    generation) maintains traditional support but with increasing private
+    discomfort. The progressive wing (AOC, Sanders, Tlaib, Omar) treats
+    Palestinian rights as a core progressive cause and demands arms
+    conditionality. The middle is shifting — mainstream Democrats like
+    Kaine, Murphy, and Van Hollen have crossed previous red lines by
+    calling for restrictions on offensive weapons transfers. The 2024
+    "uncommitted" primary movement showed that Gaza is an electoral issue
+    within the Democratic coalition, particularly in Michigan, Minnesota,
+    and other states with significant Arab/Muslim American populations.
+
+  GENERATIONAL EARTHQUAKE IN PUBLIC OPINION:
+  Polling data shows a dramatic generational divergence:
+  - Americans 65+: 60%+ favor Israel over Palestinians, view the alliance
+    as a bedrock of US foreign policy
+  - Americans 18-34: majority sympathize more with Palestinians than Israel
+    — a historic first. For Gen Z, Israel/Palestine is a defining political
+    issue comparable to Vietnam for boomers or apartheid for Gen X
+  - The campus protest movement (2024-2026 encampments, divestment campaigns,
+    faculty solidarity) has made Israel one of the most contentious issues
+    on American campuses since the anti-Vietnam War movement
+  - Social media (TikTok, Instagram) has broken the traditional media
+    gatekeeping on Palestinian narratives — younger Americans see unfiltered
+    content from Gaza that prior generations never encountered
+  - The "information war" is increasingly asymmetric: Israel dominates
+    traditional media and Washington lobbying; Palestinians dominate social
+    media and grassroots activist energy
+
+  ICC/ICJ AND INTERNATIONAL LAW TENSIONS:
+  The US is actively shielding Israel from international legal proceedings:
+  - ICC arrest warrants issued for senior Israeli officials — the US has
+    threatened sanctions against ICC personnel and warned allies against
+    enforcement
+  - ICJ advisory opinion on occupation has created a legal framework that
+    challenges US positions
+  - The Rubio State Department has suppressed internal reporting on potential
+    Leahy Law violations by Israeli military units
+  - Bipartisan legislation in Congress sanctions ICC officials and criminalizes
+    cooperation with ICC investigations of US allies
+  - However, some career State Department and Pentagon lawyers have privately
+    warned that the legal exposure is unsustainable and that US credibility
+    on international law is being permanently damaged
+
+  AID CONDITIONALITY DEBATE:
+  The most politically charged question in the bilateral relationship:
+  - Current law (Leahy Law, Arms Export Control Act, Foreign Assistance Act
+    Section 620I) already requires human rights vetting and prohibits aid to
+    units committing gross violations — but enforcement has been effectively
+    suspended for Israel
+  - Progressive Democrats have introduced legislation to condition future
+    weapons transfers on compliance with international humanitarian law
+  - Mainstream Democrats have pushed for transparency — requiring the
+    administration to report on how US weapons are being used
+  - Republicans have responded with legislation to make Israel aid
+    unconditional and immune from any presidential restriction
+  - AIPAC has spent over $100M in recent cycles to defeat candidates who
+    support conditionality, while J Street and progressive groups fund
+    the opposing side
+
+  ECONOMIC INTERDEPENDENCE:
+  The economic relationship provides structural ballast:
+  - $50B+ annual bilateral trade under the 1985 FTA (first US free trade
+    agreement ever signed)
+  - Israel has more NASDAQ-listed companies than any country except the US
+  - Major US tech companies (Google, Microsoft, Apple, Intel, Amazon) operate
+    significant R&D centers in Israel
+  - Israeli cybersecurity firms are embedded in US government and corporate
+    infrastructure
+  - US venture capital invests $10B+ annually in Israeli startups
+  - Defense trade is deeply integrated — Israeli firms are major US defense
+    subcontractors
+  - BDS movement has had minimal economic impact but creates growing
+    reputational risk, especially with younger consumers and ESG frameworks
+
+  ABRAHAM ACCORDS AND SAUDI NORMALIZATION:
+  The Abraham Accords framework (UAE, Bahrain, Morocco, Sudan normalizations)
+  remains a signature achievement that both countries want to expand:
+  - Saudi-Israeli normalization is the grand prize — would transform regional
+    architecture
+  - Saudi price: credible Palestinian statehood pathway, US defense treaty,
+    civilian nuclear program
+  - Israeli price: full normalization including economic, diplomatic, and
+    security cooperation
+  - The Gaza war has complicated but not killed normalization — Saudi Arabia
+    insists on a Palestinian component but has not walked away from talks
+  - A Saudi deal would be the strongest argument for the alliance's continued
+    strategic value and could paper over the domestic political fractures
+
+  CORE TENSIONS FOR SIMULATION:
+  1. Can the bipartisan consensus on Israel be reconstructed, or is the
+     partisan fracture permanent?
+  2. Does the generational shift in public opinion eventually translate into
+     policy change, or do institutional factors (AIPAC, defense industry,
+     evangelical base) sustain the status quo?
+  3. How does the ICC/ICJ legal pressure interact with domestic US politics?
+  4. Does Saudi normalization provide an off-ramp that renews the alliance's
+     strategic rationale?
+  5. What is the breaking point — if any — where the US actually conditions
+     or restricts military aid to Israel?
+  6. How do the economic ties and tech interdependence operate as a stabilizing
+     force independent of political dynamics?
+
+timeframe_preset: long
+
+nature: 0.5
+mode:
+  - geopol
+
+questions:
+  - "Is the bipartisan consensus on unconditional US support for Israel permanently broken, or can it be reconstructed?"
+  - "What is the probability that the US Congress passes legislation conditioning military aid to Israel within 2 years?"
+  - "How does the generational shift in US public opinion translate into concrete policy changes, and on what timeline?"
+  - "What is the probability that Saudi-Israeli normalization is achieved within 1 year, and what does it require?"
+  - "Does AIPAC's spending successfully contain the progressive challenge, or does it accelerate backlash?"
+  - "What is the most likely trajectory for US-Israel relations under a future Democratic administration?"
+  - "How does the ICC/ICJ legal pressure affect the bilateral relationship — does the US sustain its shielding indefinitely?"
+
+mc_questions:
+  - question: "What is the state of US military aid to Israel in 2 years?"
+    options:
+      - "Unchanged — $3.8B+ baseline with emergency supplements as needed"
+      - "Maintained at baseline but with new reporting/transparency requirements"
+      - "Partially conditioned — specific offensive weapons categories restricted"
+      - "Significantly reduced due to legislative action or presidential decision"
+      - "Increased — new MOU negotiated with higher baseline"
+
+  - question: "What is the dominant dynamic in US domestic politics on Israel?"
+    options:
+      - "Bipartisan consensus restored — Israel returns to a unifying issue"
+      - "Stable partisan split — Republicans pro-Israel, Democrats divided but majority supportive"
+      - "Accelerating partisan divergence — Israel becomes a wedge issue like abortion or guns"
+      - "Generational takeover — younger cohort's views reshape both parties"
+      - "Issue salience fades — other crises push Israel off the agenda"
+
+  - question: "What happens with Saudi-Israeli normalization?"
+    options:
+      - "Full normalization deal achieved including Palestinian component"
+      - "Partial deal — diplomatic recognition without full resolution of Palestinian issue"
+      - "Deal framework agreed but implementation stalls"
+      - "Negotiations continue without breakthrough"
+      - "Normalization shelved indefinitely due to Gaza aftermath"
+
+  - question: "How does the campus/youth protest movement evolve?"
+    options:
+      - "Intensifies and becomes a permanent feature of US politics"
+      - "Matures into an organized political movement with electoral impact"
+      - "Peaks and gradually subsides as media attention shifts"
+      - "Fragments — internal divisions between liberal Zionists and anti-Zionists weaken it"
+      - "Suppressed by state legislation and university crackdowns"
+
+  - question: "What is the status of ICC proceedings against Israeli officials?"
+    options:
+      - "Warrants effectively nullified — no enforcement by any significant state"
+      - "Warrants restrict Israeli officials' travel but have no policy impact"
+      - "Warrants create a growing diplomatic crisis — some EU states signal enforcement"
+      - "US sanctions on ICC succeed in paralyzing the court"
+      - "ICC proceedings expand and begin to affect the bilateral relationship"

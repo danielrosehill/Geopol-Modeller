@@ -17,3 +17,8 @@ actors:
   - id: hamas_political
   - id: qatar
   - id: jordan
+
+
+  # International assemblies
+  - id: un_general_assembly
+  - id: un_security_council

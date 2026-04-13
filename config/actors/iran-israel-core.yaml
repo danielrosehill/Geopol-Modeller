@@ -221,3 +221,7 @@ actors:
       - Ukraine commitment absorbs military bandwidth
       - Limited economic leverage compared to China
       - Must balance Iran relationship with Gulf Arab ties
+
+
+  # International assemblies
+  - id: un_security_council

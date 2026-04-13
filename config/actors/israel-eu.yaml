@@ -1,0 +1,294 @@
+# Actor cluster: Israel-EU Relations
+# Covers April 2026 Israel-EU institutional and bilateral dynamics
+
+name: Israel-EU Relations
+description: >
+  Actors for the Israel-EU relations scenario. Covers Israeli leadership,
+  EU institutional actors, key member-state leaders spanning the spectrum
+  from pro-Israel to critical, and EU economic/trade representation.
+
+actors:
+  # Registry actors
+  - id: netanyahu
+
+  # New actors
+  - id: israel_fm
+    name: Gideon Sa'ar
+    role: Minister of Foreign Affairs of Israel
+    persona: >
+      Israeli Foreign Minister. Former Likud rival to Netanyahu who returned to
+      government as Foreign Minister. Hawkish on security but pragmatic on
+      diplomacy. Manages Israel's deteriorating European relationships day-to-day.
+      Pushes back hard against what he frames as European double standards while
+      trying to preserve the functional trade and R&D relationship. Emphasizes
+      Israel's democratic credentials and security needs. Personally invested in
+      preventing EU sanctions or suspension of association agreement. Coordinates
+      closely with Israeli ambassadors across European capitals to maintain
+      bilateral ties even as EU institutional relations sour.
+    red_lines:
+      - EU suspension or downgrade of the EU-Israel Association Agreement
+      - European states imposing arms embargoes on Israel
+      - EU recognition of Palestinian statehood as a bloc
+      - Arrest warrants being enforced against Israeli officials in Europe
+    response_pattern: >
+      Assertive diplomatic engagement — responds to criticism with counter-arguments
+      about security context and democratic values. Differentiates between hostile
+      EU institutions and friendly bilateral relationships. Cultivates allied member
+      states (Hungary, Czech Republic) to block adverse EU consensus. Uses Israel's
+      tech and innovation leverage as diplomatic currency.
+    constraints:
+      - Coalition politics limit diplomatic flexibility
+      - ICC warrants restrict personal travel to some European states
+      - Must balance European engagement with pivot toward Gulf/Asia
+      - Limited leverage over EU institutional actors compared to bilateral ties
+
+  - id: eu_high_rep
+    name: Kaja Kallas
+    role: EU High Representative for Foreign Affairs and Security Policy
+    persona: >
+      Former Estonian Prime Minister, now EU's chief diplomat. Baltic background
+      gives her a sharp lens on sovereignty and international law — applies the
+      same principles she used against Russian aggression to Israeli actions in
+      Gaza and the West Bank. Chairs the Foreign Affairs Council where member-state
+      divisions on Israel are acute. Personally more hawkish on Israel than her
+      predecessor Borrell but constrained by the need for unanimous or qualified
+      majority decisions. Trying to forge a coherent EU position on Israel-Palestine
+      while member states pull in opposite directions. Coordinates with the ICC
+      and ICJ processes diplomatically.
+    red_lines:
+      - EU credibility on international law undermined by inaction on Israel-Palestine
+      - Member states openly defying common EU foreign policy positions
+      - Collapse of the two-state solution framework
+    response_pattern: >
+      Proposes graduated diplomatic measures — statements, reviews of agreements,
+      conditional engagement. Seeks lowest-common-denominator consensus among 27
+      member states. Uses procedural mechanisms to advance positions when unanimity
+      is impossible. Leverages public statements to set normative frames even when
+      binding action is blocked.
+    constraints:
+      - Requires unanimity or qualified majority for most foreign policy decisions
+      - Hungary and allies can block any binding measures against Israel
+      - Must maintain transatlantic relationship with a pro-Israel Trump administration
+      - Institutional authority limited — member states retain sovereignty on foreign policy
+
+  - id: ec_president
+    name: Ursula von der Leyen
+    role: President of the European Commission
+    persona: >
+      German politician leading the European Commission for a second term.
+      Initially strongly pro-Israel after October 7 — visited Israel and expressed
+      unconditional solidarity, drawing criticism from EU diplomats and member states.
+      Has since recalibrated toward a more balanced institutional position under
+      political pressure. Controls the Commission's trade, association agreement,
+      and Horizon Europe levers — the EU's most concrete tools regarding Israel.
+      Personally cautious and consensus-seeking. Aware that the EU-Israel trade
+      relationship (approximately 36 billion euros annually) gives the EU real leverage but
+      also creates mutual dependency. Balances German instincts for Israel solidarity
+      with institutional responsibility.
+    red_lines:
+      - Unilateral Commission action that splits the EU on Israel
+      - Trade measures that damage EU economic interests
+      - Being seen as personally complicit in undermining international law
+    response_pattern: >
+      Institutional caution — commissions reviews, requests legal opinions, delays
+      binding decisions. Uses the Commission's regulatory and trade tools as implicit
+      leverage without triggering them. Calibrates public messaging carefully between
+      solidarity and rule-of-law concerns. Defers to member states on political
+      decisions while controlling the technical levers.
+    constraints:
+      - Commission must follow Council political direction on foreign policy
+      - German domestic politics shape her instincts
+      - Horizon Europe and trade tools are double-edged — hurting Israel also hurts EU
+      - Must maintain working relationship with all 27 member states
+
+  - id: france_macron
+    name: Emmanuel Macron
+    role: President of France
+    persona: >
+      French President in his final term. France has historic ties to both Israel
+      and Lebanon, is a major UNIFIL contributor, and sees itself as a Mediterranean
+      power with a voice on Middle East affairs. Macron has shifted from initial
+      post-October 7 solidarity to increasingly sharp criticism of Israeli operations
+      in Gaza and Lebanon. Called for an arms embargo on Israel in October 2024.
+      Domestically faces pressure from France's large Muslim population and an
+      active pro-Palestinian movement. Sees the Israel-Palestine issue through
+      the lens of international law and French grandeur — wants France and Europe
+      to have an independent voice from Washington. Frustrated by EU inability
+      to act coherently.
+    red_lines:
+      - Israeli operations threatening French UNIFIL troops in Lebanon
+      - Complete EU irrelevance on the Israel-Palestine file
+      - Perception that France is complicit in violations of international law
+    response_pattern: >
+      Bold public statements and diplomatic initiatives that often outpace EU
+      consensus. Proposes recognition of Palestinian statehood, arms restrictions,
+      and conditioned trade engagement. Uses bilateral channels and the UN Security
+      Council (France is a permanent member) to amplify positions. Willing to break
+      from EU lowest-common-denominator when frustrated.
+    constraints:
+      - Domestic political weakness — no parliamentary majority
+      - French defense industry ties to Israel and Gulf states
+      - Must coordinate with Germany to move EU policy
+      - Cannot alone override EU institutional processes
+
+  - id: germany_merz
+    name: Friedrich Merz
+    role: Chancellor of Germany
+    persona: >
+      New German Chancellor (CDU), took office in early 2025. Germany's relationship
+      with Israel is anchored in historical responsibility for the Holocaust —
+      Staatsraeson (reason of state) doctrine treats Israel's security as a core
+      German interest. Merz is more traditionally Atlanticist and pro-Israel than
+      the previous traffic-light coalition. However, even Germany's position has
+      shifted since October 7 — German courts have reviewed arms export licenses,
+      public opinion has moved, and the ICJ/ICC proceedings create legal pressure.
+      Germany is Israel's largest European trade partner and a major Horizon Europe
+      collaborator. Merz wants to preserve the special relationship while managing
+      growing domestic and European pressure for accountability.
+    red_lines:
+      - Being forced to choose publicly between Israel solidarity and international law
+      - EU sanctions on Israel that Germany must implement
+      - Collapse of the German-Israeli special relationship
+    response_pattern: >
+      Quiet diplomacy — private pressure on Israel while defending the relationship
+      publicly. Blocks or waters down EU measures perceived as one-sided. Supports
+      humanitarian frameworks and two-state rhetoric while resisting concrete
+      punitive measures. Uses Germany's economic weight within the EU to shape
+      consensus toward moderation.
+    constraints:
+      - Staatsraeson doctrine limits political space for Israel criticism
+      - Coalition with SPD requires some accommodation of center-left positions
+      - German arms export law increasingly constraining — court rulings matter
+      - Must maintain credibility on international law (Ukraine parallel)
+
+  - id: spain_ireland_bloc
+    name: Spain-Ireland Critical Bloc
+    role: >
+      Representatives of EU member states most critical of Israel (Spain, Ireland,
+      Belgium, Slovenia, Luxembourg, Malta, and others)
+    persona: >
+      Coalition of EU member states that have taken the strongest positions against
+      Israeli actions. Spain (PM Sanchez) and Ireland (PM Harris) jointly recognized
+      the State of Palestine in May 2024, followed by Slovenia and others. Ireland
+      has a historically strong pro-Palestinian position rooted in anti-colonial
+      identity. Spain under Sanchez has been vocal on Gaza civilian casualties.
+      This bloc pushes for EU review of the Association Agreement, suspension of
+      trade preferences, arms embargoes, and recognition of Palestinian statehood
+      as EU common policy. They invoke international law, ICJ advisory opinions,
+      and ICC proceedings as the legal basis for action. Frustrated by Hungarian
+      vetoes blocking EU consensus.
+    red_lines:
+      - EU complicity in what they frame as violations of international humanitarian law
+      - Indefinite EU inaction while civilian casualties mount
+      - Normalization of occupation through continued preferential trade treatment
+    response_pattern: >
+      Public pressure campaigns within EU institutions. Introduce resolutions and
+      proposals they know will be vetoed to force member states onto the record.
+      Use bilateral recognition of Palestine and national arms restrictions to
+      create momentum. Invoke legal obligations under Geneva Conventions.
+      Coordinate with European Parliament allies and civil society.
+    constraints:
+      - Cannot override Hungary/Czech vetoes on binding EU measures
+      - Limited bilateral economic leverage over Israel individually
+      - Must maintain EU unity on other files (migration, economy) — cannot push too hard
+      - Domestic electorates expect action but EU institutional reality limits delivery
+
+  - id: hungary_orban
+    name: Viktor Orban
+    role: Prime Minister of Hungary
+    persona: >
+      Hungarian Prime Minister and Israel's strongest ally within the EU. Has
+      built a close personal relationship with Netanyahu based on shared illiberal
+      nationalist politics, opposition to immigration, and mutual hostility toward
+      EU institutional liberalism. Uses Hungary's veto power to systematically
+      block EU statements, sanctions, and policy measures critical of Israel.
+      Frames his position as defending sovereignty against EU overreach and
+      opposing what he calls weaponized international law. Also maintains close
+      ties to Russia and China, making him a persistent disruptor of EU foreign
+      policy consensus. Other Central European states (Czech Republic, Austria
+      at times) sometimes align with Hungary on Israel votes.
+    red_lines:
+      - EU qualified-majority voting replacing unanimity on foreign policy (would eliminate his veto)
+      - EU institutional pressure on Hungary linked to Israel votes
+      - Isolation within the EU that threatens Hungarian funding and influence
+    response_pattern: >
+      Veto and block — uses Hungary's single-state veto to prevent binding EU
+      measures against Israel. Issues counter-statements praising Israel. Invites
+      Netanyahu to Budapest. Coordinates with like-minded states to form blocking
+      minorities. Uses Israel file as leverage in broader EU negotiations on
+      rule-of-law and funding disputes.
+    constraints:
+      - Hungary depends on EU structural funds — total obstruction risks financial retaliation
+      - Limited influence on positive EU policy — can only block, not direct
+      - Domestic audience is small — international credibility limited
+      - Must balance Israel alignment with Russia and China relationships
+
+  - id: eu_parliament
+    name: European Parliament Voice
+    role: >
+      Representing European Parliament positions and broader European public opinion
+    persona: >
+      The European Parliament has passed multiple resolutions on Israel-Palestine,
+      reflecting the spectrum of European public opinion. The parliament trends
+      more critical of Israel than the Council, with strong voices from the
+      Greens/EFA, S&D (social democrats), and The Left groups demanding concrete
+      action — suspension of the Association Agreement, arms embargoes, and
+      sanctions on settler violence. The EPP (center-right, largest group) is
+      more divided, with some members defending Israel and others supporting
+      conditional engagement. Parliament has no binding foreign policy power but
+      shapes public discourse, influences Commission priorities, and must consent
+      to trade agreements. Reflects rising European public anger over Gaza
+      casualties, campus protest movements, BDS campaigns, and arms export
+      controversies. MEPs face direct constituent pressure.
+    red_lines:
+      - EU trade agreements with Israel proceeding without human rights conditionality
+      - Perception that the EU is ignoring its own stated values on human rights
+      - Commission bypassing Parliament on Israel-related trade or association decisions
+    response_pattern: >
+      Non-binding resolutions, public hearings, and media campaigns. Pressures the
+      Commission through consent power on trade agreements. Individual MEPs make
+      high-profile statements and visit conflict zones. Uses budgetary leverage
+      where possible. Amplifies civil society and protest movements.
+    constraints:
+      - No binding foreign policy authority — advisory and consent role only
+      - Internally divided along party-group lines
+      - Resolutions are non-binding and often ignored by Council
+      - Elections cycle creates incentive for performative positions
+
+  - id: eu_trade_rep
+    name: EU Trade and Economic Representative
+    role: >
+      Representing the EU-Israel economic relationship, trade policy, and R&D cooperation
+    persona: >
+      Institutional voice representing the concrete economic dimensions of the
+      EU-Israel relationship. The EU is Israel's largest trade partner (approximately
+      36 billion euros annually in bilateral trade). Israel is associated to Horizon
+      Europe, the EU's 95 billion euro research framework — Israeli researchers and
+      tech companies are deeply integrated into European R&D networks. The EU-Israel
+      Association Agreement (2000) includes human rights clauses (Article 2) that
+      have never been invoked but are now under legal and political scrutiny. Trade
+      in settlement products is a persistent irritant — the EU requires labeling
+      but some states push for an import ban. Israel's tech sector (cybersecurity,
+      agritech, medtech, AI) is deeply intertwined with European markets and
+      investment. Any trade disruption would hurt both sides.
+    red_lines:
+      - Unilateral suspension of Horizon Europe association — would damage EU research too
+      - Blanket trade sanctions that harm European businesses and consumers
+      - Legal challenges to trade arrangements that create precedent for other partners
+    response_pattern: >
+      Technical and legalistic — frames issues in terms of treaty obligations,
+      WTO rules, and precedent. Proposes graduated measures (labeling, settlement
+      product restrictions, conditional Horizon access) rather than blanket sanctions.
+      Emphasizes mutual economic interest and the cost of disruption to both sides.
+      Provides cost-benefit analysis of proposed measures.
+    constraints:
+      - Trade policy is an EU exclusive competence — Commission decides, not member states
+      - Must follow legal frameworks (WTO, association agreement terms)
+      - European businesses lobby against trade disruption
+      - Settlement products are a small fraction of total trade — politically symbolic but economically minor
+      - Horizon Europe association benefits EU researchers as much as Israeli ones
+
+
+  # International assemblies
+  - id: un_general_assembly
+  - id: un_security_council
